@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f7f7f5">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<title>Library – WhoIsJohnny?</title>
+<meta name="description" content="A growing library of deadpan texts. Free social packs for Instagram, and print packs as A4, 50 x 70 cm, 18 x 24 in and postcards.">
+<link rel="canonical" href="https://whoisjohnny.com/library/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="WhoIsJohnny?">
+<meta property="og:title" content="WhoIsJohnny? Small texts, big print">
+<meta property="og:description" content="A growing library of deadpan texts. Free social packs, print packs from USD 4.">
+<meta property="og:url" content="https://whoisjohnny.com/library/">
+<meta property="og:image" content="https://whoisjohnny.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="WhoIsJohnny? Small texts. Big print. Deadpan texts in red type on white sheets.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="WhoIsJohnny? Small texts, big print">
+<meta name="twitter:description" content="A growing library of deadpan texts. Free social packs, print packs from USD 4.">
+<meta name="twitter:image" content="https://whoisjohnny.com/og-image.png">
+<link rel="stylesheet" href="/assets/site.css?v=2">
+</head>
+<body class="lib">
+<main>
+  <header class="top"><a class="mark" href="/" aria-label="WhoIsJohnny? home">?</a><span class="nav"><a href="/">Home</a><a href="#news" id="navNews">Subscribe</a><a href="#about">About</a></span></header>
+  <h1>Small texts.<br><span class="soft">Big print.</span></h1>
+  <p class="lead">A growing library of deadpan texts. Every text comes as a social pack, free, and a print pack for USD 4: A4 (21 x 29.7 cm / 8.3 x 11.7 in), 50 x 70 cm (19.7 x 27.6 in), 18 x 24 in (45.7 x 61 cm), and two postcard sizes, A6 (10.5 x 14.8 cm) and 4 x 6 in (10.2 x 15.2 cm). No. 001 is free in full, so you can see the quality. Print at home or at a print shop.</p>
+  <p class="lead" style="font-size:14px;color:#8b8b86">Download the free social packs, post them, tag <a href="https://www.instagram.com/whoisjohnny2020" target="_blank" rel="noopener" style="color:inherit;font-weight:700">@whoisjohnny2020</a>.</p>
+  <div class="filter">
+    <button data-f="all" aria-pressed="true">All</button>
+    <button data-f="mine" aria-pressed="false">My collection <span class="n" id="mineN">0</span></button>
+    <span id="count"></span>
+  </div>
+  <div class="grid" id="grid"><div class="empty hidden" id="empty">Nothing here yet. Open a text you like and press &ldquo;Add to my collection&rdquo;.</div></div>
+
+  <section class="news" id="news">
+    <h2>New releases</h2>
+    <p>Leave your email and we will send info about new releases and newsletters.</p>
+    <form id="newsForm" novalidate>
+      <input type="email" id="newsEmail" placeholder="your@email.com" autocomplete="email" aria-label="Email">
+      <input type="text" id="newsHp" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <label class="consent"><input type="checkbox" id="newsOk"> <span>Yes, send me new releases and newsletters. I can unsubscribe at any time.</span></label>
+      <button class="btn" type="submit">Subscribe</button>
+      <p class="msg" id="newsMsg" role="status"></p>
+    </form>
+    <p class="fine2">Your email is kept in a private list and used only for this. To be removed, write to <a href="mailto:hello@whoisjohnny.com">hello@whoisjohnny.com</a>.</p>
+  </section>
+
+  <section class="about" id="about">
+    <h2>What is this?</h2>
+    <p>A growing library of small texts, made as an experiment. I wanted to see what happens when you make something digital, put it out, and let it travel. Each text is a small work, in the same deadpan style as my paper works.</p>
+    <h2>Is it art?</h2>
+    <p>Yes. It is the same practice as my wall works, in a different material: a sentence in plain type that says something a little too directly. Here the material is a file instead of paper. You print it, hang it, or post it. The work is finished when someone uses it.</p>
+    <h2>Why?</h2>
+    <p>Mostly to try. To make something digital, to play with what is possible, and to make life a little more fun, for me and for whoever finds it. And to share the fun.</p>
+    <h2>Who writes the texts?</h2>
+    <p>An AI writes them, and I choose which ones go in the library. That is part of the experiment: to see what happens when a person and a machine make small things together, and to say so openly.</p>
+    <h2>Share it</h2>
+    <p>Every text has a free social pack. Download it and post it on Instagram. Tag <a href="https://www.instagram.com/whoisjohnny2020" target="_blank" rel="noopener">@whoisjohnny2020</a>, so I can see where they end up. The further they travel, the better the project works.</p>
+    <p class="fine2">The social images are for sharing. Please leave the credit on them. The print files are for your own walls, not for resale.</p>
+    <h2>WhoIsJohnny?</h2>
+    <p>An artist.</p>
+  </section>
+  <footer>
+    whoisjohnny.com — an art project by Johnny Ramstedt<br>
+    <a href="mailto:hello@whoisjohnny.com">hello@whoisjohnny.com</a> ·
+    <a href="https://www.instagram.com/whoisjohnny2020" target="_blank" rel="noopener">Instagram @whoisjohnny2020</a>
+  </footer>
+</main>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="mbox">
+    <button class="mclose" id="mClose" aria-label="Close">&times;</button>
+    <div class="mgrid">
+      <div class="mleft">
+        <div class="mview"><canvas id="big"></canvas><canvas id="mock" class="hidden"></canvas></div>
+        <div class="tabs"><button data-v="sheet" aria-pressed="true">The print</button><button data-v="wall" aria-pressed="false">On the wall</button></div>
+        <a href="#" class="dl hidden" id="mockSave">Save the mockup as PNG</a>
+      </div>
+      <div class="mright">
+        <div class="mtop"><div class="ttl" id="ttl"></div><div class="arrows"><button id="mPrev" aria-label="Previous text">&larr;</button><button id="mNext" aria-label="Next text">&rarr;</button></div></div>
+        <div class="gets" id="gets"></div>
+        <ul class="spec" id="spec"></ul>
+        <button class="btn" id="main"></button>
+        <button class="btn alt" id="socBtn">Download the social pack, free (three images)</button>
+        <button class="btn alt" id="collectBtn"></button>
+        <button class="btn alt" id="pack10">Any 10 print packs — USD 30</button>
+        <button class="btn alt" id="pack20">Any 20 print packs — USD 50</button>
+        <p class="pnote"><b>Paper tip.</b> Matte paper suits the plain type best. For A4, 120–170 g/m². For 50 x 70 cm and 18 x 24 in, 170–200 g/m² uncoated or silk-matte, printed at a print shop. For postcards, 250–300 g/m² card stock.</p>
+        <p class="pnote" style="margin-top:10px"><b>Digital only.</b> You download the files. Nothing is sent to you by post.</p>
+        <div class="ttl2">Social pack: three images, ready to post</div>
+        <div class="files" id="soc"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="box">
+    <div id="step1">
+      <h3>Door closed.</h3>
+      <p>Nobody was charged. This is a test, and the shop is not open yet. Want <b id="oname">it</b> when it opens? Leave your email, and you will hear from us once.</p>
+      <input type="email" id="notify" placeholder="your@email.com" autocomplete="email">
+      <button id="send">Tell me</button><button class="ghost" id="close1">No thanks</button>
+    </div>
+    <div id="gate" class="hidden">
+      <h3>Free. One thing first.</h3>
+      <p>The No. <b id="gno">001</b> print pack is free in exchange for your email. We send info about new releases and newsletters, nothing else.</p>
+      <input type="email" id="gateEmail" placeholder="your@email.com" autocomplete="email" aria-label="Email">
+      <input type="text" id="gateHp" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <label class="consent"><input type="checkbox" id="gateOk"> <span>Yes, send me new releases and newsletters. I can unsubscribe at any time.</span></label>
+      <button id="gateGo">Download</button><button class="ghost" id="gateNo">Cancel</button>
+      <p class="msg" id="gateMsg" role="status"></p>
+    </div>
+    <div id="thanks" class="hidden">
+      <h3>Noted.</h3>
+      <p>You will hear from us once. Not more than that.</p>
+      <button id="close2">Close</button>
+    </div>
+  </div>
+</div>
+
+<script src="/assets/core.js?v=2"></script>
+<script src="/assets/cmyk-001.js?v=2"></script>
+<script src="/assets/library.js?v=2"></script>
+</body>
+</html>
