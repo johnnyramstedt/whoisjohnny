@@ -250,7 +250,10 @@ $("main").addEventListener("click", () => {
   if (x.free) {
     if (!EMAIL_ON || store.get("wij_email")) downloadFree(x); else openGate(x);
   } else {
-    door("single", "the print pack", { text: x.t, no: x.no, price: String(PRICE) });
+    if (CHECKOUT[x.no]) {
+      track("clicked_buy", { product: "single", text: x.t, no: x.no, price: String(PRICE), referrer: document.referrer || "direct" });
+      setTimeout(() => { window.location.href = CHECKOUT[x.no]; }, 250);
+    } else door("single", "the print pack", { text: x.t, no: x.no, price: String(PRICE) });
   }
 });
 $("socBtn").addEventListener("click", () => {

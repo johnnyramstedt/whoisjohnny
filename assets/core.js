@@ -2,6 +2,52 @@
 // ---- CONFIG ---------------------------------------------------------------
 const SHEETS_URL = "";   // paste the Google Apps Script web-app URL here (see _paid-packs/google-sheets-setup.md). Empty = only logged in the browser console.
 const PRICE = 4, PRICE10 = 30, PRICE20 = 50;
+// Polar checkout links per text (production). Texts without a link fall back to the email overlay.
+const CHECKOUT = {
+ "002": "https://buy.polar.sh/polar_cl_jgrnjMLjspRxBn6g54rxMpDA9TAv4bQFsFIVa1zLRWs",
+ "003": "https://buy.polar.sh/polar_cl_4S5yCdnhwaLi6stF8BTODh23PJoFxoR8GxyqA4GoP8Y",
+ "004": "https://buy.polar.sh/polar_cl_yzpKuO6mYnm9LxAirAYJaArAuG0hgojhEh1jz4S9YdV",
+ "005": "https://buy.polar.sh/polar_cl_t10BTcfInJ4mZKttUL16ZjBCEC974Q5dsuxAw3wA4Eo",
+ "006": "https://buy.polar.sh/polar_cl_EwlsjQVFxguSa3RM1ai5oS7ceuuuHV7RF18rP2SULQj",
+ "007": "https://buy.polar.sh/polar_cl_Yq0pWPWZe8Npd8LzYyUPHbNLGv1hzY79NXgEU2fYflE",
+ "008": "https://buy.polar.sh/polar_cl_C3egr4KdWhkgIszKxwKM7dTsL8B1GEUcpuy1A2oq5pp",
+ "009": "https://buy.polar.sh/polar_cl_XHfHMSv88pnpZ0BuJh8dCbO66XX0SEKhauw9i1oa1y0",
+ "010": "https://buy.polar.sh/polar_cl_bDjynzjRyrsXci0oOLelc8tkkwjqvxG3zJvpR0keC0X",
+ "011": "https://buy.polar.sh/polar_cl_xEkpcpIuIrUPL0idERu9vPNl4CPO8MjkCCLu308wayX",
+ "012": "https://buy.polar.sh/polar_cl_5q9ZaULuy42oaHBJeIliBmgm3ieeSXxjm9Upa2WNtnL",
+ "013": "https://buy.polar.sh/polar_cl_tTcibtaYYIRJgetVM5UPYN7FcaphGW4rR0ebx2x91yj",
+ "014": "https://buy.polar.sh/polar_cl_D4IKnpwCQp2BtRBvjn9CvdnxCd3mFKiJmXrAw1FHGJb",
+ "015": "https://buy.polar.sh/polar_cl_gYRSnwIKXJNH5nXnUh4HGVaXLct2eiSAV6Rpg3Mp4Nm",
+ "016": "https://buy.polar.sh/polar_cl_eL2nSmxeOX5HwGSZta8hkrXEhl2Fj0CqTaB7Z1WZBF9",
+ "017": "https://buy.polar.sh/polar_cl_OdMMRSjb5avxQnSUCBNDugFDiWPuFKKD2z55b21HIWA",
+ "018": "https://buy.polar.sh/polar_cl_Wrl58lOxWFBqCuxioKKJTpJYFC9VRBC1ViyrJ2mHkS8",
+ "019": "https://buy.polar.sh/polar_cl_DAtFdSbftFiWFlIldmYwF8yvz1D66hIeqRjnZ21boks",
+ "020": "https://buy.polar.sh/polar_cl_aB4SySWR3Sv9Bp9NkpoPAwS2ttMoqAyIGaqsX3dwjvc",
+ "021": "https://buy.polar.sh/polar_cl_7l2Ho5ix17K5SoypwmoXHUY8OrAH4FeGRHgqN3r3XIl",
+ "022": "https://buy.polar.sh/polar_cl_EQjlJDrmMQRg2L9g8BD5N6fuTCzx03WTXTPXi0Cr7Qi",
+ "023": "https://buy.polar.sh/polar_cl_fs9GO4vbF3HlTRNHzG86tuKs1mXCvYcZuAnU63Dt5HG",
+ "024": "https://buy.polar.sh/polar_cl_CyFaxTfENpOE75LID5QZs0wG2pNkbUpCIyImN2K7o2I",
+ "025": "https://buy.polar.sh/polar_cl_ZFYwxSEpXTKyZ6OtIwgVlt5Txy6wkYrJzphJX2eVoF9",
+ "026": "https://buy.polar.sh/polar_cl_a5edZ0pI63NvU3mZB39rb3VunzcLa38O2UnLS1tWNtE",
+ "027": "https://buy.polar.sh/polar_cl_XPgZ7HKkJw4NQLjOxSPveAM4F8lSYALN7vkbw0Rkhog",
+ "028": "https://buy.polar.sh/polar_cl_v7CdjbaJU8d8ixPqbQYZfyXyacgWHFvVrjzV50weg2u",
+ "029": "https://buy.polar.sh/polar_cl_g6xlQ7eSmXUIueBD0lILM3AFHcwl76HRkU1bE2FZe6T",
+ "030": "https://buy.polar.sh/polar_cl_zVtTXJBLvnmmzz7akaugIpot2YNyyBAP4lhVK0K149m",
+ "031": "https://buy.polar.sh/polar_cl_xe8zUSLDmeBeFs5nLGqcOUVbvs75RywcspHf60OiO0M",
+ "032": "https://buy.polar.sh/polar_cl_8ibPFvDWSUAuQV7AGUGufFjM0yuu3ChsMbO6R2plA6O",
+ "033": "https://buy.polar.sh/polar_cl_emqOpJ4AJdOB4bh3MJLTX5oSKy81kAEbGmTLg4LmW5B",
+ "034": "https://buy.polar.sh/polar_cl_FHJMV3t8Cbnp5lC6Vv3gBO39MSJdR1cwrU7iP4FjVyY",
+ "035": "https://buy.polar.sh/polar_cl_fND5yCjE7epUF02CmtaC82mnn5J20QgH6aeQE3sdMvE",
+ "036": "https://buy.polar.sh/polar_cl_Ekq9aOjZ0jrmVjx6VMkZudd4uKM0b0SRcSMyx0gDmmQ",
+ "037": "https://buy.polar.sh/polar_cl_wjCOIwnZYQhns5dbQLL1KrB2V65OBqNEs3xnG3Fz3qY",
+ "038": "https://buy.polar.sh/polar_cl_Rkl0Va5DljLK6lm35lT6Y4KsXdHJ3T6089WDD2Ao3Rj",
+ "039": "https://buy.polar.sh/polar_cl_RD8X4wAhqFYGqyX4e8ZuXcmeDW3hGTcxpqagX0T29qN",
+ "040": "https://buy.polar.sh/polar_cl_Qlu7NVFhvGWTWZYHNnyxgUHLEXBD0l7dFl9Yp27wD6P",
+ "041": "https://buy.polar.sh/polar_cl_orzoDDW6QXyfY9CI4vHCPj8qYVja423Ifl0yX1urfzV",
+ "042": "https://buy.polar.sh/polar_cl_svGwDFc80GLk5TIOfzvpBJZun0kTh1hKnk1O80d1pu4",
+ "043": "https://buy.polar.sh/polar_cl_jWRYrYe5B2jclMMCxkC8wzdJoZ1QIGChNMnuq3KfHaA",
+ "044": "https://buy.polar.sh/polar_cl_tNmcKEGuyMppbQjvf9oQYEvIwJGoY1G3EUP9I13M1Gg"
+};
 // ---------------------------------------------------------------------------
 const $ = (id) => document.getElementById(id);
 
