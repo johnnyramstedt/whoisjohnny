@@ -128,3 +128,22 @@
   .spec li { display:flex; justify-content:space-between; gap:16px; padding: 8px 0; border-bottom:1px solid var(--line); }
   .spec li span { color: var(--mute); text-align:right; }
   .mright .gets { margin-top: 14px; }
+
+/* pick mode */
+.pickbar{position:fixed;left:0;right:0;bottom:0;z-index:60;background:#0d0d0d;color:#f7f7f5;display:flex;justify-content:space-between;align-items:center;gap:14px;padding:14px 22px;flex-wrap:wrap}
+.pickbar.hidden{display:none}
+.pickinfo{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.pickinfo b{font-size:16px}
+.pickinfo #pickCount{color:#e4002b;font-weight:700;font-size:18px}
+.pickinfo .pm{opacity:.7;font-size:14px}
+.pickbtns{display:flex;gap:10px;align-items:center}
+.pickbar button{font:inherit;cursor:pointer;border:0;padding:11px 20px;background:#e4002b;color:#fff;font-weight:600}
+.pickbar button:disabled{opacity:.35;cursor:not-allowed}
+.pickbar button.ghost{background:transparent;color:#f7f7f5;border:1px solid #555}
+body.picking{padding-bottom:90px}
+.tile{position:relative}
+body.picking .tile{cursor:copy}
+body.picking .tile.picked{outline:3px solid #e4002b;outline-offset:-3px}
+body.picking .tile.picked::after{content:"✓";position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:#e4002b;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center}
+body.picking .tile:has(.cap.free){opacity:.35;cursor:not-allowed}
+@media (max-width:600px){.pickbar{padding:12px 14px}.pickbar button{padding:10px 14px}}

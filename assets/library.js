@@ -12,9 +12,46 @@ function buildGrid() {
     const c = document.createElement("canvas"); drawSheet(c, x, "a4", 360); b.appendChild(c);
     const s = document.createElement("div"); s.className = "cap" + (x.free ? " free" : "");
     s.textContent = "No. " + x.no + "  ·  " + (x.free ? "FREE" : "USD " + PRICE); b.appendChild(s);
-    b.addEventListener("click", () => openModal(i));
+    b.addEventListener("click", () => { if (pick.size) togglePick(i); else openModal(i); });
     tiles.push(b); g.insertBefore(b, anchor);
   });
+}
+
+// Pick mode: choose 10 or 20 texts for a bundle
+const pick = { size: 0, set: new Set(), price: 0 };
+function updatePickBar() {
+  const n = pick.set.size, left = pick.size - n;
+  $("pickCount").textContent = n + " / " + pick.size;
+  $("pickMsg").textContent = left > 0 ? "Choose " + left + " more" : "Ready";
+  $("pickGo").disabled = left > 0;
+  $("pickGo").textContent = "Continue — USD " + pick.price;
+  TEXTS.forEach((x, i) => tiles[i].classList.toggle("picked", pick.set.has(x.no)));
+}
+function startPick(size, price) {
+  const cur = TEXTS[sel];
+  closeModal();
+  filter = "all"; refreshGrid();
+  pick.size = size; pick.price = price; pick.set = new Set();
+  if (!cur.free) pick.set.add(cur.no);
+  document.body.classList.add("picking");
+  $("pickbar").classList.remove("hidden");
+  $("pickTitle").textContent = "Pick " + size + " texts";
+  updatePickBar();
+  track("started_pick", { product: "pack" + size, viewing: cur.no });
+  window.scrollTo({ top: $("grid").getBoundingClientRect().top + window.scrollY - 90, behavior: "smooth" });
+}
+function endPick() {
+  pick.size = 0; pick.set = new Set();
+  document.body.classList.remove("picking");
+  $("pickbar").classList.add("hidden");
+  tiles.forEach(t => t.classList.remove("picked"));
+}
+function togglePick(i) {
+  const x = TEXTS[i];
+  if (x.free) return;
+  if (pick.set.has(x.no)) pick.set.delete(x.no);
+  else if (pick.set.size < pick.size) pick.set.add(x.no);
+  updatePickBar();
 }
 
 function refreshGrid() {
@@ -222,8 +259,16 @@ $("socBtn").addEventListener("click", () => {
   track("downloaded_social", { text: x.t, no: x.no });
   collect(x.no, true); afterCollect();
 });
-$("pack10").addEventListener("click", () => door("pack10", "the ten-text pack", { price: String(PRICE10), viewing: TEXTS[sel].no }));
-$("pack20").addEventListener("click", () => door("pack20", "the twenty-text pack", { price: String(PRICE20), viewing: TEXTS[sel].no }));
+$("pack10").addEventListener("click", () => startPick(10, PRICE10));
+$("pack20").addEventListener("click", () => startPick(20, PRICE20));
+$("pickCancel").addEventListener("click", endPick);
+$("pickClear").addEventListener("click", () => { pick.set = new Set(); updatePickBar(); });
+$("pickGo").addEventListener("click", () => {
+  if (pick.set.size !== pick.size) return;
+  const list = TEXTS.filter(x => pick.set.has(x.no)).map(x => x.no);
+  door("pack" + pick.size, "the " + pick.size + "-text pack (No. " + list.join(", ") + ")", { price: String(pick.price), no: list.join(","), picks: list.join(",") });
+  endPick();
+});
 $("collectBtn").addEventListener("click", () => { const x = TEXTS[sel]; collect(x.no, !owned.has(x.no)); afterCollect(); });
 $("mockSave").addEventListener("click", (e) => {
   e.preventDefault(); const x = TEXTS[sel], c = document.createElement("canvas"); drawMockup(c, x, 1080);
@@ -237,6 +282,7 @@ $("mNext").addEventListener("click", () => step(1));
 $("modal").addEventListener("click", (e) => { if (e.target.id === "modal") closeModal(); });
 document.addEventListener("keydown", (e) => {
   if ($("overlay").style.display === "flex") { if (e.key === "Escape") closeOverlay(); return; }
+  if (e.key === "Escape" && pick.size) { endPick(); return; }
   if (!isOpen()) return;
   if (e.key === "Escape") closeModal(); else if (e.key === "ArrowRight") step(1); else if (e.key === "ArrowLeft") step(-1);
 });

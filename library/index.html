@@ -23,7 +23,7 @@
 <meta name="twitter:title" content="WhoIsJohnny? Small texts, big print">
 <meta name="twitter:description" content="A growing library of deadpan texts. Free social packs, print packs from USD 4.">
 <meta name="twitter:image" content="https://whoisjohnny.com/og-image.png">
-<link rel="stylesheet" href="/assets/site.css?v=2">
+<link rel="stylesheet" href="/assets/site.css?v=3">
 </head>
 <body class="lib">
 <main>
@@ -89,8 +89,8 @@
         <button class="btn" id="main"></button>
         <button class="btn alt" id="socBtn">Download the social pack, free (three images)</button>
         <button class="btn alt" id="collectBtn"></button>
-        <button class="btn alt" id="pack10">Any 10 print packs — USD 30</button>
-        <button class="btn alt" id="pack20">Any 20 print packs — USD 50</button>
+        <button class="btn alt" id="pack10">Any 10 print packs — USD 30 (you choose)</button>
+        <button class="btn alt" id="pack20">Any 20 print packs — USD 50 (you choose)</button>
         <p class="pnote"><b>Paper tip.</b> Matte paper suits the plain type best. For A4, 120–170 g/m². For 50 x 70 cm and 18 x 24 in, 170–200 g/m² uncoated or silk-matte, printed at a print shop. For postcards, 250–300 g/m² card stock.</p>
         <p class="pnote" style="margin-top:10px"><b>Digital only.</b> You download the files. Nothing is sent to you by post.</p>
         <div class="ttl2">Social pack: three images, ready to post</div>
@@ -98,6 +98,11 @@
       </div>
     </div>
   </div>
+</div>
+
+<div class="pickbar hidden" id="pickbar" role="region" aria-label="Choose texts">
+  <div class="pickinfo"><b id="pickTitle">Pick 10 texts</b><span id="pickCount">0 / 10</span><span class="pm" id="pickMsg"></span></div>
+  <div class="pickbtns"><button class="ghost" id="pickClear">Clear</button><button class="ghost" id="pickCancel">Cancel</button><button id="pickGo" disabled>Continue</button></div>
 </div>
 
 <div class="overlay" id="overlay">
@@ -127,6 +132,6 @@
 
 <script src="/assets/core.js?v=2"></script>
 <script src="/assets/cmyk-001.js?v=2"></script>
-<script src="/assets/library.js?v=2"></script>
+<script src="/assets/library.js?v=3"></script>
 </body>
 </html>
