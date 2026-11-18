@@ -147,3 +147,9 @@ body.picking .tile.picked{outline:3px solid #e4002b;outline-offset:-3px}
 body.picking .tile.picked::after{content:"✓";position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:#e4002b;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center}
 body.picking .tile:has(.cap.free){opacity:.35;cursor:not-allowed}
 @media (max-width:600px){.pickbar{padding:12px 14px}.pickbar button{padding:10px 14px}}
+
+.thanksbar{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;background:#0d0d0d;color:#f7f7f5;padding:18px 22px;margin:0 0 22px;line-height:1.5}
+.thanksbar.hidden{display:none}
+.thanksbar b{color:#e4002b}
+.thanksbar a{color:inherit}
+.thanksbar button{background:none;border:0;color:#f7f7f5;font-size:26px;line-height:1;cursor:pointer}

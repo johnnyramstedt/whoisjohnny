@@ -321,4 +321,16 @@ $("newsForm").addEventListener("submit", (e) => {
   el.value = ""; $("newsOk").checked = false;
 });
 
+// Thank-you message after a Polar purchase (success URL has ?thanks=1, or the visitor came from Polar)
+(function () {
+  let ok = /[?&]thanks=1/.test(location.search);
+  try { ok = ok || /(^|\.)polar\.sh$/.test(new URL(document.referrer).hostname); } catch (e) {}
+  if (!ok) return;
+  $("thanksBar").classList.remove("hidden");
+  track("purchase_return", { referrer: document.referrer || "direct" });
+  try { history.replaceState(null, "", location.pathname + location.hash); } catch (e) {}
+  $("thanksClose").addEventListener("click", () => $("thanksBar").classList.add("hidden"));
+  window.scrollTo(0, 0);
+})();
+
 buildGrid(); refreshGrid(); openFromHash();
