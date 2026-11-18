@@ -262,8 +262,6 @@ $("socBtn").addEventListener("click", () => {
   track("downloaded_social", { text: x.t, no: x.no });
   collect(x.no, true); afterCollect();
 });
-$("pack10").addEventListener("click", () => startPick(10, PRICE10));
-$("pack20").addEventListener("click", () => startPick(20, PRICE20));
 $("pickCancel").addEventListener("click", endPick);
 $("pickClear").addEventListener("click", () => { pick.set = new Set(); updatePickBar(); });
 $("pickGo").addEventListener("click", () => {
