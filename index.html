@@ -11,55 +11,261 @@
 </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#f7f7f5">
+<meta name="theme-color" content="#f2f1ed">
 <meta name="p:domain_verify" content="26af8644a534c5310a58b1a1a78f44ef"/>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<title>WhoIsJohnny? Small texts, big print</title>
-<meta name="description" content="A growing library of deadpan texts. Free social packs for Instagram, and print packs as A4, 50 x 70 cm, 18 x 24 in and postcards.">
+<title>WhoIsJohnny? A project about who gets to be somebody</title>
+<meta name="description" content="Pantheon, a series of drawings of anonymous figures by Johnny Ramstedt. Unique works on paper, A3, acid-free paper, signed and dated.">
 <link rel="canonical" href="https://whoisjohnny.com/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="WhoIsJohnny?">
-<meta property="og:title" content="WhoIsJohnny? Small texts, big print">
-<meta property="og:description" content="A growing library of deadpan texts. Free social packs, print packs from USD 4.">
+<meta property="og:title" content="WhoIsJohnny? A project about who gets to be somebody">
+<meta property="og:description" content="Pantheon: drawings of anonymous figures by Johnny Ramstedt. Unique works on paper.">
 <meta property="og:url" content="https://whoisjohnny.com/">
-<meta property="og:image" content="https://whoisjohnny.com/og-image.png">
+<meta property="og:image" content="https://whoisjohnny.com/pantheon/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="WhoIsJohnny? Small texts. Big print. Deadpan texts in red type on white sheets.">
+<meta property="og:image:alt" content="WhoIsJohnny? with three crayon drawings of anonymous figures.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="WhoIsJohnny? Small texts, big print">
-<meta name="twitter:description" content="A growing library of deadpan texts. Free social packs, print packs from USD 4.">
-<meta name="twitter:image" content="https://whoisjohnny.com/og-image.png">
-<link rel="stylesheet" href="/assets/site.css?v=2">
+<meta name="twitter:title" content="WhoIsJohnny? A project about who gets to be somebody">
+<meta name="twitter:description" content="Pantheon: drawings of anonymous figures by Johnny Ramstedt. Unique works on paper.">
+<meta name="twitter:image" content="https://whoisjohnny.com/pantheon/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;800&display=swap">
+<style>
+body{margin:0;background:#f2f1ed}
+a{color:#111111;text-underline-offset:4px;text-decoration-thickness:1px}
+a:hover{color:#d63a27}
+a:focus-visible{outline:2px solid #111111;outline-offset:4px}
+</style>
+<style>html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}</style>
 </head>
-<body class="landing">
-<main>
-  <header class="top"><a class="mark" href="/" aria-label="WhoIsJohnny? home">?</a><span class="nav"><a href="/library/">Library</a><a href="/library/#about">About</a></span></header>
-  <a class="frame" id="frame" href="/library/#001" aria-label="Open this text in the library"><canvas id="imgA" class="on"></canvas><canvas id="imgB"></canvas></a>
-  <div class="enterrow"><span id="num">No. 001</span><a href="/library/">Enter the library</a></div>
-</main>
-<script src="/assets/core.js?v=4"></script>
-<script>
-  (function () {
-    const A = $("imgA"), B = $("imgB"), frame = $("frame"), num = $("num");
-    const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let i = 0, front = A, back = B, timer = null;
-    const paint = (cv, k) => drawMockup(cv, TEXTS[k], 1080);
-    const label = (k) => { frame.href = "/library/#" + TEXTS[k].no; num.textContent = "No. " + TEXTS[k].no + " / " + TEXTS.length; };
-    function next() {
-      i = (i + 1) % TEXTS.length;
-      paint(back, i); back.classList.add("on"); front.classList.remove("on");
-      const t = front; front = back; back = t; label(i);
-    }
-    const start = () => { if (!timer && !reduce) timer = setInterval(next, 5500); };
-    const stop = () => { clearInterval(timer); timer = null; };
-    const ready = (document.fonts && document.fonts.load) ? document.fonts.load('400 14px "Space Grotesk"') : Promise.resolve();
-    ready.catch(() => {}).then(() => { paint(A, 0); label(0); start(); });
-    document.addEventListener("visibilitychange", () => { if (document.hidden) stop(); else start(); });
-    frame.addEventListener("mouseenter", stop); frame.addEventListener("mouseleave", start);
-  })();
-</script>
+<body>
+<div style="width: 100%; box-sizing: border-box; background: #f2f1ed; color: #111111; font-family: 'Hanken Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.5; display: flex; flex-direction: column; align-items: center">
+<div style="width: 100%; max-width: 1200px; box-sizing: border-box; padding: 0 24px; display: flex; flex-direction: column">
+
+<header style="display: flex; flex-wrap: wrap; gap: 12px 32px; justify-content: space-between; align-items: baseline; padding: 28px 0">
+<a href="#top" style="font-size: 18px; font-weight: 800; text-decoration: none; letter-spacing: -0.01em">WhoIsJohnny<span style="color: #d63a27">?</span></a>
+<nav style="display: flex; flex-wrap: wrap; gap: 8px 28px; font-size: 15px">
+<a href="#story">Story</a>
+<a href="#works">Works</a>
+<a href="#room">In the room</a>
+<a href="#about">Johnny</a>
+<a href="#inquiries">Inquiries</a>
+</nav>
+</header>
+
+<section id="top" style="display: flex; flex-direction: column; gap: 32px; padding: 72px 0 96px">
+<h1 style="margin: 0; font-size: clamp(44px, 12.4vw, 168px); line-height: 0.95; letter-spacing: -0.045em; font-weight: 800">WhoIsJohnny<span style="color: #d63a27">?</span></h1>
+<div style="display: flex; flex-wrap: wrap; gap: 16px 48px; justify-content: space-between; align-items: flex-end; border-top: 1px solid #d9d7d0; padding-top: 24px">
+<p style="margin: 0; font-size: clamp(22px, 3vw, 32px); line-height: 1.2; max-width: 22ch; font-weight: 500">A project about who gets to be somebody.</p>
+<p style="margin: 0; font-size: 15px; color: #66665f; max-width: 36ch">Drawings of anonymous figures by Johnny Ramstedt. Series: Pantheon, 2026.</p>
+</div>
+</section>
+
+<section id="story" style="display: flex; flex-wrap: wrap; gap: 32px 64px; padding: 96px 0; border-top: 1px solid #d9d7d0">
+<h2 style="flex: 1 1 180px; margin: 0; font-size: 15px; font-weight: 500; color: #66665f">The story</h2>
+<div style="flex: 4 1 440px; min-width: 0; max-width: 720px; display: flex; flex-direction: column; gap: 28px">
+<p style="margin: 0; font-size: clamp(30px, 4.4vw, 52px); line-height: 1.1; letter-spacing: -0.02em; font-weight: 800; text-wrap: balance">How little does it take to become somebody<span style="color: #d63a27">?</span></p>
+<p style="margin: 0; font-size: 19px; color: #3a3a37">WhoIsJohnny<span style="color: #d63a27">?</span> is a project built around a question, and it has no plan to answer it. Who is he? Who is anyone? Who decides who gets to be somebody?</p>
+<p style="margin: 0; font-size: 19px; color: #3a3a37">The first answer is a crowd. Pantheon is a growing gathering of anonymous figures, each with a small head, a few marks for a face and a body of scribble, drawn on paper in different sizes. They are called <em>Quidam</em>, Latin for “a certain someone”: the person nobody bothered to name. Give them a grand title and a number and they start to look important anyway.</p>
+<p style="margin: 0; font-size: 19px; color: #3a3a37">It is a serious question dressed in a silly face. Look long enough and the figures look back, which is exactly the point.</p>
+</div>
+</section>
+
+<section id="works" style="display: flex; flex-direction: column; gap: 40px; padding: 96px 0; border-top: 1px solid #d9d7d0">
+<div style="display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: space-between; align-items: baseline">
+<h2 style="margin: 0; font-size: 15px; font-weight: 500; color: #66665f">Works, Pantheon</h2>
+<div style="font-size: 15px; color: #66665f">Unique works on paper. A4, A3 and larger. Acid-free paper. Unframed. Monogrammed and dated on recto, signed and dated on verso.</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); gap: 56px 32px">
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<img src="/pantheon/q1.jpg" alt="Quidam 1, drawing: a figure with grey head loops and a brown scribble body" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
+<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
+<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 1</div>
+<a href="#inquiries" style="font-size: 15px">Inquire</a>
+</div>
+<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
+<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Acid-free paper. Unframed. Signed and dated on verso.</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<img src="/pantheon/q2.jpg" alt="Quidam 2, drawing: a figure with orange hair and wide eyes, red scribble body" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
+<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
+<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 2</div>
+<a href="#inquiries" style="font-size: 15px">Inquire</a>
+</div>
+<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
+<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Acid-free paper. Unframed. Signed and dated on verso.</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<img src="/pantheon/q3.jpg" alt="Quidam 3, drawing: a figure in red-rimmed glasses with black hair" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
+<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
+<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 3</div>
+<a href="#inquiries" style="font-size: 15px">Inquire</a>
+</div>
+<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
+<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Acid-free paper. Unframed. Signed and dated on verso.</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<img src="/pantheon/q4.jpg" alt="Quidam 4, drawing: a smiling figure in black" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
+<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
+<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 4</div>
+<a href="#inquiries" style="font-size: 15px">Inquire</a>
+</div>
+<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
+<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Acid-free paper. Unframed. Signed and dated on verso.</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<img src="/pantheon/q5.jpg" alt="Quidam 5, drawing: two figures in teal and salmon pink" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
+<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
+<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 5</div>
+<a href="#inquiries" style="font-size: 15px">Inquire</a>
+</div>
+<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
+<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Acid-free paper. Unframed. Signed and dated on verso.</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<img src="/pantheon/q6.jpg" alt="Quidam 6, drawing: a green figure with orange stripes" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
+<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
+<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 6</div>
+<a href="#inquiries" style="font-size: 15px">Inquire</a>
+</div>
+<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
+<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Acid-free paper. Unframed. Signed and dated on verso.</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<img src="/pantheon/q7.jpg" alt="Quidam 7, drawing: a figure outlined in brown with a long mouth" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
+<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
+<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 7</div>
+<a href="#inquiries" style="font-size: 15px">Inquire</a>
+</div>
+<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
+<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Acid-free paper. Unframed. Signed and dated on verso.</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<img src="/pantheon/q8.jpg" alt="Quidam 8, drawing: two figures in black with wide eyes" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
+<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
+<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 8</div>
+<a href="#inquiries" style="font-size: 15px">Inquire</a>
+</div>
+<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
+<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Acid-free paper. Unframed. Signed and dated on verso.</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<img src="/pantheon/q9.jpg" alt="Quidam 9, drawing: a figure with a teal head and green and orange body" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
+<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
+<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 9</div>
+<a href="#inquiries" style="font-size: 15px">Inquire</a>
+</div>
+<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
+<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Acid-free paper. Unframed. Signed and dated on verso.</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<img src="/pantheon/q10.jpg" alt="Quidam 10, drawing: a figure with teal hair and a black body" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
+<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
+<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 10</div>
+<a href="#inquiries" style="font-size: 15px">Inquire</a>
+</div>
+<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
+<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Acid-free paper. Unframed. Signed and dated on verso.</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<img src="/pantheon/q11.jpg" alt="Quidam 11, drawing: two heads in blue and black with coloured marks" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
+<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
+<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 11</div>
+<a href="#inquiries" style="font-size: 15px">Inquire</a>
+</div>
+<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
+<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Acid-free paper. Unframed. Signed and dated on verso.</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<img src="/pantheon/q12.jpg" alt="Quidam 12, drawing: a black figure with a wide smile and a crown of marks" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
+<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
+<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 12</div>
+<a href="#inquiries" style="font-size: 15px">Inquire</a>
+</div>
+<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
+<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Acid-free paper. Unframed. Signed and dated on verso.</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<img src="/pantheon/q13.jpg" alt="Quidam 13, drawing: two black figures with square heads" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
+<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
+<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 13</div>
+<a href="#inquiries" style="font-size: 15px">Inquire</a>
+</div>
+<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
+<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Acid-free paper. Unframed. Signed and dated on verso.</div>
+</div>
+</div>
+</section>
+
+<section id="room" style="display: flex; flex-direction: column; gap: 40px; padding: 96px 0; border-top: 1px solid #d9d7d0">
+<div style="display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: space-between; align-items: baseline">
+<h2 style="margin: 0; font-size: 15px; font-weight: 500; color: #66665f">In the room</h2>
+<div style="font-size: 15px; color: #66665f">Mockups. Black floating frame for A3, approx. 38 × 50 cm, not included.</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 32px">
+<div style="flex: 1 1 280px; min-width: 0"><img src="/pantheon/r2.jpg" alt="Quidam 2 in a black floating frame on a wall" style="display: block; width: 100%; height: auto"></div>
+<div style="flex: 1 1 280px; min-width: 0"><img src="/pantheon/r8.jpg" alt="Quidam 8 in a black floating frame on a wall" style="display: block; width: 100%; height: auto"></div>
+<div style="flex: 1 1 280px; min-width: 0"><img src="/pantheon/r12.jpg" alt="Quidam 12 in a black floating frame on a wall" style="display: block; width: 100%; height: auto"></div>
+</div>
+</section>
+
+<section id="about" style="display: flex; flex-wrap: wrap; gap: 32px 64px; padding: 96px 0; border-top: 1px solid #d9d7d0">
+<h2 style="flex: 1 1 180px; margin: 0; font-size: 15px; font-weight: 500; color: #66665f">Johnny</h2>
+<div style="flex: 4 1 440px; min-width: 0; max-width: 720px; display: flex; flex-direction: column; gap: 56px">
+<p style="margin: 0; font-size: 19px; color: #3a3a37">Johnny Ramstedt (b. 1970, Borgå, Finland) is a visual artist based in Helsinki. He has exhibited internationally since 1999, and his work is in private and corporate collections across Europe and the US.</p>
+<div style="display: flex; flex-direction: column; gap: 14px">
+<h3 style="margin: 0; font-size: 15px; font-weight: 500; color: #66665f">Selected exhibitions</h3>
+<div style="display: flex; flex-direction: column; gap: 8px; font-size: 16px; color: #3a3a37">
+<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2025</span><span>Fafa's window gallery, Helsinki</span></div>
+<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2024</span><span>Volta Art Fair, Basel</span></div>
+<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2023</span><span>Art Gallery Loviisa, Lovisa</span></div>
+<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2022</span><span>Galleria Theodor, Lovisa</span></div>
+<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2021</span><span>SEB (Skandinaviska Enskilda Banken), Helsinki</span></div>
+<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2021</span><span>Interpretations from The Abstract, The Contemporary Art Modern Project: Miami, New York, London, Pacific Palisades</span></div>
+<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2020</span><span>Monokhromos II, The Contemporary Art Modern Project, Miami</span></div>
+<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2016</span><span>Galleri Lohme, Malmö</span></div>
+<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2016</span><span>Korjaamo, Helsinki</span></div>
+<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2014</span><span>Galerie Art Room, Helsinki</span></div>
+<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2014</span><span>Kulturhuset Grand, Porvoo</span></div>
+<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">1999</span><span>Art Alex, Helsinki</span></div>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px">
+<h3 style="margin: 0; font-size: 15px; font-weight: 500; color: #66665f">Grants</h3>
+<p style="margin: 0; font-size: 16px; color: #3a3a37">Svenska Kulturfonden, 2021–2026. Arts Promotion Centre Finland (Taike), 2022. Grönqvistska Foundation, 2016.</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px">
+<h3 style="margin: 0; font-size: 15px; font-weight: 500; color: #66665f">Collections</h3>
+<p style="margin: 0; font-size: 16px; color: #3a3a37">Private collections. Lovisa City. 99 Hudson, Jersey City, NJ, USA.</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px">
+<h3 style="margin: 0; font-size: 15px; font-weight: 500; color: #66665f">Studies</h3>
+<p style="margin: 0; font-size: 16px; color: #3a3a37">Carpentry and woodworking, Piet Hein Eek, Eindhoven. Vocational qualification in the wood industry (carpentry and joinery), Axxell, Finland. Interdisciplinary studies (art history), Helsinki University. Art Students League of New York.</p>
+</div>
+</div>
+</section>
+
+<section id="inquiries" style="display: flex; flex-wrap: wrap; gap: 32px 64px; padding: 96px 0 120px; border-top: 1px solid #d9d7d0">
+<h2 style="flex: 1 1 180px; margin: 0; font-size: 15px; font-weight: 500; color: #66665f">Inquiries</h2>
+<div style="flex: 4 1 440px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+<p style="margin: 0; font-size: clamp(26px, 4vw, 44px); line-height: 1.15; letter-spacing: -0.02em; font-weight: 800; overflow-wrap: anywhere"><a href="mailto:hello@whoisjohnny.com">hello@whoisjohnny.com</a></p>
+<p style="margin: 0; font-size: 19px; color: #3a3a37">Instagram: <a href="https://www.instagram.com/whoisjohnny2020/">@whoisjohnny2020</a></p>
+<p style="margin: 0; font-size: 15px; color: #66665f">Write for sizes and availability.</p>
+<p style="margin: 0; font-size: 15px; color: #66665f">Prices include VAT within the EU. No VAT outside the EU. Shipping is added. Larger and smaller sizes: write for prices.</p>
+</div>
+</section>
+
+<footer style="display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: space-between; padding: 24px 0 40px; border-top: 1px solid #d9d7d0; font-size: 14px; color: #66665f">
+<span>© 2026 Johnny Ramstedt</span>
+<span>whoisjohnny.com</span>
+</footer>
+
+</div>
+</div>
 </body>
 </html>

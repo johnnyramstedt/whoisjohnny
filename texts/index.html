@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T7DLYBM115"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-T7DLYBM115');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f7f7f5">
+<meta name="p:domain_verify" content="26af8644a534c5310a58b1a1a78f44ef"/>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<title>WhoIsJohnny? Small texts, big print</title>
+<meta name="description" content="A growing library of deadpan texts. Free social packs for Instagram, and print packs as A4, 50 x 70 cm, 18 x 24 in and postcards.">
+<link rel="canonical" href="https://whoisjohnny.com/texts/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="WhoIsJohnny?">
+<meta property="og:title" content="WhoIsJohnny? Small texts, big print">
+<meta property="og:description" content="A growing library of deadpan texts. Free social packs, print packs from USD 4.">
+<meta property="og:url" content="https://whoisjohnny.com/texts/">
+<meta property="og:image" content="https://whoisjohnny.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="WhoIsJohnny? Small texts. Big print. Deadpan texts in red type on white sheets.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="WhoIsJohnny? Small texts, big print">
+<meta name="twitter:description" content="A growing library of deadpan texts. Free social packs, print packs from USD 4.">
+<meta name="twitter:image" content="https://whoisjohnny.com/og-image.png">
+<link rel="stylesheet" href="/assets/site.css?v=2">
+</head>
+<body class="landing">
+<main>
+  <header class="top"><a class="mark" href="/" aria-label="WhoIsJohnny? home">?</a><span class="nav"><a href="/library/">Library</a><a href="/library/#about">About</a></span></header>
+  <a class="frame" id="frame" href="/library/#001" aria-label="Open this text in the library"><canvas id="imgA" class="on"></canvas><canvas id="imgB"></canvas></a>
+  <div class="enterrow"><span id="num">No. 001</span><a href="/library/">Enter the library</a></div>
+</main>
+<script src="/assets/core.js?v=4"></script>
+<script>
+  (function () {
+    const A = $("imgA"), B = $("imgB"), frame = $("frame"), num = $("num");
+    const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let i = 0, front = A, back = B, timer = null;
+    const paint = (cv, k) => drawMockup(cv, TEXTS[k], 1080);
+    const label = (k) => { frame.href = "/library/#" + TEXTS[k].no; num.textContent = "No. " + TEXTS[k].no + " / " + TEXTS.length; };
+    function next() {
+      i = (i + 1) % TEXTS.length;
+      paint(back, i); back.classList.add("on"); front.classList.remove("on");
+      const t = front; front = back; back = t; label(i);
+    }
+    const start = () => { if (!timer && !reduce) timer = setInterval(next, 5500); };
+    const stop = () => { clearInterval(timer); timer = null; };
+    const ready = (document.fonts && document.fonts.load) ? document.fonts.load('400 14px "Space Grotesk"') : Promise.resolve();
+    ready.catch(() => {}).then(() => { paint(A, 0); label(0); start(); });
+    document.addEventListener("visibilitychange", () => { if (document.hidden) stop(); else start(); });
+    frame.addEventListener("mouseenter", stop); frame.addEventListener("mouseleave", start);
+  })();
+</script>
+</body>
+</html>
