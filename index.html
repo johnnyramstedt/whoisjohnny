@@ -1,465 +1,310 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-T7DLYBM115"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-T7DLYBM115');
+</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
-<meta name="referrer" content="no-referrer">
-<title>Registration of Arms Form</title>
+<meta name="theme-color" content="#f2f1ed">
+<meta name="p:domain_verify" content="26af8644a534c5310a58b1a1a78f44ef"/>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<title>WhoIsJohnny? A project about who gets to be somebody</title>
+<meta name="description" content="Pantheon, a series of drawings of anonymous figures by Johnny Ramstedt. Unique mixed media works on acid-free paper, A3, signed and dated.">
+<link rel="canonical" href="https://whoisjohnny.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="WhoIsJohnny?">
+<meta property="og:title" content="WhoIsJohnny? A project about who gets to be somebody">
+<meta property="og:description" content="Pantheon: drawings of anonymous figures by Johnny Ramstedt. Unique works on paper.">
+<meta property="og:url" content="https://whoisjohnny.com/">
+<meta property="og:image" content="https://whoisjohnny.com/pantheon/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="WhoIsJohnny? with three crayon drawings of anonymous figures.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="WhoIsJohnny? A project about who gets to be somebody">
+<meta name="twitter:description" content="Pantheon: drawings of anonymous figures by Johnny Ramstedt. Unique works on paper.">
+<meta name="twitter:image" content="https://whoisjohnny.com/pantheon/og.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;800&display=swap">
 <style>
-  /* Layout: screen = toolbar + stack of A4 sheets (one per passenger); print = sheets only, one per page */
-  :root {
-    --bg: #e9ebee;
-    --fg: #1d2330;
-    --muted: #5d6676;
-    --bar: #ffffff;
-    --line: #cfd4dc;
-    --accent: #1f4e8c;
-    --accent-fg: #ffffff;
-    --warn: #a4380f;
-    --paper: #ffffff;
-    --ink: #1b1b1b;
-    --ink-soft: #6b6f76;
-    color-scheme: light;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #14181f; --fg: #e6e9ef; --muted: #98a1b1; --bar: #1c222c; --line: #323a47;
-      --accent: #7aa7e6; --accent-fg: #0d1a2e; --warn: #ff9a73;
-      color-scheme: dark;
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #14181f; --fg: #e6e9ef; --muted: #98a1b1; --bar: #1c222c; --line: #323a47;
-    --accent: #7aa7e6; --accent-fg: #0d1a2e; --warn: #ff9a73;
-    color-scheme: dark;
-  }
-
-  * { box-sizing: border-box; }
-  html, body { margin: 0; }
-  body {
-    background: var(--bg);
-    color: var(--fg);
-    font: 14px/1.4 "Helvetica Neue", Arial, sans-serif;
-    padding-left: max(16px, env(safe-area-inset-left, 0px));
-    padding-right: max(16px, env(safe-area-inset-right, 0px));
-    padding-block: 0 48px;
-  }
-
-  /* ---------- toolbar (screen only) ---------- */
-  .bar {
-    position: sticky; top: 0; z-index: 5;
-    background: var(--bar);
-    border-bottom: 1px solid var(--line);
-    margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
-    padding: 12px max(16px, env(safe-area-inset-right, 0px)) 12px max(16px, env(safe-area-inset-left, 0px));
-    display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center;
-  }
-  .bar h1 { font-size: 15px; margin: 0; font-weight: 700; letter-spacing: .01em; }
-  .bar .hint { color: var(--muted); font-size: 12.5px; flex: 1 1 260px; min-width: 0; }
-  .actions { display: flex; flex-wrap: wrap; gap: 8px; }
-  button {
-    font: inherit; font-weight: 600; cursor: pointer;
-    border: 1px solid var(--line); background: var(--bar); color: var(--fg);
-    padding: 8px 14px; border-radius: 4px;
-  }
-  button.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
-  button:hover { filter: brightness(.96); }
-  button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  button:disabled { opacity: .4; cursor: default; }
-  .linkrow { width: 100%; display: none; flex-wrap: wrap; gap: 6px 8px; align-items: center; }
-  .linkrow.on { display: flex; }
-  .linkrow input { flex: 1 1 280px; min-width: 0; font: 12.5px ui-monospace, Menlo, monospace; padding: 7px 9px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); border-radius: 4px; }
-  .linkrow .note { flex: 1 1 100%; color: var(--muted); font-size: 12px; }
-
-  .only-edit { display: inline-block; }
-  .only-view { display: none; }
-  body.view .only-edit { display: none; }
-  body.view .only-view { display: inline-block; }
-
-  .sheets { display: flex; flex-direction: column; align-items: center; gap: 24px; padding-top: 24px; }
-  .scroller { width: 100%; overflow-x: auto; display: flex; justify-content: center; }
-
-  /* ---------- the A4 sheet ---------- */
-  .sheet {
-    position: relative;
-    width: 210mm; min-height: 297mm;
-    flex: none;
-    background: var(--paper); color: var(--ink);
-    padding: 12mm 14mm 10mm;
-    font-family: Arial, "Helvetica Neue", sans-serif;
-    box-shadow: 0 1px 3px rgba(0,0,0,.25), 0 8px 24px rgba(0,0,0,.12);
-  }
-  .sheet .pax-tag { position: absolute; top: 5mm; left: 14mm; font-size: 8pt; color: var(--ink-soft); letter-spacing: .06em; text-transform: uppercase; }
-  .sheet .remove { position: absolute; top: 4mm; right: 4mm; font-size: 12px; padding: 4px 9px; background: #fff; color: #333; border-color: #c9c9c9; }
-  body.view .sheet .remove { display: none; }
-  body.view .sheet input, body.view .sheet textarea { pointer-events: none; }
-
-  .head { display: grid; grid-template-columns: 1fr auto 1fr; align-items: end; gap: 8mm; padding-bottom: 3mm; border-bottom: 1px solid #bbb; }
-  .brand { font-weight: 800; font-style: italic; font-size: 19pt; letter-spacing: .02em; color: #555; }
-  .title { font-size: 15pt; text-align: center; letter-spacing: .01em; }
-  .formno { font-size: 6.5pt; text-align: right; line-height: 1.25; color: #333; }
-  .formno b { font-weight: 700; }
-
-  .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5mm; margin-top: 5mm; }
-  .box { border: 1px solid #555; padding: 1.6mm 2.2mm; min-height: 17mm; display: flex; flex-direction: column; }
-  .box.span2 { grid-column: span 2; }
-  .box label, .lbl { font-weight: 700; font-size: 9pt; color: #777; }
-  .box input { border: 0; background: transparent; font: 11pt Arial, sans-serif; color: var(--ink); padding: 1mm 0 0; width: 100%; outline-offset: 3px; }
-  .sheet input, .sheet textarea { color: var(--ink); }
-
-  h3.u { font-size: 10.5pt; font-weight: 700; color: #777; text-decoration: underline; margin: 6mm 0 3mm; }
-  .lines { display: grid; grid-template-columns: 38mm 1fr; align-items: end; row-gap: 2.6mm; column-gap: 4mm; }
-  .lines .lbl { padding-bottom: 1mm; }
-  .line { border: 0; border-bottom: 1px solid #666; background: transparent; font: 11pt Arial, sans-serif; padding: 1mm 0 .5mm; width: 100%; border-radius: 0; }
-
-  .ammo { display: grid; grid-template-columns: 1fr 70mm; gap: 4mm; align-items: start; }
-  .ammo .rows { display: grid; grid-template-columns: 1fr 24mm 10mm; align-items: end; row-gap: 3.5mm; column-gap: 3mm; margin-left: -2mm; }
-  .ammo .rows .lbl { text-align: left; }
-  .ammo .rows span.kg { font-weight: 700; font-size: 9pt; color: #777; padding-bottom: 1mm; }
-  .warn { color: var(--warn); font-size: 9pt; font-weight: 700; margin-top: 2mm; display: none; }
-  .warn.on { display: block; }
-
-  .permit { display: grid; grid-template-columns: 64mm 1fr; gap: 0 4mm; margin-top: 0; }
-  .checks { display: grid; grid-template-columns: 48mm 6mm; align-items: center; row-gap: 0; }
-  .checks .lbl { height: 6mm; display: flex; align-items: center; }
-  .checks .cell { height: 6mm; border: 1px solid #555; border-top-width: 0; display: flex; align-items: center; justify-content: center; }
-  .checks .cell:nth-of-type(1) { border-top-width: 1px; }
-  .checks input { appearance: none; -webkit-appearance: none; width: 100%; height: 100%; margin: 0; background: transparent; display: grid; place-content: center; cursor: pointer; }
-  .checks input:checked::after { content: "\2713"; font-size: 11pt; font-weight: 700; color: #111; line-height: 1; }
-  .remarks { border: 1px solid #555; padding: 1.6mm 2.2mm; display: flex; flex-direction: column; min-height: 30mm; }
-  .remarks textarea { flex: 1; border: 0; background: transparent; resize: none; font: 10.5pt Arial, sans-serif; padding-top: 1mm; width: 100%; }
-
-  .notice { border: 1px solid #555; margin-top: 6mm; padding: 2mm 4mm 3mm; }
-  .notice .a { font-size: 6.6pt; font-weight: 700; text-align: center; color: #555; border-bottom: 1px solid #ddd; padding-bottom: 1.6mm; margin-bottom: 2mm; }
-  .notice .b { font-size: 6.6pt; font-weight: 700; line-height: 1.32; color: #222; text-align: justify; }
-
-  .sign { display: grid; grid-template-columns: 1fr 1fr; gap: 12mm; margin-top: 9mm; font-size: 10.5pt; color: #777; }
-  .sign div { padding-bottom: 14mm; border-bottom: 1px solid #666; }
-  .page { text-align: right; font-size: 9pt; margin-top: 8mm; color: #222; }
-
-  @media (max-width: 820px) {
-    .scroller { display: block; }
-    .sheet { margin-inline: auto; }
-  }
-
-  /* ---------- print ---------- */
-  @page { size: A4; margin: 0; }
-  @media print {
-    html, body { background: #fff !important; padding: 0 !important; }
-    .bar, .remove { display: none !important; }
-    .sheets { display: block; padding: 0; gap: 0; }
-    .scroller { display: block; overflow: visible; }
-    .sheet {
-      width: 210mm; height: 296mm; min-height: 0; box-shadow: none; margin: 0;
-      break-after: page; page-break-after: always; overflow: hidden;
-    }
-    .scroller:last-child .sheet { break-after: auto; page-break-after: auto; }
-    .warn { display: none !important; }
-    input, textarea { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .checks input:checked::after { color: #000; }
-  }
+body{margin:0;background:#f2f1ed}
+a{color:#111111;text-underline-offset:4px;text-decoration-thickness:1px}
+a:hover{color:#d63a27}
+a:focus-visible{outline:2px solid #111111;outline-offset:4px}
 </style>
+<style>html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}</style>
 </head>
 <body>
+<div style="width: 100%; box-sizing: border-box; background: #f2f1ed; color: #111111; font-family: 'Hanken Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.5; display: flex; flex-direction: column; align-items: center">
+<div style="width: 100%; max-width: 1200px; box-sizing: border-box; padding: 0 24px; display: flex; flex-direction: column">
 
-<div class="bar">
-  <h1>Registration of Arms Form</h1>
-  <div class="hint" id="hint"></div>
-  <div class="actions">
-    <button id="add" type="button" class="only-edit">+ Add passenger</button>
-    <button id="clear" type="button" class="only-edit">Clear all</button>
-    <button id="share" type="button" class="only-edit">Copy link to filled forms</button>
-    <button id="editcopy" type="button" class="only-view">Edit a copy</button>
-    <button id="print" type="button" class="primary">Save as PDF / Print</button>
-  </div>
-  <div class="linkrow" id="linkrow">
-    <input id="linkout" type="text" readonly aria-label="Link to the filled forms">
-    <span class="note" id="linknote"></span>
-  </div>
+<header style="display: flex; flex-wrap: wrap; gap: 12px 32px; justify-content: space-between; align-items: baseline; padding: 28px 0">
+<a href="#top" style="font-size: 18px; font-weight: 800; text-decoration: none; letter-spacing: -0.01em">WhoIsJohnny<span style="color: #d63a27">?</span></a>
+<nav style="display: flex; flex-wrap: wrap; gap: 8px 28px; font-size: 15px">
+<a href="#story">Story</a>
+<a href="#works">Works</a>
+<a href="#room">In the room</a>
+<a href="#texts">Texts</a>
+<a href="#about">Johnny</a>
+<a href="#inquiries">Inquiries</a>
+</nav>
+</header>
+
+<section id="top" style="display: flex; flex-direction: column; gap: 32px; padding: 72px 0 96px">
+<h1 style="margin: 0; font-size: clamp(44px, 12.4vw, 168px); line-height: 0.95; letter-spacing: -0.045em; font-weight: 800">WhoIsJohnny<span style="color: #d63a27">?</span></h1>
+<div style="display: flex; flex-wrap: wrap; gap: 16px 48px; justify-content: space-between; align-items: flex-end; border-top: 1px solid #d9d7d0; padding-top: 24px">
+<p style="margin: 0; font-size: clamp(22px, 3vw, 32px); line-height: 1.2; max-width: 22ch; font-weight: 500">A project about who gets to be somebody.</p>
+<p style="margin: 0; font-size: 15px; color: #66665f; max-width: 36ch">Drawings of anonymous figures by Johnny Ramstedt. Series: Pantheon, 2026.</p>
 </div>
+</section>
 
-<main class="sheets" id="sheets"></main>
+<section id="story" style="display: flex; flex-wrap: wrap; gap: 32px 64px; padding: 96px 0; border-top: 1px solid #d9d7d0">
+<h2 style="flex: 1 1 180px; margin: 0; font-size: 15px; font-weight: 500; color: #66665f">The story</h2>
+<div style="flex: 4 1 440px; min-width: 0; max-width: 720px; display: flex; flex-direction: column; gap: 28px">
+<p style="margin: 0; font-size: clamp(30px, 4.4vw, 52px); line-height: 1.1; letter-spacing: -0.02em; font-weight: 800; text-wrap: balance">How little does it take to become somebody<span style="color: #d63a27">?</span></p>
+<p style="margin: 0; font-size: 19px; color: #3a3a37">WhoIsJohnny<span style="color: #d63a27">?</span> is a project built around a question, and it has no plan to answer it. Who is he? Who is anyone? Who decides who gets to be somebody?</p>
+<p style="margin: 0; font-size: 19px; color: #3a3a37">The first answer is a crowd. Pantheon is a growing gathering of anonymous figures, each with a small head, a few marks for a face and a body of scribble, drawn on paper in different sizes. They are called <em>Quidam</em>, Latin for “a certain someone”: the person nobody bothered to name. Give them a grand title and a number and they start to look important anyway.</p>
+<p style="margin: 0; font-size: 19px; color: #3a3a37">It is a serious question dressed in a silly face. Look long enough and the figures look back, which is exactly the point.</p>
+</div>
+</section>
 
-<template id="tpl">
-  <div class="scroller">
-  <section class="sheet">
-    <span class="pax-tag"></span>
-    <button class="remove" type="button">Remove</button>
+<section id="works" style="display: flex; flex-direction: column; gap: 40px; padding: 96px 0; border-top: 1px solid #d9d7d0">
+<div style="display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: space-between; align-items: baseline">
+<h2 style="margin: 0; font-size: 15px; font-weight: 500; color: #66665f">Works, Pantheon</h2>
+<div style="font-size: 15px; color: #66665f">Unique works on paper. A4, A3 and larger. Mixed media on acid-free paper. Unframed. Monogrammed and dated on recto, signed and dated on verso.</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); gap: 56px 32px">
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<img src="/pantheon/q1.jpg" alt="Quidam 1, drawing: a figure with grey head loops and a brown scribble body" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
+<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
+<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 1</div>
+<a href="#inquiries" style="font-size: 15px">Inquire</a>
+</div>
+<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
+<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Mixed media on acid-free paper. Unframed. Signed and dated on verso.</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<img src="/pantheon/q2.jpg" alt="Quidam 2, drawing: a figure with orange hair and wide eyes, red scribble body" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
+<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
+<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 2</div>
+<a href="#inquiries" style="font-size: 15px">Inquire</a>
+</div>
+<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
+<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Mixed media on acid-free paper. Unframed. Signed and dated on verso.</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<img src="/pantheon/q3.jpg" alt="Quidam 3, drawing: a figure in red-rimmed glasses with black hair" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
+<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
+<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 3</div>
+<a href="#inquiries" style="font-size: 15px">Inquire</a>
+</div>
+<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
+<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Mixed media on acid-free paper. Unframed. Signed and dated on verso.</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<img src="/pantheon/q4.jpg" alt="Quidam 4, drawing: a smiling figure in black" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
+<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
+<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 4</div>
+<a href="#inquiries" style="font-size: 15px">Inquire</a>
+</div>
+<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
+<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Mixed media on acid-free paper. Unframed. Signed and dated on verso.</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<img src="/pantheon/q5.jpg" alt="Quidam 5, drawing: two figures in teal and salmon pink" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
+<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
+<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 5</div>
+<a href="#inquiries" style="font-size: 15px">Inquire</a>
+</div>
+<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
+<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Mixed media on acid-free paper. Unframed. Signed and dated on verso.</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<img src="/pantheon/q6.jpg" alt="Quidam 6, drawing: a green figure with orange stripes" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
+<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
+<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 6</div>
+<a href="#inquiries" style="font-size: 15px">Inquire</a>
+</div>
+<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
+<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Mixed media on acid-free paper. Unframed. Signed and dated on verso.</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<img src="/pantheon/q7.jpg" alt="Quidam 7, drawing: a figure outlined in brown with a long mouth" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
+<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
+<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 7</div>
+<a href="#inquiries" style="font-size: 15px">Inquire</a>
+</div>
+<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
+<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Mixed media on acid-free paper. Unframed. Signed and dated on verso.</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<img src="/pantheon/q8.jpg" alt="Quidam 8, drawing: two figures in black with wide eyes" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
+<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
+<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 8</div>
+<a href="#inquiries" style="font-size: 15px">Inquire</a>
+</div>
+<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
+<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Mixed media on acid-free paper. Unframed. Signed and dated on verso.</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<img src="/pantheon/q9.jpg" alt="Quidam 9, drawing: a figure with a teal head and green and orange body" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
+<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
+<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 9</div>
+<a href="#inquiries" style="font-size: 15px">Inquire</a>
+</div>
+<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
+<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Mixed media on acid-free paper. Unframed. Signed and dated on verso.</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<img src="/pantheon/q10.jpg" alt="Quidam 10, drawing: a figure with teal hair and a black body" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
+<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
+<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 10</div>
+<a href="#inquiries" style="font-size: 15px">Inquire</a>
+</div>
+<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
+<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Mixed media on acid-free paper. Unframed. Signed and dated on verso.</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<img src="/pantheon/q11.jpg" alt="Quidam 11, drawing: two heads in blue and black with coloured marks" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
+<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
+<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 11</div>
+<a href="#inquiries" style="font-size: 15px">Inquire</a>
+</div>
+<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
+<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Mixed media on acid-free paper. Unframed. Signed and dated on verso.</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<img src="/pantheon/q12.jpg" alt="Quidam 12, drawing: a black figure with a wide smile and a crown of marks" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
+<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
+<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 12</div>
+<a href="#inquiries" style="font-size: 15px">Inquire</a>
+</div>
+<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
+<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Mixed media on acid-free paper. Unframed. Signed and dated on verso.</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
+<img src="/pantheon/q13.jpg" alt="Quidam 13, drawing: two black figures with square heads" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
+<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
+<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 13</div>
+<a href="#inquiries" style="font-size: 15px">Inquire</a>
+</div>
+<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
+<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Mixed media on acid-free paper. Unframed. Signed and dated on verso.</div>
+</div>
+</div>
+</section>
 
-    <div class="head">
-      <div class="brand">FLEXFLIGHT</div>
-      <div class="title">REGISTRATION OF ARMS FORM</div>
-      <div class="formno"><b>FORM NO:</b> FLX SE 008<br><b>REVISION NUMBER:</b> 01<br><b>REVISION DATE:</b>16.11.2023</div>
-    </div>
+<section id="room" style="display: flex; flex-direction: column; gap: 40px; padding: 96px 0; border-top: 1px solid #d9d7d0">
+<div style="display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: space-between; align-items: baseline">
+<h2 style="margin: 0; font-size: 15px; font-weight: 500; color: #66665f">In the room</h2>
+<div style="font-size: 15px; color: #66665f">Mockups. Black floating frame for A3, approx. 38 × 50 cm, not included.</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 32px">
+<div style="flex: 1 1 280px; min-width: 0"><img src="/pantheon/r2.jpg" alt="Quidam 2 in a black floating frame on a wall" style="display: block; width: 100%; height: auto"></div>
+<div style="flex: 1 1 280px; min-width: 0"><img src="/pantheon/r8.jpg" alt="Quidam 8 in a black floating frame on a wall" style="display: block; width: 100%; height: auto"></div>
+<div style="flex: 1 1 280px; min-width: 0"><img src="/pantheon/r12.jpg" alt="Quidam 12 in a black floating frame on a wall" style="display: block; width: 100%; height: auto"></div>
+</div>
+</section>
 
-    <div class="grid4">
-      <div class="box"><label>Date:</label><input data-f="date" type="date"></div>
-      <div class="box"><label>Commander:</label><input data-f="commander" type="text" autocomplete="off"></div>
-      <div class="box"><label>Flight No:</label><input data-f="flight" type="text" autocomplete="off"></div>
-      <div class="box"><label>Aircraft:</label><input data-f="aircraft" type="text" autocomplete="off"></div>
+<section id="texts" style="display: flex; flex-wrap: wrap; gap: 32px 64px; padding: 96px 0; border-top: 1px solid #d9d7d0">
+<h2 style="flex: 1 1 180px; margin: 0; font-size: 15px; font-weight: 500; color: #66665f">Texts</h2>
+<div style="flex: 4 1 440px; min-width: 0; max-width: 720px; display: flex; flex-direction: column; gap: 20px">
+<p style="margin: 0; font-size: clamp(26px, 4vw, 44px); line-height: 1.15; letter-spacing: -0.02em; font-weight: 800">Small texts, big print.</p>
+<p style="margin: 0; font-size: 19px; color: #3a3a37">A growing library of deadpan texts. Free social packs for Instagram, and print files to download from USD 4: A4, 50 &times; 70 cm, 18 &times; 24 in and postcards.</p>
+<p style="margin: 0; font-size: 19px"><a href="/library/">Enter the library &rarr;</a></p>
+</div>
+</section>
 
-      <div class="box"><label>Airport:</label><input data-f="airport" type="text" autocomplete="off"></div>
-      <div class="box"><label>Time of Dep:</label><input data-f="dep" type="text" placeholder="HH:MM" autocomplete="off"></div>
-      <div class="box"><label>Destination:</label><input data-f="dest" type="text" autocomplete="off"></div>
-      <div class="box"><label>Time of Arr:</label><input data-f="arr" type="text" placeholder="HH:MM" autocomplete="off"></div>
+<section id="about" style="display: flex; flex-wrap: wrap; gap: 32px 64px; padding: 96px 0; border-top: 1px solid #d9d7d0">
+<h2 style="flex: 1 1 180px; margin: 0; font-size: 15px; font-weight: 500; color: #66665f">Johnny</h2>
+<div style="flex: 4 1 440px; min-width: 0; max-width: 720px; display: flex; flex-direction: column; gap: 56px">
+<p style="margin: 0; font-size: 19px; color: #3a3a37">Johnny Ramstedt (b. 1970, Borgå, Finland) is a visual artist based in Helsinki. He has exhibited internationally since 1999, and his work is in private and corporate collections across Europe and the US.</p>
+<div style="display: flex; flex-direction: column; gap: 14px">
+<h3 style="margin: 0; font-size: 15px; font-weight: 500; color: #66665f">Selected exhibitions</h3>
+<div style="display: flex; flex-direction: column; gap: 8px; font-size: 16px; color: #3a3a37">
+<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2025</span><span>Fafa's window gallery, Helsinki</span></div>
+<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2024</span><span>Volta Art Fair, Basel</span></div>
+<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2023</span><span>Art Gallery Loviisa, Lovisa</span></div>
+<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2022</span><span>Galleria Theodor, Lovisa</span></div>
+<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2021</span><span>SEB (Skandinaviska Enskilda Banken), Helsinki</span></div>
+<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2021</span><span>Interpretations from The Abstract, The Contemporary Art Modern Project: Miami, New York, London, Pacific Palisades</span></div>
+<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2020</span><span>Monokhromos II, The Contemporary Art Modern Project, Miami</span></div>
+<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2016</span><span>Galleri Lohme, Malmö</span></div>
+<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2016</span><span>Korjaamo, Helsinki</span></div>
+<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2014</span><span>Galerie Art Room, Helsinki</span></div>
+<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2014</span><span>Kulturhuset Grand, Porvoo</span></div>
+<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">1999</span><span>Art Alex, Helsinki</span></div>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px">
+<h3 style="margin: 0; font-size: 15px; font-weight: 500; color: #66665f">Grants</h3>
+<p style="margin: 0; font-size: 16px; color: #3a3a37">Svenska Kulturfonden, 2021–2026. Arts Promotion Centre Finland (Taike), 2022. Grönqvistska Foundation, 2016.</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px">
+<h3 style="margin: 0; font-size: 15px; font-weight: 500; color: #66665f">Collections</h3>
+<p style="margin: 0; font-size: 16px; color: #3a3a37">Private collections. Lovisa City. 99 Hudson, Jersey City, NJ, USA.</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px">
+<h3 style="margin: 0; font-size: 15px; font-weight: 500; color: #66665f">Studies</h3>
+<p style="margin: 0; font-size: 16px; color: #3a3a37">Carpentry and woodworking, Piet Hein Eek, Eindhoven. Vocational qualification in the wood industry (carpentry and joinery), Axxell, Finland. Interdisciplinary studies (art history), Helsinki University. Art Students League of New York.</p>
+</div>
+</div>
+</section>
 
-      <div class="box span2"><label>Passenger Name</label><input class="p-name" type="text" autocomplete="off"></div>
-      <div class="box"><label>Passport No:</label><input class="p-pass" type="text" autocomplete="off"></div>
-      <div class="box"><label>Nationality:</label><input class="p-nat" type="text" autocomplete="off"></div>
-    </div>
+<section id="inquiries" style="display: flex; flex-wrap: wrap; gap: 32px 64px; padding: 96px 0 120px; border-top: 1px solid #d9d7d0">
+<h2 style="flex: 1 1 180px; margin: 0; font-size: 15px; font-weight: 500; color: #66665f">Inquiries</h2>
+<div style="flex: 4 1 440px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+<p style="margin: 0; font-size: clamp(26px, 4vw, 44px); line-height: 1.15; letter-spacing: -0.02em; font-weight: 800; overflow-wrap: anywhere"><a href="mailto:hello@whoisjohnny.com">hello@whoisjohnny.com</a></p>
+<p style="margin: 0; font-size: 19px; color: #3a3a37">Instagram: <a href="https://www.instagram.com/whoisjohnny2020/">@whoisjohnny2020</a></p>
+<p style="margin: 0; font-size: 15px; color: #66665f">Write for sizes and availability.</p>
+<p style="margin: 0; font-size: 15px; color: #66665f">Prices include VAT within the EU. No VAT outside the EU. Shipping is added. Larger and smaller sizes: write for prices.</p>
+</div>
+</section>
 
-    <h3 class="u">Type of Weapon:</h3>
-    <div class="lines">
-      <span class="lbl">Rifle Type &amp; No:</span><input class="line" type="text">
-      <span class="lbl">Shotgun Type &amp; No:</span><input class="line" type="text">
-      <span class="lbl">Pistol Type &amp; No:</span><input class="line" type="text">
-      <span class="lbl">Revolver Type &amp; No:</span><input class="line" type="text">
-      <span class="lbl">Other Type &amp; No:</span><input class="line" type="text">
-    </div>
+<footer style="display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: space-between; padding: 24px 0 40px; border-top: 1px solid #d9d7d0; font-size: 14px; color: #66665f">
+<span>© 2026 Johnny Ramstedt</span>
+<span><a href="/library/">Texts</a> · whoisjohnny.com</span>
+</footer>
 
-    <div class="ammo" style="margin-top:7mm">
-      <h3 class="u" style="margin:0">Ammunition (max 5 kgs)</h3>
-      <div class="rows">
-        <span class="lbl">Rifle Ammunition:</span><input class="line am" type="text" inputmode="decimal"><span class="kg">Kgs.</span>
-        <span class="lbl">Shotgun Ammunition:</span><input class="line am" type="text" inputmode="decimal"><span class="kg">Kgs.</span>
-        <span class="lbl">Other:</span><input class="line am" type="text" inputmode="decimal"><span class="kg">Kgs.</span>
-      </div>
-    </div>
-    <div class="warn">Total ammunition is over 5 kgs.</div>
-
-    <h3 class="u" style="margin-top:6mm">Valid firearms permit (mark below)</h3>
-    <div class="permit">
-      <div class="checks">
-        <span class="lbl">ID Issued by Police:</span><span class="cell"><input type="checkbox" aria-label="ID Issued by Police"></span>
-        <span class="lbl">ID Issued by Military:</span><span class="cell"><input type="checkbox" aria-label="ID Issued by Military"></span>
-        <span class="lbl">Export Certificate:</span><span class="cell"><input type="checkbox" aria-label="Export Certificate"></span>
-        <span class="lbl">Declaration of Firearms:</span><span class="cell"><input type="checkbox" aria-label="Declaration of Firearms"></span>
-        <span class="lbl">EU Firearms Passport:</span><span class="cell"><input type="checkbox" aria-label="EU Firearms Passport"></span>
-      </div>
-      <div class="remarks"><label class="lbl">Remarks:</label><textarea></textarea></div>
-    </div>
-
-    <div class="notice">
-      <div class="a">In case of illegal possession of firearms, special report is to be completed and the police shall be contacted.</div>
-      <div class="b">Flexflight Operational Department will complete the registration of firearms, upon which security staff must be contacted to avail himself at the check-in counter in the departure/arrival terminal. From this point the passengers incl. his/hers baggage and firearms are to be accompanied by the staff of security into the transit area, where security will perform a precautionary check of the passengers his/hers luggage, firearms and ammunition, as well as his/hers permission to carry firearms. ALL HUNTING WEAPONS MUST BE TRANSPORTED AS CHECKED-IN BAGGAGE ONLY. WEAPONS, AMMUNITION ETC. MAY ONLY BE TRANSPORTED BY THE AIRLINE WHEN LOADED SO THAT NO PERSON DURING THE FLIGHT CAN HAVE UNHINDERED ACCESS TO IT.</div>
-    </div>
-
-    <div class="sign"><div>Signed by Airline / Handling Agent</div><div>Signed by Airport Security.</div></div>
-    <div class="page">Page <b>1</b> of <b>1</b></div>
-  </section>
-  </div>
-</template>
-
+</div>
+</div>
+<style>
+img[src*="/pantheon/q"]{cursor:zoom-in}
+#lb{position:fixed;inset:0;z-index:100;background:rgba(17,17,17,.92);display:none;align-items:center;justify-content:center;padding:24px;cursor:zoom-out;overflow:auto}
+#lb.on{display:flex}
+#lb .card{display:flex;align-items:stretch;gap:0;max-width:100%;max-height:100%;background:#f2f1ed;cursor:default;box-shadow:0 10px 40px rgba(0,0,0,.4)}
+#lb .pic{display:flex;align-items:center;justify-content:center;background:#fff;min-width:0}
+#lb .pic img{display:block;max-width:100%;max-height:calc(100vh - 48px);width:auto;height:auto}
+#lb .info{flex:0 0 300px;box-sizing:border-box;padding:36px 32px;display:flex;flex-direction:column;gap:14px;font-family:'Hanken Grotesk',sans-serif;color:#111;justify-content:center}
+#lb .t{font-size:26px;font-weight:800;letter-spacing:-.01em}
+#lb .pr{font-size:20px;font-weight:500}
+#lb .m{font-size:14px;line-height:1.5;color:#66665f}
+#lb .inq{font-size:15px;color:#111;margin-top:8px}
+#lb .x{position:absolute;top:10px;right:18px;color:#f2f1ed;font:300 34px/1 'Hanken Grotesk',sans-serif;cursor:pointer}
+#lb .nav{position:absolute;top:50%;transform:translateY(-50%);color:#f2f1ed;font:300 44px/1 'Hanken Grotesk',sans-serif;padding:16px;user-select:none;cursor:pointer}
+#lb .prev{left:4px}#lb .next{right:4px}
+@media (max-width:760px){#lb{padding:12px;align-items:flex-start}#lb .card{flex-direction:column;max-height:none}#lb .pic img{max-height:70vh}#lb .info{flex:none;padding:20px 20px 24px}#lb .nav{display:none}}
+</style>
+<div id="lb" role="dialog" aria-modal="true" aria-label="Enlarged drawing"><span class="x" aria-hidden="true">&times;</span><span class="nav prev" aria-label="Previous">&#8249;</span><div class="card"><div class="pic"><img alt=""></div><div class="info"><div class="t"></div><div class="pr"></div><div class="m"></div><a class="inq" href="#inquiries">Inquire</a></div></div><span class="nav next" aria-label="Next">&#8250;</span></div>
 <script>
-(function () {
-  var FLIGHT = ['date','commander','flight','aircraft','airport','dep','dest','arr'];
-  var STORE = 'halvett-arms-draft';
-  var host = document.getElementById('sheets');
-  var tpl = document.getElementById('tpl');
-  var hint = document.getElementById('hint');
-  var shared = {};
-  var viewMode = false;
-  FLIGHT.forEach(function (k) { shared[k] = ''; });
-
-  function sheets() { return host.querySelectorAll('.sheet'); }
-
-  /* ---------- read / write form state ---------- */
-  function vals(s, sel) { return Array.prototype.map.call(s.querySelectorAll(sel), function (e) { return e.value; }); }
-  function readSheet(s) {
-    return {
-      n: s.querySelector('.p-name').value,
-      pp: s.querySelector('.p-pass').value,
-      na: s.querySelector('.p-nat').value,
-      w: vals(s, '.lines .line'),
-      a: vals(s, '.am'),
-      c: Array.prototype.map.call(s.querySelectorAll('.checks input'), function (e) { return e.checked ? 1 : 0; }),
-      r: s.querySelector('textarea').value
-    };
-  }
-  function collect() {
-    return { f: shared, p: Array.prototype.map.call(sheets(), readSheet) };
-  }
-  function setList(list, arr) { (arr || []).forEach(function (v, i) { if (list[i]) list[i].value = v; }); }
-  function fillSheet(s, p) {
-    if (!p) return;
-    s.querySelector('.p-name').value = p.n || '';
-    s.querySelector('.p-pass').value = p.pp || '';
-    s.querySelector('.p-nat').value = p.na || '';
-    setList(s.querySelectorAll('.lines .line'), p.w);
-    setList(s.querySelectorAll('.am'), p.a);
-    var cb = s.querySelectorAll('.checks input');
-    (p.c || []).forEach(function (v, i) { if (cb[i]) cb[i].checked = !!v; });
-    s.querySelector('textarea').value = p.r || '';
-    checkAmmo(s);
-  }
-
-  /* ---------- link encoding (data lives after the #, never sent to the server) ---------- */
-  function b64u(bytes) {
-    var s = '';
-    for (var i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i]);
-    return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-  }
-  function unb64u(str) {
-    str = str.replace(/-/g, '+').replace(/_/g, '/');
-    while (str.length % 4) str += '=';
-    var bin = atob(str), out = new Uint8Array(bin.length);
-    for (var i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
-    return out;
-  }
-  async function encode(obj) {
-    var bytes = new TextEncoder().encode(JSON.stringify(obj));
-    if (window.CompressionStream) {
-      var cs = new Blob([bytes]).stream().pipeThrough(new CompressionStream('deflate-raw'));
-      return 'z.' + b64u(new Uint8Array(await new Response(cs).arrayBuffer()));
-    }
-    return 'r.' + b64u(bytes);
-  }
-  async function decode(str) {
-    var kind = str.slice(0, 2), bytes = unb64u(str.slice(2));
-    if (kind === 'z.') {
-      var ds = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
-      bytes = new Uint8Array(await new Response(ds).arrayBuffer());
-    }
-    return JSON.parse(new TextDecoder().decode(bytes));
-  }
-
-  /* ---------- sheets ---------- */
-  function renumber() {
-    var all = sheets(), n = all.length;
-    Array.prototype.forEach.call(all, function (s, i) {
-      s.querySelector('.pax-tag').textContent = 'Passenger ' + (i + 1) + ' of ' + n;
-      s.querySelector('.remove').disabled = n === 1;
-    });
-    if (viewMode) hint.textContent = n + (n === 1 ? ' passenger' : ' passengers') + '. Press Save as PDF / Print to get one A4 sheet per passenger.';
-  }
-
-  function checkAmmo(sheet) {
-    var sum = 0;
-    sheet.querySelectorAll('.am').forEach(function (el) {
-      var v = parseFloat(String(el.value).replace(',', '.'));
-      if (!isNaN(v)) sum += v;
-    });
-    sheet.querySelector('.warn').classList.toggle('on', sum > 5);
-  }
-
-  function addSheet(p) {
-    var frag = tpl.content.cloneNode(true);
-    var wrap = frag.querySelector('.scroller');
-    var sheet = wrap.querySelector('.sheet');
-    FLIGHT.forEach(function (k) { sheet.querySelector('[data-f="' + k + '"]').value = shared[k]; });
-    fillSheet(sheet, p);
-    sheet.querySelector('.remove').addEventListener('click', function () {
-      if (sheets().length > 1) { wrap.remove(); renumber(); save(); }
-    });
-    host.appendChild(wrap);
-    renumber();
-    return sheet;
-  }
-
-  /* ---------- draft kept in this browser only ---------- */
-  var saveTimer = null;
-  function save() {
-    if (viewMode) return;
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(function () {
-      try { localStorage.setItem(STORE, JSON.stringify(collect())); } catch (e) {}
-    }, 250);
-  }
-
-  function onEdit(e) {
-    var t = e.target;
-    if (t.dataset && t.dataset.f) {
-      shared[t.dataset.f] = t.value;
-      host.querySelectorAll('[data-f="' + t.dataset.f + '"]').forEach(function (el) { if (el !== t) el.value = t.value; });
-    }
-    if (t.classList.contains('am')) checkAmmo(t.closest('.sheet'));
-    save();
-  }
-  host.addEventListener('input', onEdit);
-  host.addEventListener('change', onEdit);
-
-  /* ---------- buttons ---------- */
-  document.getElementById('add').addEventListener('click', function () {
-    var s = addSheet();
-    save();
-    s.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    s.querySelector('.p-name').focus({ preventScroll: true });
-  });
-
-  document.getElementById('clear').addEventListener('click', function () {
-    if (!window.confirm('Remove all passengers and flight details from this page?')) return;
-    FLIGHT.forEach(function (k) { shared[k] = ''; });
-    host.innerHTML = '';
-    addSheet();
-    try { localStorage.removeItem(STORE); } catch (e) {}
-    document.getElementById('linkrow').classList.remove('on');
-  });
-
-  document.getElementById('share').addEventListener('click', async function () {
-    var btn = this, label = btn.textContent;
-    var token = await encode(collect());
-    var url = location.href.split('#')[0].split('?')[0] + '#d=' + token;
-    var out = document.getElementById('linkout');
-    out.value = url;
-    document.getElementById('linknote').textContent =
-      'Anyone with this link can read all details on the forms, including passport numbers. The link is ' + url.length + ' characters long. If a messaging app cuts it, send the PDF instead.';
-    document.getElementById('linkrow').classList.add('on');
-    out.focus(); out.select();
-    function done() { btn.textContent = 'Link copied'; setTimeout(function () { btn.textContent = label; }, 1800); }
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(url).then(done, function () {});
-    }
-  });
-
-  document.getElementById('editcopy').addEventListener('click', function () {
-    viewMode = false;
-    document.body.classList.remove('view');
-    hint.textContent = EDIT_HINT;
-    history.replaceState(null, '', location.href.split('#')[0]);
-    save();
-  });
-
-  var baseTitle = document.title;
-  window.addEventListener('beforeprint', function () {
-    var parts = ['Arms-form'];
-    if (shared.flight) parts.push(shared.flight);
-    if (shared.date) parts.push(shared.date);
-    document.title = parts.join('_').replace(/[^\w.\-]+/g, '-');
-  });
-  window.addEventListener('afterprint', function () { document.title = baseTitle; });
-  document.getElementById('print').addEventListener('click', function () { window.print(); });
-
-  /* ---------- start ---------- */
-  var EDIT_HINT = 'Fill in the flight details once, they copy to every passenger. Your entries are kept in this browser while you work. To save a PDF, press the blue button and choose "Save as PDF" as the printer.';
-  hint.textContent = EDIT_HINT;
-
-  function load(data) {
-    shared = {};
-    FLIGHT.forEach(function (k) { shared[k] = (data.f && data.f[k]) || ''; });
-    host.innerHTML = '';
-    (data.p && data.p.length ? data.p : [null]).forEach(function (p) { addSheet(p); });
-  }
-
-  (async function init() {
-    var h = location.hash;
-    if (h.indexOf('#d=') === 0) {
-      try {
-        load(await decode(h.slice(3)));
-        viewMode = true;
-        document.body.classList.add('view');
-        renumber();
-        return;
-      } catch (e) {
-        hint.textContent = 'This link could not be read. Ask the sender for a new link or a PDF.';
-      }
-    }
-    try {
-      var raw = localStorage.getItem(STORE);
-      if (raw) { load(JSON.parse(raw)); return; }
-    } catch (e) {}
-    addSheet();
-  })();
+(function(){
+var imgs=[].slice.call(document.querySelectorAll('img[src*="/pantheon/q"]')),lb=document.getElementById('lb'),big=lb.querySelector('.pic img'),T=lb.querySelector('.t'),P=lb.querySelector('.pr'),M=lb.querySelector('.m'),i=0;
+function show(n){i=(n+imgs.length)%imgs.length;var im=imgs[i],box=im.parentNode,d=box.children;big.src=im.src;big.alt=im.alt;
+T.textContent=d[1].children[0].textContent;P.textContent=d[2].textContent;M.textContent=d[3].textContent;
+lb.classList.add('on');lb.scrollTop=0;document.body.style.overflow='hidden';}
+function hide(){lb.classList.remove('on');document.body.style.overflow='';}
+imgs.forEach(function(im,n){im.addEventListener('click',function(){show(n)});});
+lb.addEventListener('click',function(e){var t=e.target;if(t.classList.contains('prev')){show(i-1)}else if(t.classList.contains('next')){show(i+1)}else if(t.classList.contains('inq')){hide()}else if(!t.closest('.card')){hide()}});
+document.addEventListener('keydown',function(e){if(!lb.classList.contains('on'))return;if(e.key==='Escape')hide();else if(e.key==='ArrowLeft')show(i-1);else if(e.key==='ArrowRight')show(i+1);});
 })();
 </script>
 </body>
