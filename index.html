@@ -1,310 +1,865 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-T7DLYBM115"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-T7DLYBM115');
-</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#f2f1ed">
-<meta name="p:domain_verify" content="26af8644a534c5310a58b1a1a78f44ef"/>
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="icon" href="/favicon.ico" sizes="48x48">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<title>WhoIsJohnny? A project about who gets to be somebody</title>
-<meta name="description" content="Pantheon, a series of drawings of anonymous figures by Johnny Ramstedt. Unique mixed media works on acid-free paper, A3, signed and dated.">
-<link rel="canonical" href="https://whoisjohnny.com/">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="WhoIsJohnny?">
-<meta property="og:title" content="WhoIsJohnny? A project about who gets to be somebody">
-<meta property="og:description" content="Pantheon: drawings of anonymous figures by Johnny Ramstedt. Unique works on paper.">
-<meta property="og:url" content="https://whoisjohnny.com/">
-<meta property="og:image" content="https://whoisjohnny.com/pantheon/og.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="WhoIsJohnny? with three crayon drawings of anonymous figures.">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="WhoIsJohnny? A project about who gets to be somebody">
-<meta name="twitter:description" content="Pantheon: drawings of anonymous figures by Johnny Ramstedt. Unique works on paper.">
-<meta name="twitter:image" content="https://whoisjohnny.com/pantheon/og.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;800&display=swap">
+<title>WhoIsJohnny Demo</title>
 <style>
-body{margin:0;background:#f2f1ed}
-a{color:#111111;text-underline-offset:4px;text-decoration-thickness:1px}
-a:hover{color:#d63a27}
-a:focus-visible{outline:2px solid #111111;outline-offset:4px}
+/* Layout idea: one long scroll on pale off-white, plain wordmark, a sticky size switcher, sections for figures and texts. Arial, quiet, a little dry. Single theme by choice. */
+:root{
+  --bg:#f2f1ed;
+  --ink:#151515;
+  --muted:#6a675f;
+  --line:#d4d1c8;
+  --paper:#fbfaf6;
+  --wall:#e2ded3;
+  --font:Arial,"Helvetica Neue",Helvetica,sans-serif;
+  --ar:210/297;
+  color-scheme:light;
+}
+body[data-fmt="print"]{--ar:210/297}
+body[data-fmt="instagram"]{--ar:4/5}
+body[data-fmt="tiktok"]{--ar:9/16}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.55}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+a{color:inherit}
+button:focus-visible,a:focus-visible{outline:3px solid #2b44ff;outline-offset:3px}
+.demo{background:var(--ink);color:#fff;font-size:12px;font-weight:700;text-align:center;padding:5px 10px}
+
+header.top{display:flex;justify-content:space-between;align-items:baseline;gap:12px 28px;flex-wrap:wrap;padding:20px 0 14px;border-bottom:1px solid var(--line)}
+.word{font-weight:700;font-size:20px;letter-spacing:-.02em;text-decoration:none}
+nav{display:flex;gap:6px 22px;flex-wrap:wrap;font-size:14px}
+nav a{text-decoration:none;color:var(--muted)}
+nav a:hover{color:var(--ink);text-decoration:underline}
+
+.hero{padding:64px 0 44px}
+.hero h1{font-size:clamp(48px,11vw,128px);line-height:.95;letter-spacing:-.045em;margin:0 0 20px}
+.hero .tag{font-size:clamp(20px,3vw,28px);font-weight:700;letter-spacing:-.01em;max-width:24ch;margin:0 0 10px}
+.hero .sub{color:var(--muted);max-width:50ch;margin:0}
+
+.fmtbar{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--line);padding:9px 0}
+.fmtin{display:flex;gap:10px 18px;flex-wrap:wrap;align-items:center}
+.fmtin .lab{font-size:12px;font-weight:700;color:var(--muted)}
+.seg{display:flex;border:2px solid var(--ink)}
+.seg button{font:inherit;font-weight:700;font-size:13px;padding:6px 12px;border:0;background:transparent;color:var(--ink);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.fmtin .px{font-size:12px;color:var(--muted)}
+
+section{padding:46px 0;border-top:1px solid var(--line)}
+section:first-of-type{border-top:0}
+h2{font-size:14px;letter-spacing:.08em;text-transform:uppercase;margin:0 0 6px}
+.lede{font-size:clamp(20px,2.6vw,26px);line-height:1.3;font-weight:700;letter-spacing:-.01em;max-width:32ch;margin:0 0 18px}
+.body{max-width:62ch;color:#2c2b27;margin:0 0 12px}
+.small{font-size:13px;color:var(--muted)}
+details.acc{border-top:1px solid var(--line);padding:14px 0}
+details.acc:last-of-type{border-bottom:1px solid var(--line)}
+details.acc summary{cursor:pointer;font-weight:700;font-size:17px;list-style:none}
+details.acc summary::-webkit-details-marker{display:none}
+details.acc summary:after{content:"+";float:right;font-weight:400}
+details.acc[open] summary:after{content:"\2212"}
+details.acc .body{margin-top:10px;max-width:68ch}
+.legal h3{font-size:15px;margin:22px 0 4px}
+.legal p,.legal li{font-size:14.5px;line-height:1.6;max-width:68ch}
+
+.facts{display:flex;gap:6px 26px;flex-wrap:wrap;margin:16px 0 0;padding:0;list-style:none;font-size:14px;color:var(--muted)}
+.facts li::before{content:"· "}
+
+/* sheets */
+.sheet{position:relative;aspect-ratio:var(--ar);container-type:inline-size;overflow:hidden;font-weight:700;letter-spacing:-.02em;line-height:1.08;background:#fff;color:#111;border:1px solid var(--line);box-shadow:0 10px 22px rgba(0,0,0,.1)}
+.sheet.dark{background:#111;color:#fff;border-color:#111}
+.sheet.y{background:#ffe14d}
+.wall{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;margin:14px 0 26px}
+.wall .sheet{--ar:4/5;box-shadow:none;transition:transform .15s}
+.wall .sheet:hover{transform:scale(1.8);z-index:5;box-shadow:0 12px 28px rgba(0,0,0,.25)}
+.wall .sheet .no,.wall .sheet .q{display:none}
+.wall .sheet>.in{padding:7cqw 6cqw}
+@media(max-width:700px){.wall{grid-template-columns:repeat(5,1fr)}}
+.sheet.fixprint{--ar:210/297}
+.sheet>.in{display:flex;flex-direction:column;justify-content:center;gap:5cqw;padding:9cqw 9cqw 16cqw;height:100%}
+.t{display:block;font-size:calc(var(--b)*var(--k,1));overflow-wrap:anywhere}
+.s1{--b:15cqw}.s2{--b:12cqw}.s3{--b:10cqw}.s4{--b:8.6cqw}.s5{--b:7.4cqw}
+.rule{height:.7cqw;background:currentColor;width:100%;opacity:.9}
+.no{position:absolute;left:9cqw;bottom:7cqw;font-size:4.4cqw;font-weight:400;letter-spacing:.04em;opacity:.8;z-index:2}
+.q{position:absolute;right:9cqw;bottom:5.5cqw;font-size:8cqw;font-weight:700;z-index:2}
+.sheet.fig svg{position:absolute;inset:0;width:100%;height:100%;display:block;transition:transform .2s}
+body[data-fmt="tiktok"] .sheet.fig svg{transform:translateY(-7%)}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:30px 24px;margin-top:26px;align-items:start}
+.tcard{display:flex;flex-direction:column;gap:10px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{font:inherit;font-weight:700;font-size:14px;background:var(--ink);color:#fff;border:2px solid var(--ink);padding:8px 14px;cursor:pointer}
+.btn:hover{background:#2b44ff;border-color:#2b44ff}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.ghost:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+.more{margin-top:26px}
+
+/* packs */
+.packs{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:26px}
+.pack{background:var(--paper);border:1px solid var(--line);padding:18px;display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.pack b{font-size:20px;letter-spacing:-.01em}
+.pack .minis{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;width:100%}
+.pack .minis .sheet{box-shadow:none}
+.pack .minis .more{display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted);margin:0}
+.pack .p{font-size:32px;font-weight:700;letter-spacing:-.02em;line-height:1}
+.pack .p small{font-size:13px;font-weight:400;color:var(--muted);letter-spacing:0;margin-left:8px}
+
+/* room */
+.room{position:relative;aspect-ratio:16/8;background:var(--wall);margin-top:22px;overflow:hidden;container-type:inline-size}
+.room .sofa{position:absolute;left:22%;width:56%;bottom:0;height:24%;background:#7e8388;border-radius:3cqw 3cqw 0 0}
+.room .fr{position:absolute;bottom:37%;border:max(3px,.5cqw) solid #151515;background:#fff;box-shadow:0 6px 14px rgba(0,0,0,.18);aspect-ratio:3/4;overflow:hidden}
+.room .fr svg{display:block;width:100%;height:100%}
+.room .fr.t1{left:28%;width:13%}
+.room .fr.t2{left:44%;width:10%}
+.room .fr.t3{left:57%;width:13%}
+.room .sheet{box-shadow:none;border:0;height:100%;aspect-ratio:auto}
+
+footer{padding:34px 0 60px;border-top:1px solid var(--line);font-size:14px;color:var(--muted);display:flex;flex-wrap:wrap;gap:8px 28px;justify-content:space-between}
+footer .ai{flex-basis:100%;font-size:12px}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;font-size:14px;z-index:30;max-width:calc(100vw - 32px)}
+.toast[hidden]{display:none}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.sheet.fig svg{transition:none}}
 </style>
-<style>html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}</style>
 </head>
-<body>
-<div style="width: 100%; box-sizing: border-box; background: #f2f1ed; color: #111111; font-family: 'Hanken Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.5; display: flex; flex-direction: column; align-items: center">
-<div style="width: 100%; max-width: 1200px; box-sizing: border-box; padding: 0 24px; display: flex; flex-direction: column">
+<body data-fmt="print">
+<div class="wrap">
+  <header class="top" id="top">
+    <a class="word" href="#top">WhoIsJohnny?</a>
+    <nav aria-label="Sections">
+      <a href="#story">Story</a>
+      <a href="#wall">All</a>
+      <a href="#figures">Figures</a>
+      <a href="#texts">Texts</a>
+      <a href="#packs">Packs</a>
+      <a href="#room">In the room</a>
+      <a href="#info">FAQ</a>
+      <a href="#print">Printing</a>
+      <a href="#about">Johnny</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
 
-<header style="display: flex; flex-wrap: wrap; gap: 12px 32px; justify-content: space-between; align-items: baseline; padding: 28px 0">
-<a href="#top" style="font-size: 18px; font-weight: 800; text-decoration: none; letter-spacing: -0.01em">WhoIsJohnny<span style="color: #d63a27">?</span></a>
-<nav style="display: flex; flex-wrap: wrap; gap: 8px 28px; font-size: 15px">
-<a href="#story">Story</a>
-<a href="#works">Works</a>
-<a href="#room">In the room</a>
-<a href="#texts">Texts</a>
-<a href="#about">Johnny</a>
-<a href="#inquiries">Inquiries</a>
-</nav>
-</header>
+  <div class="hero">
+    <h1>WhoIsJohnny?</h1>
+    <p class="tag">A project about who gets to be somebody.</p>
+    <p class="sub">Figures and dry texts. All made with a little humour.</p>
+  </div>
+</div>
 
-<section id="top" style="display: flex; flex-direction: column; gap: 32px; padding: 72px 0 96px">
-<h1 style="margin: 0; font-size: clamp(44px, 12.4vw, 168px); line-height: 0.95; letter-spacing: -0.045em; font-weight: 800">WhoIsJohnny<span style="color: #d63a27">?</span></h1>
-<div style="display: flex; flex-wrap: wrap; gap: 16px 48px; justify-content: space-between; align-items: flex-end; border-top: 1px solid #d9d7d0; padding-top: 24px">
-<p style="margin: 0; font-size: clamp(22px, 3vw, 32px); line-height: 1.2; max-width: 22ch; font-weight: 500">A project about who gets to be somebody.</p>
-<p style="margin: 0; font-size: 15px; color: #66665f; max-width: 36ch">Drawings of anonymous figures by Johnny Ramstedt. Series: Pantheon, 2026.</p>
+<div class="fmtbar">
+  <div class="wrap fmtin">
+    <span class="lab" id="fmtLab">Preview as</span>
+    <div class="seg" role="group" aria-labelledby="fmtLab" id="fmtSeg">
+      <button type="button" data-f="print" aria-pressed="true">Print</button>
+      <button type="button" data-f="instagram" aria-pressed="false">Instagram</button>
+      <button type="button" data-f="tiktok" aria-pressed="false">TikTok</button>
+    </div>
+    <span class="px" id="fmtPx"></span>
+  </div>
 </div>
-</section>
 
-<section id="story" style="display: flex; flex-wrap: wrap; gap: 32px 64px; padding: 96px 0; border-top: 1px solid #d9d7d0">
-<h2 style="flex: 1 1 180px; margin: 0; font-size: 15px; font-weight: 500; color: #66665f">The story</h2>
-<div style="flex: 4 1 440px; min-width: 0; max-width: 720px; display: flex; flex-direction: column; gap: 28px">
-<p style="margin: 0; font-size: clamp(30px, 4.4vw, 52px); line-height: 1.1; letter-spacing: -0.02em; font-weight: 800; text-wrap: balance">How little does it take to become somebody<span style="color: #d63a27">?</span></p>
-<p style="margin: 0; font-size: 19px; color: #3a3a37">WhoIsJohnny<span style="color: #d63a27">?</span> is a project built around a question, and it has no plan to answer it. Who is he? Who is anyone? Who decides who gets to be somebody?</p>
-<p style="margin: 0; font-size: 19px; color: #3a3a37">The first answer is a crowd. Pantheon is a growing gathering of anonymous figures, each with a small head, a few marks for a face and a body of scribble, drawn on paper in different sizes. They are called <em>Quidam</em>, Latin for “a certain someone”: the person nobody bothered to name. Give them a grand title and a number and they start to look important anyway.</p>
-<p style="margin: 0; font-size: 19px; color: #3a3a37">It is a serious question dressed in a silly face. Look long enough and the figures look back, which is exactly the point.</p>
-</div>
-</section>
+<div class="wrap">
+  <section id="story">
+    <h2>The story</h2>
+    <p class="lede">Some figures. Some sentences. Same sense of humour.</p>
+    <p class="body">It began with drawings of figures called Quidam, Latin for "a certain someone". Look long enough and they look back. Now the figures are digital too, curated by Johnny, and no two alike. Then came the texts: short, dry sentences for your wall.</p>
+    <p class="body">The original drawings are resting for now.</p>
+  </section>
 
-<section id="works" style="display: flex; flex-direction: column; gap: 40px; padding: 96px 0; border-top: 1px solid #d9d7d0">
-<div style="display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: space-between; align-items: baseline">
-<h2 style="margin: 0; font-size: 15px; font-weight: 500; color: #66665f">Works, Pantheon</h2>
-<div style="font-size: 15px; color: #66665f">Unique works on paper. A4, A3 and larger. Mixed media on acid-free paper. Unframed. Monogrammed and dated on recto, signed and dated on verso.</div>
-</div>
-<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); gap: 56px 32px">
-<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
-<img src="/pantheon/q1.jpg" alt="Quidam 1, drawing: a figure with grey head loops and a brown scribble body" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
-<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
-<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 1</div>
-<a href="#inquiries" style="font-size: 15px">Inquire</a>
-</div>
-<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
-<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Mixed media on acid-free paper. Unframed. Signed and dated on verso.</div>
-</div>
-<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
-<img src="/pantheon/q2.jpg" alt="Quidam 2, drawing: a figure with orange hair and wide eyes, red scribble body" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
-<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
-<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 2</div>
-<a href="#inquiries" style="font-size: 15px">Inquire</a>
-</div>
-<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
-<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Mixed media on acid-free paper. Unframed. Signed and dated on verso.</div>
-</div>
-<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
-<img src="/pantheon/q3.jpg" alt="Quidam 3, drawing: a figure in red-rimmed glasses with black hair" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
-<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
-<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 3</div>
-<a href="#inquiries" style="font-size: 15px">Inquire</a>
-</div>
-<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
-<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Mixed media on acid-free paper. Unframed. Signed and dated on verso.</div>
-</div>
-<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
-<img src="/pantheon/q4.jpg" alt="Quidam 4, drawing: a smiling figure in black" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
-<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
-<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 4</div>
-<a href="#inquiries" style="font-size: 15px">Inquire</a>
-</div>
-<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
-<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Mixed media on acid-free paper. Unframed. Signed and dated on verso.</div>
-</div>
-<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
-<img src="/pantheon/q5.jpg" alt="Quidam 5, drawing: two figures in teal and salmon pink" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
-<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
-<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 5</div>
-<a href="#inquiries" style="font-size: 15px">Inquire</a>
-</div>
-<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
-<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Mixed media on acid-free paper. Unframed. Signed and dated on verso.</div>
-</div>
-<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
-<img src="/pantheon/q6.jpg" alt="Quidam 6, drawing: a green figure with orange stripes" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
-<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
-<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 6</div>
-<a href="#inquiries" style="font-size: 15px">Inquire</a>
-</div>
-<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
-<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Mixed media on acid-free paper. Unframed. Signed and dated on verso.</div>
-</div>
-<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
-<img src="/pantheon/q7.jpg" alt="Quidam 7, drawing: a figure outlined in brown with a long mouth" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
-<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
-<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 7</div>
-<a href="#inquiries" style="font-size: 15px">Inquire</a>
-</div>
-<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
-<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Mixed media on acid-free paper. Unframed. Signed and dated on verso.</div>
-</div>
-<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
-<img src="/pantheon/q8.jpg" alt="Quidam 8, drawing: two figures in black with wide eyes" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
-<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
-<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 8</div>
-<a href="#inquiries" style="font-size: 15px">Inquire</a>
-</div>
-<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
-<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Mixed media on acid-free paper. Unframed. Signed and dated on verso.</div>
-</div>
-<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
-<img src="/pantheon/q9.jpg" alt="Quidam 9, drawing: a figure with a teal head and green and orange body" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
-<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
-<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 9</div>
-<a href="#inquiries" style="font-size: 15px">Inquire</a>
-</div>
-<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
-<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Mixed media on acid-free paper. Unframed. Signed and dated on verso.</div>
-</div>
-<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
-<img src="/pantheon/q10.jpg" alt="Quidam 10, drawing: a figure with teal hair and a black body" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
-<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
-<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 10</div>
-<a href="#inquiries" style="font-size: 15px">Inquire</a>
-</div>
-<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
-<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Mixed media on acid-free paper. Unframed. Signed and dated on verso.</div>
-</div>
-<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
-<img src="/pantheon/q11.jpg" alt="Quidam 11, drawing: two heads in blue and black with coloured marks" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
-<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
-<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 11</div>
-<a href="#inquiries" style="font-size: 15px">Inquire</a>
-</div>
-<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
-<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Mixed media on acid-free paper. Unframed. Signed and dated on verso.</div>
-</div>
-<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
-<img src="/pantheon/q12.jpg" alt="Quidam 12, drawing: a black figure with a wide smile and a crown of marks" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
-<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
-<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 12</div>
-<a href="#inquiries" style="font-size: 15px">Inquire</a>
-</div>
-<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
-<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Mixed media on acid-free paper. Unframed. Signed and dated on verso.</div>
-</div>
-<div style="display: flex; flex-direction: column; gap: 16px; min-width: 0">
-<img src="/pantheon/q13.jpg" alt="Quidam 13, drawing: two black figures with square heads" style="display: block; width: 100%; height: auto; background: #ffffff; border: 1px solid #dcdad3">
-<div style="display: flex; flex-wrap: wrap; gap: 4px 16px; justify-content: space-between; align-items: baseline">
-<div style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Quidam 13</div>
-<a href="#inquiries" style="font-size: 15px">Inquire</a>
-</div>
-<div style="font-size: 17px; font-weight: 500; margin-top: -8px">EUR 623.70</div>
-<div style="font-size: 14px; color: #66665f; margin-top: -8px">A3 · 29.7 × 42 cm / 11.7 × 16.5 in · Mixed media on acid-free paper. Unframed. Signed and dated on verso.</div>
-</div>
-</div>
-</section>
+  <section id="wall">
+    <h2>All of them</h2>
+    <p class="small">The whole batch on one wall. 50 figures, 50 texts. Hover to look closer.</p>
+    <div class="wall" id="wallFigs"></div>
+    <div class="wall" id="wallTexts"></div>
+  </section>
 
-<section id="room" style="display: flex; flex-direction: column; gap: 40px; padding: 96px 0; border-top: 1px solid #d9d7d0">
-<div style="display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: space-between; align-items: baseline">
-<h2 style="margin: 0; font-size: 15px; font-weight: 500; color: #66665f">In the room</h2>
-<div style="font-size: 15px; color: #66665f">Mockups. Black floating frame for A3, approx. 38 × 50 cm, not included.</div>
-</div>
-<div style="display: flex; flex-wrap: wrap; gap: 32px">
-<div style="flex: 1 1 280px; min-width: 0"><img src="/pantheon/r2.jpg" alt="Quidam 2 in a black floating frame on a wall" style="display: block; width: 100%; height: auto"></div>
-<div style="flex: 1 1 280px; min-width: 0"><img src="/pantheon/r8.jpg" alt="Quidam 8 in a black floating frame on a wall" style="display: block; width: 100%; height: auto"></div>
-<div style="flex: 1 1 280px; min-width: 0"><img src="/pantheon/r12.jpg" alt="Quidam 12 in a black floating frame on a wall" style="display: block; width: 100%; height: auto"></div>
-</div>
-</section>
+  <section id="figures">
+    <h2>Figures</h2>
+    <p class="lede">Digital figures. No two alike.</p>
+    <p class="body">Every figure gets its own face, colours, hair and mood. Curated by Johnny. Each one comes in four sizes: A4, 50 × 70 cm, Instagram and TikTok.</p>
+    <ul class="facts">
+      <li>Fig. 001 is free in full</li>
+      <li>Free social pack for every figure</li>
+      <li>Print pack EUR 4, same as the texts</li>
+    </ul>
+    <div class="tgrid" id="figGrid"></div>
+    <div class="row more"><button class="btn ghost" id="moreFigs" type="button">Show 12 more</button><span class="small" id="figCount"></span></div>
+  </section>
 
-<section id="texts" style="display: flex; flex-wrap: wrap; gap: 32px 64px; padding: 96px 0; border-top: 1px solid #d9d7d0">
-<h2 style="flex: 1 1 180px; margin: 0; font-size: 15px; font-weight: 500; color: #66665f">Texts</h2>
-<div style="flex: 4 1 440px; min-width: 0; max-width: 720px; display: flex; flex-direction: column; gap: 20px">
-<p style="margin: 0; font-size: clamp(26px, 4vw, 44px); line-height: 1.15; letter-spacing: -0.02em; font-weight: 800">Small texts, big print.</p>
-<p style="margin: 0; font-size: 19px; color: #3a3a37">A growing library of deadpan texts. Free social packs for Instagram, and print files to download from USD 4: A4, 50 &times; 70 cm, 18 &times; 24 in and postcards.</p>
-<p style="margin: 0; font-size: 19px"><a href="/library/">Enter the library &rarr;</a></p>
-</div>
-</section>
+  <section id="texts">
+    <h2>Texts</h2>
+    <p class="lede">Dry sentences for your wall.</p>
+    <p class="body">Same rules as the figures. Four sizes in every pack. Curated by Johnny.</p>
+    <ul class="facts">
+      <li>A4: 21 × 29.7 cm / 8.3 × 11.7 in</li>
+      <li>Poster: 50 × 70 cm / 19.7 × 27.6 in</li>
+      <li>Instagram 4:5 and TikTok 9:16</li>
+    </ul>
+    <div class="tgrid" id="textGrid"></div>
+    <div class="row more"><button class="btn ghost" id="moreTexts" type="button">Show 12 more</button><span class="small" id="textCount"></span></div>
+  </section>
 
-<section id="about" style="display: flex; flex-wrap: wrap; gap: 32px 64px; padding: 96px 0; border-top: 1px solid #d9d7d0">
-<h2 style="flex: 1 1 180px; margin: 0; font-size: 15px; font-weight: 500; color: #66665f">Johnny</h2>
-<div style="flex: 4 1 440px; min-width: 0; max-width: 720px; display: flex; flex-direction: column; gap: 56px">
-<p style="margin: 0; font-size: 19px; color: #3a3a37">Johnny Ramstedt (b. 1970, Borgå, Finland) is a visual artist based in Helsinki. He has exhibited internationally since 1999, and his work is in private and corporate collections across Europe and the US.</p>
-<div style="display: flex; flex-direction: column; gap: 14px">
-<h3 style="margin: 0; font-size: 15px; font-weight: 500; color: #66665f">Selected exhibitions</h3>
-<div style="display: flex; flex-direction: column; gap: 8px; font-size: 16px; color: #3a3a37">
-<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2025</span><span>Fafa's window gallery, Helsinki</span></div>
-<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2024</span><span>Volta Art Fair, Basel</span></div>
-<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2023</span><span>Art Gallery Loviisa, Lovisa</span></div>
-<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2022</span><span>Galleria Theodor, Lovisa</span></div>
-<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2021</span><span>SEB (Skandinaviska Enskilda Banken), Helsinki</span></div>
-<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2021</span><span>Interpretations from The Abstract, The Contemporary Art Modern Project: Miami, New York, London, Pacific Palisades</span></div>
-<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2020</span><span>Monokhromos II, The Contemporary Art Modern Project, Miami</span></div>
-<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2016</span><span>Galleri Lohme, Malmö</span></div>
-<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2016</span><span>Korjaamo, Helsinki</span></div>
-<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2014</span><span>Galerie Art Room, Helsinki</span></div>
-<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">2014</span><span>Kulturhuset Grand, Porvoo</span></div>
-<div style="display: flex; gap: 24px"><span style="flex: 0 0 48px; color: #66665f">1999</span><span>Art Alex, Helsinki</span></div>
-</div>
-</div>
-<div style="display: flex; flex-direction: column; gap: 14px">
-<h3 style="margin: 0; font-size: 15px; font-weight: 500; color: #66665f">Grants</h3>
-<p style="margin: 0; font-size: 16px; color: #3a3a37">Svenska Kulturfonden, 2021–2026. Arts Promotion Centre Finland (Taike), 2022. Grönqvistska Foundation, 2016.</p>
-</div>
-<div style="display: flex; flex-direction: column; gap: 14px">
-<h3 style="margin: 0; font-size: 15px; font-weight: 500; color: #66665f">Collections</h3>
-<p style="margin: 0; font-size: 16px; color: #3a3a37">Private collections. Lovisa City. 99 Hudson, Jersey City, NJ, USA.</p>
-</div>
-<div style="display: flex; flex-direction: column; gap: 14px">
-<h3 style="margin: 0; font-size: 15px; font-weight: 500; color: #66665f">Studies</h3>
-<p style="margin: 0; font-size: 16px; color: #3a3a37">Carpentry and woodworking, Piet Hein Eek, Eindhoven. Vocational qualification in the wood industry (carpentry and joinery), Axxell, Finland. Interdisciplinary studies (art history), Helsinki University. Art Students League of New York.</p>
-</div>
-</div>
-</section>
 
-<section id="inquiries" style="display: flex; flex-wrap: wrap; gap: 32px 64px; padding: 96px 0 120px; border-top: 1px solid #d9d7d0">
-<h2 style="flex: 1 1 180px; margin: 0; font-size: 15px; font-weight: 500; color: #66665f">Inquiries</h2>
-<div style="flex: 4 1 440px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
-<p style="margin: 0; font-size: clamp(26px, 4vw, 44px); line-height: 1.15; letter-spacing: -0.02em; font-weight: 800; overflow-wrap: anywhere"><a href="mailto:hello@whoisjohnny.com">hello@whoisjohnny.com</a></p>
-<p style="margin: 0; font-size: 19px; color: #3a3a37">Instagram: <a href="https://www.instagram.com/whoisjohnny2020/">@whoisjohnny2020</a></p>
-<p style="margin: 0; font-size: 15px; color: #66665f">Write for sizes and availability.</p>
-<p style="margin: 0; font-size: 15px; color: #66665f">Prices include VAT within the EU. No VAT outside the EU. Shipping is added. Larger and smaller sizes: write for prices.</p>
-</div>
-</section>
+  <section id="packs">
+    <h2>Packs</h2>
+    <p class="lede">Sets that belong together.</p>
+    <p class="body">Each pack is a fixed set, delivered as one download with all four sizes of every piece. Single pieces are EUR 4.</p>
+    <div class="packs" id="packGrid"></div>
+  </section>
 
-<footer style="display: flex; flex-wrap: wrap; gap: 8px 32px; justify-content: space-between; padding: 24px 0 40px; border-top: 1px solid #d9d7d0; font-size: 14px; color: #66665f">
-<span>© 2026 Johnny Ramstedt</span>
-<span><a href="/library/">Texts</a> · whoisjohnny.com</span>
-</footer>
+  <section id="room">
+    <h2>In the room</h2>
+    <p class="lede">A figure and two sentences, side by side.</p>
+    <div class="room" id="roomMock" aria-label="Wall mock-up"></div>
+    <p class="small" style="margin-top:10px">Mock-up. Frames are not included.</p>
+  </section>
 
+  <section id="about">
+    <h2>Johnny</h2>
+    <p class="lede">Johnny Ramstedt, born 1970 in Borgå, Finland.</p>
+    <p class="body">Visual artist with exhibitions since 1999. His serious work lives at johnnyramstedt.com. This is where the funny things live.</p>
+  </section>
+
+  <section id="info">
+    <h2>FAQ</h2>
+    <p class="lede">Questions people ask.</p>
+    <details class="acc" open><summary>What do I get when I buy?</summary><div class="body">A download link by email. Nothing is shipped. Every figure and every text comes as one pack with four files: A4 (PDF), 50 × 70 cm (PDF), Instagram 4:5 (1080 × 1350 px, PNG) and TikTok 9:16 (1080 × 1920 px, PNG).</div></details>
+    <details class="acc"><summary>Is anything sent to me in the post?</summary><div class="body">No. Everything on this site is digital. You download the files and print them yourself, or have a print shop do it.</div></details>
+    <details class="acc"><summary>Can I return it?</summary><div class="body">No. Because the files are delivered digitally and you can download them immediately, there is no right of return or refund once the download has started. If a file is broken or will not open, write to us and we will fix it or refund you. See the terms below.</div></details>
+    <details class="acc"><summary>How do I download?</summary><div class="body">After payment you get an email with a personal download link. You can also reach your files from the order page. Save them somewhere safe. If you lose the link, write to us and we will send a new one.</div></details>
+    <details class="acc"><summary>Which size should I print?</summary><div class="body">A4 fits a normal home printer. 50 × 70 cm is a standard poster size in Europe and fits ready-made frames. Print shops can do it on request. See the printing guide below.</div></details>
+    <details class="acc"><summary>Can I print as many copies as I like?</summary><div class="body">Yes, for your own walls, your home and your own workplace. You may not resell the files or the prints, and you may not use the figures or texts on products you sell. See the terms below.</div></details>
+    <details class="acc"><summary>What is the free social pack?</summary><div class="body">The Instagram and TikTok versions are free to use if you credit "WhoIsJohnny?" or tag @johnnyramstedt. No. 001 is free in all sizes.</div></details>
+    <details class="acc"><summary>Are the figures and texts made by hand?</summary><div class="body">The figures and texts are generated with AI and curated by Johnny, who chooses what goes on the site. The original hand-drawn figures, Quidam, are resting for now.</div></details>
+    <details class="acc"><summary>What does the question mark mean?</summary><div class="body">It is on every piece. The site is called WhoIsJohnny? and it is a project about who gets to be somebody.</div></details>
+    <details class="acc"><summary>Can I buy a pack of several pieces?</summary><div class="body">Yes. Packs are fixed sets: ten figures, ten texts, or all 50 of either. They cost less than buying the pieces one by one.</div></details>
+    <details class="acc"><summary>Which currency and what about VAT?</summary><div class="body">Prices are in EUR. Checkout is handled by Polar, which also takes care of VAT and shows the final price before you pay.</div></details>
+    <details class="acc"><summary>Something is wrong with my order</summary><div class="body">Write to hello@whoisjohnny.com with your order number and we will sort it out.</div></details>
+  </section>
+
+  <section id="print">
+    <h2>How to print</h2>
+    <p class="lede">For a good result on your wall.</p>
+    <p class="body">Short version: print on matte, uncoated or lightly coated paper, at 100% size, in colour.</p>
+    <details class="acc" open><summary>A4 at home or at the office</summary><div class="body">Use matte paper of 120 to 170 g/m². Ordinary copy paper (80 g) works and gives a pleasantly dry look that suits the texts, but thicker paper holds colour better. Choose "Actual size" or "100%" in the print dialog. Do not choose "Fit to page", it adds margins and shrinks the piece.</div></details>
+    <details class="acc"><summary>50 × 70 cm at a print shop</summary><div class="body">Ask for a poster print on matte paper of 170 to 250 g/m². Matte avoids glare from windows and lamps. Send the 50 × 70 cm PDF as it is and ask for no scaling, no cropping and no extra border. Most shops can print this size in a day.</div></details>
+    <details class="acc"><summary>Black and yellow pages</summary><div class="body">Some texts have solid black or solid yellow backgrounds. Home inkjet printers can show streaks on large dark areas. A laser printer or a print shop gives the cleanest result. If your printer streaks, try the white versions first.</div></details>
+    <details class="acc"><summary>Sharp at any size</summary><div class="body">The A4 and 50 × 70 cm files are PDFs with vector text and shapes, so they stay sharp at any print size. The Instagram and TikTok files are pixel images made for screens. Do not print those on paper.</div></details>
+    <details class="acc"><summary>Colour</summary><div class="body">Files are made in sRGB, which is what most printers and shops expect. Colours can vary slightly between screens and printers. That is normal and is part of the charm.</div></details>
+    <details class="acc"><summary>Frames</summary><div class="body">A4 and 50 × 70 cm are common frame sizes. Frames are not included. A thin black or white frame suits both the figures and the texts.</div></details>
+  </section>
+
+  <section id="terms">
+    <h2>Terms and conditions</h2>
+    <div class="legal">
+    <p class="small">Last updated 25 November 2026. This is a draft and should be read through before launch.</p>
+    <h3>1. Who sells</h3>
+    <p>whoisjohnny.com is run by Johnny Ramstedt, a private individual in Finland. Contact: hello@whoisjohnny.com. Payments and checkout are handled by Polar, which acts as the merchant of record. Their terms and privacy policy apply to the payment itself.</p>
+    <h3>2. What you buy</h3>
+    <p>Digital files only: a download link to PDF and PNG files. Nothing physical is sent, and no frames, paper or prints are included. The size, format and number of files are described on the product page.</p>
+    <h3>3. Delivery</h3>
+    <p>You receive a personal download link by email directly after payment. The link is personal and must not be shared. If the link does not work, write to hello@whoisjohnny.com.</p>
+    <h3>4. Right of withdrawal and returns</h3>
+    <p>The products are digital content delivered immediately. By completing the purchase you ask us to start delivery at once and you accept that you lose your right of withdrawal as soon as the download has begun. For this reason there is no return and no refund for change of mind. This does not limit your statutory rights if a file is faulty. If a file is broken, missing or does not match its description, we will replace it or refund you.</p>
+    <h3>5. Licence</h3>
+    <p>You get a personal, non-exclusive licence to print and display the files for your own use, at home or in your own workplace, in any number of copies. You may not resell, share, upload or redistribute the files, edit them and sell them on, or use them on products you sell, such as posters, mugs, clothing or stickers. Copyright stays with Johnny Ramstedt.</p>
+    <h3>6. Free social files</h3>
+    <p>The free social versions may be posted on social media if you credit "WhoIsJohnny?" or tag @johnnyramstedt. The credit must stay visible.</p>
+    <h3>7. Prices</h3>
+    <p>Prices are shown in EUR and include VAT where it applies. The final price is shown at checkout. We may change prices at any time. A price changes nothing for an order you have already paid.</p>
+    <h3>8. About the content</h3>
+    <p>The figures and texts are generated with AI and curated by Johnny. The texts are jokes. They are not advice. Print quality depends on your printer and paper, and we cannot guarantee how a print will look.</p>
+    <h3>9. Liability</h3>
+    <p>We are not liable for indirect loss. Our liability for a purchase never exceeds the price you paid. This does not apply where the law says otherwise, and it does not remove your rights as a consumer.</p>
+    <h3>10. Law and disputes</h3>
+    <p>Finnish law applies. Consumers in the EU keep the mandatory consumer protection of their own country. Write to us first. A consumer can also turn to the Finnish consumer advisory service and the Consumer Disputes Board.</p>
+    <h3>11. Changes</h3>
+    <p>We may update these terms. The version on the site when you buy is the one that applies to your order.</p>
+    </div>
+  </section>
+
+  <section id="privacy">
+    <h2>Privacy</h2>
+    <div class="legal">
+    <p class="small">Last updated 25 November 2026. This is a draft and should be read through before launch.</p>
+    <h3>Who is responsible</h3>
+    <p>Johnny Ramstedt, a private individual in Finland, is the controller for personal data on whoisjohnny.com. Contact: hello@whoisjohnny.com.</p>
+    <h3>What we collect</h3>
+    <p>When you buy, Polar collects your name, email, country and payment details to complete the order, send you the download link and handle VAT. We receive your name, email and order details from Polar. We never see or store your card number. If you write to us, we keep your message and email address so that we can reply.</p>
+    <h3>Why we use it</h3>
+    <p>To deliver your order, to give you support, to keep accounting records as the law requires, and to prevent misuse of download links. The legal basis is the contract with you and our legal obligations.</p>
+    <h3>Who gets it</h3>
+    <p>Polar (checkout, payment and VAT, as merchant of record), the payment processor they use, and our hosting provider, Cloudflare. We do not sell personal data and we do not use it for advertising.</p>
+    <h3>Cookies and analytics</h3>
+    <p>The site itself does not set marketing cookies. If we add analytics, it will be privacy-friendly and described here. Polar may use cookies on the checkout page. See their policy.</p>
+    <h3>How long we keep it</h3>
+    <p>Order and accounting records are kept for the period the law requires, in Finland usually six years. Support emails are deleted after they are no longer needed.</p>
+    <h3>Your rights</h3>
+    <p>You can ask to see, correct or delete your data, to restrict or object to its use, and to receive a copy. Write to hello@whoisjohnny.com. Some data must be kept by law. You can also complain to the Finnish Data Protection Ombudsman (tietosuoja.fi).</p>
+    <h3>Transfers outside the EU</h3>
+    <p>Polar and some of its providers are based in or use servers outside the EU. They use recognised safeguards for such transfers. See their privacy policy.</p>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <p class="lede">Questions? Ask.</p>
+    <p class="body">Email: hello@whoisjohnny.com<br>Instagram: @johnnyramstedt</p>
+    <p class="small">Prices are in EUR.</p>
+  </section>
+
+  <footer>
+    <span class="ai">Texts and figures are generated with AI and curated by Johnny.</span>
+    <span><a href="#terms">Terms</a> · <a href="#privacy">Privacy</a> · <a href="#info">FAQ</a></span>
+    <span>© 2026 Johnny Ramstedt · whoisjohnny.com</span>
+    <span>An art project by Johnny Ramstedt · johnnyramstedt.com</span>
+  </footer>
 </div>
-</div>
-<style>
-img[src*="/pantheon/q"]{cursor:zoom-in}
-#lb{position:fixed;inset:0;z-index:100;background:rgba(17,17,17,.92);display:none;align-items:center;justify-content:center;padding:24px;cursor:zoom-out;overflow:auto}
-#lb.on{display:flex}
-#lb .card{display:flex;align-items:stretch;gap:0;max-width:100%;max-height:100%;background:#f2f1ed;cursor:default;box-shadow:0 10px 40px rgba(0,0,0,.4)}
-#lb .pic{display:flex;align-items:center;justify-content:center;background:#fff;min-width:0}
-#lb .pic img{display:block;max-width:100%;max-height:calc(100vh - 48px);width:auto;height:auto}
-#lb .info{flex:0 0 300px;box-sizing:border-box;padding:36px 32px;display:flex;flex-direction:column;gap:14px;font-family:'Hanken Grotesk',sans-serif;color:#111;justify-content:center}
-#lb .t{font-size:26px;font-weight:800;letter-spacing:-.01em}
-#lb .pr{font-size:20px;font-weight:500}
-#lb .m{font-size:14px;line-height:1.5;color:#66665f}
-#lb .inq{font-size:15px;color:#111;margin-top:8px}
-#lb .x{position:absolute;top:10px;right:18px;color:#f2f1ed;font:300 34px/1 'Hanken Grotesk',sans-serif;cursor:pointer}
-#lb .nav{position:absolute;top:50%;transform:translateY(-50%);color:#f2f1ed;font:300 44px/1 'Hanken Grotesk',sans-serif;padding:16px;user-select:none;cursor:pointer}
-#lb .prev{left:4px}#lb .next{right:4px}
-@media (max-width:760px){#lb{padding:12px;align-items:flex-start}#lb .card{flex-direction:column;max-height:none}#lb .pic img{max-height:70vh}#lb .info{flex:none;padding:20px 20px 24px}#lb .nav{display:none}}
-</style>
-<div id="lb" role="dialog" aria-modal="true" aria-label="Enlarged drawing"><span class="x" aria-hidden="true">&times;</span><span class="nav prev" aria-label="Previous">&#8249;</span><div class="card"><div class="pic"><img alt=""></div><div class="info"><div class="t"></div><div class="pr"></div><div class="m"></div><a class="inq" href="#inquiries">Inquire</a></div></div><span class="nav next" aria-label="Next">&#8250;</span></div>
+<div class="toast" id="toast" role="status" hidden></div>
+
 <script>
 (function(){
-var imgs=[].slice.call(document.querySelectorAll('img[src*="/pantheon/q"]')),lb=document.getElementById('lb'),big=lb.querySelector('.pic img'),T=lb.querySelector('.t'),P=lb.querySelector('.pr'),M=lb.querySelector('.m'),i=0;
-function show(n){i=(n+imgs.length)%imgs.length;var im=imgs[i],box=im.parentNode,d=box.children;big.src=im.src;big.alt=im.alt;
-T.textContent=d[1].children[0].textContent;P.textContent=d[2].textContent;M.textContent=d[3].textContent;
-lb.classList.add('on');lb.scrollTop=0;document.body.style.overflow='hidden';}
-function hide(){lb.classList.remove('on');document.body.style.overflow='';}
-imgs.forEach(function(im,n){im.addEventListener('click',function(){show(n)});});
-lb.addEventListener('click',function(e){var t=e.target;if(t.classList.contains('prev')){show(i-1)}else if(t.classList.contains('next')){show(i+1)}else if(t.classList.contains('inq')){hide()}else if(!t.closest('.card')){hide()}});
-document.addEventListener('keydown',function(e){if(!lb.classList.contains('on'))return;if(e.key==='Escape')hide();else if(e.key==='ArrowLeft')show(i-1);else if(e.key==='ArrowRight')show(i+1);});
+  var $=function(id){return document.getElementById(id)};
+  function toast(m){var t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(toast._h);toast._h=setTimeout(function(){t.hidden=true},2600)}
+  function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+  function lines(t){return t.split(/(?<=[.?!])\s+/).map(esc).join('<br>')}
+  function sc(len){return len<=24?'s1':len<=40?'s2':len<=60?'s3':len<=80?'s4':'s5'}
+
+  /*FIG-START*/
+  var HEADS=['#9b9b9b','#e8832a','#18a3a3','#f2c6a0','#2f9e5b','#f3d34a','#e98c7b','#7aa7e8','#c7a3e8','#d9d9d9','#f08fb0','#8fd16a'];
+  var BODIES=['#a86a3d','#c93c2b','#222222','#e98c7b','#e8832a','#2f9e5b','#2f4fd0','#e8c92a','#18a3a3','#7a3fb0','#111111','#f08fb0'];
+  var HAIRC=['#1a1a1a','#6b4226','#e8832a','#18a3a3','#f08fb0','#f3d34a','#c93c2b','#2f4fd0'];
+  var PAPERS=['#fbfaf6','#f6efe0','#e8f1f0','#f4e6ea','#ece9f6','#fdf3c8','#e3eadf'];
+  var UID=0;
+  function rng(seed){var a=(seed*2654435761)>>>0;return function(){a=(a+0x6D2B79F5)>>>0;var t=a;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return((t^(t>>>14))>>>0)/4294967296}}
+  function figure(seed){
+    var r=rng(seed*7919+13);
+    var f=function(a,b){return a+r()*(b-a)};
+    var pick=function(a){return a[Math.floor(r()*a.length)]};
+    var int=function(n){return Math.floor(r()*n)};
+    var ink='#1a1a1a',id='f'+(UID++);
+    var head=pick(HEADS),body=pick(BODIES),tries=0;
+    while(body===head&&tries++<8)body=pick(BODIES);
+    var hairC=pick(HAIRC),paper=pick(PAPERS);
+    var R=f(36,50),cx=100,cy=f(88,100),shape=int(5);
+    var vs=[1,1,1.15,.85,1.05][shape];
+    var top=cy-R*vs,btm=cy+R*vs;
+    var s='<svg viewBox="0 0 200 266" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Digital figure">';
+
+    /* body */
+    var bt=btm-9,bb=238,bw=f(58,96),bshape=int(4),bodyEl,clipEl,pts;
+    var cxl=cx-bw/2,cxr=cx+bw/2;
+    if(bshape===0)pts=[cx-bw*.4,bt,cx+bw*.4,bt,cx+bw*.55,bb,cx-bw*.55,bb];
+    else if(bshape===1)pts=[cxl,bt,cxr,bt,cxr,bb,cxl,bb];
+    else if(bshape===3)pts=[cx-bw*.3,bt,cx+bw*.3,bt,cx+bw*.38,bb,cx-bw*.38,bb];
+    if(bshape===2){
+      var ery=(bb-bt)/2,erx=bw*.62,ecy=bt+ery;
+      bodyEl='<ellipse cx="'+cx+'" cy="'+ecy.toFixed(1)+'" rx="'+erx.toFixed(1)+'" ry="'+ery.toFixed(1)+'" fill="'+body+'" stroke="'+ink+'" stroke-width="3"/>';
+      clipEl='<ellipse cx="'+cx+'" cy="'+ecy.toFixed(1)+'" rx="'+erx.toFixed(1)+'" ry="'+ery.toFixed(1)+'"/>';
+    }else{
+      var ps=pts.map(function(v,i){return (i%2?'':'')+v.toFixed(1)}).join(' ');
+      var pp='';for(var i=0;i<pts.length;i+=2)pp+=pts[i].toFixed(1)+','+pts[i+1].toFixed(1)+' ';
+      bodyEl='<polygon points="'+pp+'" fill="'+body+'" stroke="'+ink+'" stroke-width="3" stroke-linejoin="round"/>';
+      clipEl='<polygon points="'+pp+'"/>';
+    }
+    /* legs */
+    if(r()>.4){
+      var lx=bw*f(.14,.24);
+      s+='<path d="M'+(cx-lx)+' '+(bb-4)+' L'+(cx-lx)+' 260 M'+(cx+lx)+' '+(bb-4)+' L'+(cx+lx)+' 260 M'+(cx-lx-9)+' 260 L'+(cx-lx+3)+' 260 M'+(cx+lx-3)+' 260 L'+(cx+lx+9)+' 260" stroke="'+ink+'" stroke-width="4" stroke-linecap="round" fill="none"/>';
+    }
+    /* arms */
+    var arm=int(4),ay=bt+16,ax=bw*.5;
+    function limb(x1,y1,x2,y2){return '<path d="M'+x1.toFixed(1)+' '+y1.toFixed(1)+' L'+x2.toFixed(1)+' '+y2.toFixed(1)+'" stroke="'+ink+'" stroke-width="4" stroke-linecap="round"/><circle cx="'+x2.toFixed(1)+'" cy="'+y2.toFixed(1)+'" r="5" fill="'+head+'" stroke="'+ink+'" stroke-width="2.5"/>'}
+    if(arm===0)s+=limb(cx-ax,ay,cx-ax-18,ay+46)+limb(cx+ax,ay,cx+ax+18,ay+46);
+    else if(arm===1)s+=limb(cx-ax,ay,cx-ax-18,ay+46)+limb(cx+ax,ay,cx+ax+22,ay-26);
+    else if(arm===2)s+=limb(cx-ax,ay,cx-ax-20,ay-24)+limb(cx+ax,ay,cx+ax+20,ay-24);
+    /* body + pattern */
+    s+=bodyEl;
+    var pat=int(5);
+    if(pat>0){
+      s+='<clipPath id="'+id+'">'+clipEl+'</clipPath><g clip-path="url(#'+id+')" opacity=".42" stroke="'+(r()>.5?'#ffffff':ink)+'" fill="none">';
+      if(pat===1){for(var y=bt+8;y<bb;y+=16)s+='<path d="M0 '+y.toFixed(1)+' H200" stroke-width="5"/>'}
+      else if(pat===2){for(var y2=bt+10;y2<bb;y2+=16)for(var x2=cx-60+((y2/16|0)%2)*8;x2<cx+60;x2+=16)s+='<circle cx="'+x2.toFixed(1)+'" cy="'+y2.toFixed(1)+'" r="3" fill="#fff" stroke="none"/>'}
+      else if(pat===3){for(var k=0;k<6;k++){var yy=bt+10+k*((bb-bt)/6)+r()*5;s+='<path d="M'+(cx-70)+' '+yy.toFixed(1)+' Q '+cx+' '+(yy+14+r()*10).toFixed(1)+' '+(cx+70)+' '+(yy-4).toFixed(1)+'" stroke-width="2"/>'}}
+      else{for(var x3=cx-70;x3<cx+70;x3+=14)s+='<path d="M'+x3+' '+bt+' V'+bb+'" stroke-width="5"/>'}
+      s+='</g>';
+    }
+    /* chest extra */
+    var ex=int(5);
+    if(ex===1){for(var b=0;b<3;b++)s+='<circle cx="'+cx+'" cy="'+(bt+34+b*17)+'" r="3.6" fill="#fff" stroke="'+ink+'" stroke-width="2"/>'}
+    else if(ex===2)s+='<polygon points="'+cx+','+(bt+14)+' '+(cx+8)+','+(bt+28)+' '+(cx+5)+','+(bt+62)+' '+cx+','+(bt+68)+' '+(cx-5)+','+(bt+62)+' '+(cx-8)+','+(bt+28)+'" fill="#c93c2b" stroke="'+ink+'" stroke-width="2.4" stroke-linejoin="round"/>';
+    else if(ex===3)s+='<polygon points="'+cx+','+(bt+20)+' '+(cx-20)+','+(bt+10)+' '+(cx-20)+','+(bt+30)+' '+cx+','+(bt+20)+' '+(cx+20)+','+(bt+10)+' '+(cx+20)+','+(bt+30)+'" fill="#f3d34a" stroke="'+ink+'" stroke-width="2.4" stroke-linejoin="round"/>';
+    else if(ex===4)s+='<rect x="'+(cx+bw*.1)+'" y="'+(bt+34)+'" width="18" height="16" fill="#fff" stroke="'+ink+'" stroke-width="2.4"/>';
+
+    /* ears */
+    if(int(3)===0){var er0=f(7,11);s+='<circle cx="'+(cx-R*1.02)+'" cy="'+(cy+4)+'" r="'+er0.toFixed(1)+'" fill="'+head+'" stroke="'+ink+'" stroke-width="3"/><circle cx="'+(cx+R*1.02)+'" cy="'+(cy+4)+'" r="'+er0.toFixed(1)+'" fill="'+head+'" stroke="'+ink+'" stroke-width="3"/>'}
+
+    /* hair behind head */
+    var hat=r()<.2?pick(['beanie','top','crown']):null;
+    var hair=int(8);
+    var hs='stroke="'+ink+'" stroke-width="2.6" stroke-linejoin="round"';
+    if(hair===1){
+      for(var k1=0;k1<8;k1++){var a1=(-165+k1*(150/7))*Math.PI/180,len=f(16,30),bx1=cx+Math.cos(a1)*R*.98*(shape===3?1.2:shape===2?.8:1),by1=cy+Math.sin(a1)*R*vs*.98;
+        var tx1=cx+Math.cos(a1)*(R+len),ty1=cy+Math.sin(a1)*(R*vs+len),px=-Math.sin(a1)*8,py=Math.cos(a1)*8;
+        s+='<polygon points="'+(bx1-px).toFixed(1)+','+(by1-py).toFixed(1)+' '+tx1.toFixed(1)+','+ty1.toFixed(1)+' '+(bx1+px).toFixed(1)+','+(by1+py).toFixed(1)+'" fill="'+hairC+'" '+hs+'/>'}
+    }else if(hair===2){
+      s+='<path d="M'+(cx-R*.92)+' '+(cy-R*.3)+' L'+(cx-R*1.08)+' '+(btm+30)+' M'+(cx+R*.92)+' '+(cy-R*.3)+' L'+(cx+R*1.08)+' '+(btm+30)+'" stroke="'+hairC+'" stroke-width="18" stroke-linecap="round" fill="none"/>';
+      s+='<path d="M'+(cx-R*.92)+' '+(cy-R*.3)+' L'+(cx-R*1.08)+' '+(btm+30)+' M'+(cx+R*.92)+' '+(cy-R*.3)+' L'+(cx+R*1.08)+' '+(btm+30)+'" stroke="'+ink+'" stroke-width="2" stroke-linecap="round" fill="none" opacity=".35"/>';
+    }else if(hair===3){
+      for(var k2=0;k2<7;k2++){var a2=(-170+k2*(160/6))*Math.PI/180;s+='<circle cx="'+(cx+Math.cos(a2)*(R+4)*(shape===3?1.15:shape===2?.8:1)).toFixed(1)+'" cy="'+(cy+Math.sin(a2)*(R*vs+4)).toFixed(1)+'" r="'+f(10,14).toFixed(1)+'" fill="'+hairC+'" '+hs+'/>'}
+    }else if(hair===6){
+      var mh=f(26,40);s+='<polygon points="'+(cx-10)+','+(top+10)+' '+(cx-14)+','+(top-mh*.5)+' '+(cx-5)+','+(top-mh*.35)+' '+cx+','+(top-mh)+' '+(cx+6)+','+(top-mh*.35)+' '+(cx+14)+','+(top-mh*.55)+' '+(cx+10)+','+(top+10)+'" fill="'+hairC+'" '+hs+'/>';
+    }else if(hair===7){
+      for(var k3=0;k3<6;k3++){var a3=(-160+k3*(140/5))*Math.PI/180;s+='<path d="M'+(cx+Math.cos(a3)*R*1.02).toFixed(1)+' '+(cy+Math.sin(a3)*R*vs*1.02).toFixed(1)+' L'+(cx+Math.cos(a3)*(R+16)).toFixed(1)+' '+(cy+Math.sin(a3)*(R*vs+16)).toFixed(1)+'" stroke="'+ink+'" stroke-width="3.4" stroke-linecap="round"/>'}
+    }
+
+    /* head */
+    var n=20,hp='';
+    for(var q=0;q<n;q++){
+      var a=q/n*Math.PI*2,c=Math.cos(a),sn=Math.sin(a),x,y;
+      if(shape===0){x=c*R;y=sn*R}
+      else if(shape===1){x=(c<0?-1:1)*Math.pow(Math.abs(c),.5)*R;y=(sn<0?-1:1)*Math.pow(Math.abs(sn),.5)*R}
+      else if(shape===2){x=c*R*.8;y=sn*R*1.15}
+      else if(shape===3){x=c*R*1.2;y=sn*R*.85}
+      else{x=c*R*(1+.12*sn);y=sn*R*(1+.1*sn)}
+      hp+=(cx+x+(r()-.5)*4).toFixed(1)+','+(cy+y+(r()-.5)*4).toFixed(1)+' ';
+    }
+    s+='<polygon points="'+hp+'" fill="'+head+'" stroke="'+ink+'" stroke-width="3" stroke-linejoin="round"/>';
+
+    /* hair in front */
+    if(hair===4&&!hat){s+='<path d="M'+(cx-R*.98)+' '+(cy-R*.1)+' Q '+(cx-R)+' '+(top-8)+' '+cx+' '+(top-10)+' Q '+(cx+R)+' '+(top-8)+' '+(cx+R*.98)+' '+(cy-R*.1)+' L'+(cx+R*.7)+' '+(cy-R*.45)+' Q '+cx+' '+(cy-R*.7)+' '+(cx-R*.7)+' '+(cy-R*.45)+' Z" fill="'+hairC+'" '+hs+'/>'}
+    else if(hair===5&&!hat){s+='<path d="M'+cx+' '+(top+4)+' q -8 -20 8 -26 q 12 4 0 16" stroke="'+hairC+'" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M'+cx+' '+(top+4)+' q -8 -20 8 -26 q 12 4 0 16" stroke="'+ink+'" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".5"/>'}
+
+    /* eyes */
+    var et=int(6),ey=cy-R*vs*.12,sp=R*f(.3,.48),erad=f(5.5,10),eyes=[];
+    function eye(x,y,rad,white){
+      var o='';
+      if(white){o+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+rad.toFixed(1)+'" fill="#fff" stroke="'+ink+'" stroke-width="2.4"/>';
+        o+='<circle cx="'+(x+(r()-.5)*rad*.7).toFixed(1)+'" cy="'+(y+(r()-.5)*rad*.7).toFixed(1)+'" r="'+(rad*f(.32,.55)).toFixed(1)+'" fill="'+ink+'"/>'}
+      else o+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+(rad*.55).toFixed(1)+'" fill="'+ink+'"/>';
+      return o;
+    }
+    if(et===0){s+=eye(cx-sp,ey,erad,true)+eye(cx+sp,ey,erad,true);eyes=[[cx-sp,erad],[cx+sp,erad]]}
+    else if(et===1){var big=f(12,17);s+=eye(cx,ey,big,true);eyes=[[cx,big]]}
+    else if(et===2){var sm=f(4.8,6.5);s+=eye(cx-sp*1.2,ey+3,sm,true)+eye(cx,ey-6,sm,true)+eye(cx+sp*1.2,ey+3,sm,true);eyes=[[cx-sp*1.2,sm],[cx,sm],[cx+sp*1.2,sm]]}
+    else if(et===3){s+=eye(cx-sp,ey,erad,false)+eye(cx+sp,ey,erad,false);eyes=[[cx-sp,erad*.6],[cx+sp,erad*.6]]}
+    else if(et===4){
+      s+=eye(cx-sp,ey,erad,true)+eye(cx+sp,ey,erad,true);
+      [cx-sp,cx+sp].forEach(function(x){s+='<path d="M'+(x-erad-1.2).toFixed(1)+' '+ey.toFixed(1)+' A'+(erad+1.2).toFixed(1)+' '+(erad+1.2).toFixed(1)+' 0 0 1 '+(x+erad+1.2).toFixed(1)+' '+ey.toFixed(1)+' Z" fill="'+head+'" stroke="'+ink+'" stroke-width="2.4" stroke-linejoin="round"/>'});
+      eyes=[[cx-sp,erad],[cx+sp,erad]];
+    }else{var e1=erad*1.5,e2=erad*.7;s+=eye(cx-sp,ey,e1,true)+eye(cx+sp,ey,e2,true);eyes=[[cx-sp,e1],[cx+sp,e2]]}
+    /* glasses */
+    if((et===0||et===3||et===5)&&r()<.32){
+      var gt=int(3),gc=r()<.5?ink:'#d12b2b',g1=eyes[0],g2=eyes[1];
+      if(gt===1){s+='<rect x="'+(g1[0]-g1[1]-5).toFixed(1)+'" y="'+(ey-g1[1]-5).toFixed(1)+'" width="'+(2*g1[1]+10).toFixed(1)+'" height="'+(2*g1[1]+10).toFixed(1)+'" fill="none" stroke="'+gc+'" stroke-width="3"/><rect x="'+(g2[0]-g2[1]-5).toFixed(1)+'" y="'+(ey-g2[1]-5).toFixed(1)+'" width="'+(2*g2[1]+10).toFixed(1)+'" height="'+(2*g2[1]+10).toFixed(1)+'" fill="none" stroke="'+gc+'" stroke-width="3"/>'}
+      else{s+='<circle cx="'+g1[0].toFixed(1)+'" cy="'+ey.toFixed(1)+'" r="'+(g1[1]+5).toFixed(1)+'" fill="none" stroke="'+gc+'" stroke-width="'+(gt===2?4.5:3)+'"/><circle cx="'+g2[0].toFixed(1)+'" cy="'+ey.toFixed(1)+'" r="'+(g2[1]+5).toFixed(1)+'" fill="none" stroke="'+gc+'" stroke-width="'+(gt===2?4.5:3)+'"/>'}
+      s+='<path d="M'+(g1[0]+g1[1]+5).toFixed(1)+' '+ey.toFixed(1)+' L'+(g2[0]-g2[1]-5).toFixed(1)+' '+ey.toFixed(1)+'" stroke="'+gc+'" stroke-width="3"/>';
+    }
+    /* brows */
+    var br=int(4);
+    if(br>0){eyes.forEach(function(e,i){var bx=e[0],by=ey-e[1]-9,w=e[1]+3;
+      if(br===1)s+='<path d="M'+(bx-w)+' '+(by+2)+' Q '+bx+' '+(by-7)+' '+(bx+w)+' '+(by+2)+'" stroke="'+ink+'" stroke-width="3" fill="none" stroke-linecap="round"/>';
+      else if(br===2){var d=(i<eyes.length/2)?1:-1;s+='<path d="M'+(bx-w)+' '+(by-d*3)+' L'+(bx+w)+' '+(by+d*5)+'" stroke="'+ink+'" stroke-width="3.2" stroke-linecap="round"/>'}
+      else s+='<path d="M'+(bx-w)+' '+by+' L'+(bx+w)+' '+by+'" stroke="'+ink+'" stroke-width="3" stroke-linecap="round"/>'})}
+    /* nose */
+    var nt=int(4),ny=cy+R*vs*.1;
+    if(nt===1)s+='<path d="M'+cx+' '+(ny-6)+' L'+(cx-3)+' '+(ny+7)+' L'+(cx+4)+' '+(ny+7)+'" stroke="'+ink+'" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>';
+    else if(nt===2)s+='<circle cx="'+cx+'" cy="'+ny+'" r="3.4" fill="'+ink+'"/>';
+    else if(nt===3)s+='<polygon points="'+cx+','+(ny-6)+' '+(cx-6)+','+(ny+6)+' '+(cx+6)+','+(ny+6)+'" fill="#e98c7b" stroke="'+ink+'" stroke-width="2.2" stroke-linejoin="round"/>';
+    /* freckles */
+    if(r()<.2){for(var fr=0;fr<6;fr++)s+='<circle cx="'+(cx-18+fr*7+r()*3).toFixed(1)+'" cy="'+(ny+3+(fr%2)*5).toFixed(1)+'" r="1.7" fill="'+ink+'" opacity=".6"/>'}
+    /* mouth */
+    var mt=int(8),my=cy+R*vs*f(.4,.55),mw=R*f(.34,.66);
+    var mx1=cx-mw,mx2=cx+mw;
+    if(mt===0)s+='<path d="M'+mx1+' '+my+' Q '+cx+' '+(my+mw*.9)+' '+mx2+' '+my+'" stroke="'+ink+'" stroke-width="3.2" fill="none" stroke-linecap="round"/>';
+    else if(mt===1)s+='<path d="M'+mx1+' '+my+' L'+mx2+' '+(my+f(-2,3))+'" stroke="'+ink+'" stroke-width="3.2" stroke-linecap="round"/>';
+    else if(mt===2){s+='<path d="M'+mx1+' '+my+' Q '+cx+' '+(my+mw*1.3)+' '+mx2+' '+my+' Z" fill="#fff" stroke="'+ink+'" stroke-width="3" stroke-linejoin="round"/><path d="M'+(mx1+4)+' '+(my+1.5)+' H'+(mx2-4)+'" stroke="'+ink+'" stroke-width="1.8"/>'}
+    else if(mt===3){s+='<path d="M'+mx1+' '+my+' q '+(mw/4)+' -8 '+(mw/2)+' 0 t '+(mw/2)+' 0 t '+(mw/2)+' 0 t '+(mw/2)+' 0" stroke="'+ink+'" stroke-width="3" fill="none" stroke-linecap="round"/>'}
+    else if(mt===4)s+='<ellipse cx="'+cx+'" cy="'+(my+2)+'" rx="'+f(4,7).toFixed(1)+'" ry="'+f(5,9).toFixed(1)+'" fill="'+ink+'"/>';
+    else if(mt===5)s+='<path d="M'+mx1+' '+(my+8)+' Q '+cx+' '+(my-mw*.7)+' '+mx2+' '+(my+8)+'" stroke="'+ink+'" stroke-width="3.2" fill="none" stroke-linecap="round"/>';
+    else if(mt===6){s+='<rect x="'+(cx-7)+'" y="'+(my+4)+'" width="15" height="'+f(11,17).toFixed(1)+'" rx="7" fill="#e86a8a" stroke="'+ink+'" stroke-width="2.4"/><path d="M'+mx1+' '+my+' Q '+cx+' '+(my+mw*.9)+' '+mx2+' '+my+'" stroke="'+ink+'" stroke-width="3.2" fill="none" stroke-linecap="round"/>'}
+    else{s+='<path d="M'+mx1+' '+my+' Q '+cx+' '+(my+mw*.9)+' '+mx2+' '+my+'" stroke="'+ink+'" stroke-width="3.2" fill="none" stroke-linecap="round"/><rect x="'+(cx-3.5)+'" y="'+(my+1)+'" width="7" height="8" fill="#fff" stroke="'+ink+'" stroke-width="2"/>'}
+    /* cheeks */
+    if(r()<.3){s+='<circle cx="'+(cx-R*.62)+'" cy="'+(my-5)+'" r="7" fill="#f06a8a" opacity=".5"/><circle cx="'+(cx+R*.62)+'" cy="'+(my-5)+'" r="7" fill="#f06a8a" opacity=".5"/>'}
+
+    /* hats */
+    if(hat==='beanie'){
+      var hc=pick(BODIES);s+='<path d="M'+(cx-R*.98)+' '+(top+R*.36)+' Q '+(cx-R*.95)+' '+(top-R*.6)+' '+cx+' '+(top-R*.66)+' Q '+(cx+R*.95)+' '+(top-R*.6)+' '+(cx+R*.98)+' '+(top+R*.36)+' Z" fill="'+hc+'" stroke="'+ink+'" stroke-width="3" stroke-linejoin="round"/><rect x="'+(cx-R*1.02)+'" y="'+(top+R*.16)+'" width="'+(R*2.04)+'" height="'+(R*.2)+'" fill="'+hc+'" stroke="'+ink+'" stroke-width="3"/><circle cx="'+cx+'" cy="'+(top-R*.7)+'" r="8" fill="#fff" stroke="'+ink+'" stroke-width="2.6"/>';
+    }else if(hat==='top'){
+      s+='<rect x="'+(cx-24)+'" y="'+(top-36)+'" width="48" height="40" fill="#1a1a1a" stroke="'+ink+'" stroke-width="3"/><rect x="'+(cx-24)+'" y="'+(top-6)+'" width="48" height="8" fill="#c93c2b"/><rect x="'+(cx-38)+'" y="'+(top+2)+'" width="76" height="8" rx="3" fill="#1a1a1a" stroke="'+ink+'" stroke-width="3"/>';
+    }else if(hat==='crown'){
+      s+='<polygon points="'+(cx-26)+','+(top+4)+' '+(cx-26)+','+(top-22)+' '+(cx-13)+','+(top-8)+' '+cx+','+(top-26)+' '+(cx+13)+','+(top-8)+' '+(cx+26)+','+(top-22)+' '+(cx+26)+','+(top+4)+'" fill="#f3d34a" stroke="'+ink+'" stroke-width="3" stroke-linejoin="round"/>';
+    }
+    s+='</svg>';
+    return {svg:s,paper:paper};
+  }
+  /*FIG-END*/
+
+  /* ---------- figures grid ---------- */
+  var shown=0,TOTAL=50;
+  function num(n){return ('00'+n).slice(-3)}
+  function addFigs(count){
+    var h='';
+    for(var i=0;i<count&&shown<TOTAL;i++){
+      shown++;
+      var fg=figure(shown);
+      h+='<article class="tcard"><div class="sheet fig" style="background:'+fg.paper+'">'+fg.svg+'<span class="no">Fig. '+num(shown)+'</span><span class="q">?</span></div>'+
+        '<div class="row">'+(shown===1?'<button class="btn" type="button" data-key="figure-001">Free download</button>':'<button class="btn" type="button" data-key="figure-'+num(shown)+'">Print pack, EUR 4</button>')+
+        '<button class="btn ghost" type="button" data-key="social-figure-'+num(shown)+'">Free social pack</button></div></article>';
+    }
+    $('figGrid').insertAdjacentHTML('beforeend',h);
+    $('figCount').textContent='Showing '+shown+' of '+TOTAL+'.';
+    if(shown>=TOTAL)$('moreFigs').hidden=true;
+  }
+  addFigs(12);
+  $('moreFigs').addEventListener('click',function(){addFigs(12)});
+
+  /* ---------- texts ---------- */
+  var TEXTS=[
+    "Coffee is not a personality. But it helps.",
+    "I will not be answering this email.",
+    "It is Friday in my heart.",
+    "Darkness is free.",
+    "The kitchen is open. The food is not.",
+    "Shoes off. Opinions may stay on.",
+    "Nothing is wrong. I am just here.",
+    "Please hold. Your life is important to us.",
+    "Today's mood: pending.",
+    "I have decided to be fine.",
+    "This is a quiet place. Please do not ask how it is going.",
+    "Other plans were considered.",
+    "The couch has won again.",
+    "No, I did not see your message. Yes, I did see your message.",
+    "Out of office. Also out of ideas.",
+    "Be right back. Do not wait.",
+    "The meeting has ended. Nobody told the meeting.",
+    "Your call is not being recorded. Nobody is listening either.",
+    "We regret to inform you that it is Monday.",
+    "Everything is under control. Control is under review.",
+    "I am doing my best. This is it.",
+    "Lunch is not a suggestion.",
+    "The plan is to have no plan. The plan is going well.",
+    "Please take a number. The numbers have run out.",
+    "Not today. Not tomorrow. Possibly never.",
+    "This chair is taken by a coat. The coat has rights.",
+    "Be kind. Or at least be quiet.",
+    "We are experiencing high levels of nothing.",
+    "The bed is calling. It has called before.",
+    "The dishes will wait. They are good at it.",
+    "I am not late. I am arriving gradually.",
+    "Dinner is whatever you find.",
+    "Hello. Goodbye. Anything in between is optional.",
+    "I would love to. I am not going to.",
+    "It is raining. Nobody is surprised.",
+    "Sorry for the late reply. I was busy avoiding this.",
+    "No further questions. No further answers.",
+    "Please remain calm. Calm is not available.",
+    "There is a plan. It is in my head. It is not good.",
+    "You are doing fine. Probably.",
+    "Who gets to be somebody? Everyone. Please queue.",
+    "Be yourself. Within reason.",
+    "This is not a drill. It is a Tuesday.",
+    "Nobody knows what they are doing. Carry on.",
+    "Thank you for your patience. It has been noted.",
+    "The answer is probably no. Ask anyway.",
+    "I am listening. I am also thinking about lunch.",
+    "Snacks are a form of hope.",
+    "Please do not feed the thoughts.",
+    "Everything is fine. It is just loud."
+  ];
+  var tshown=0;
+  function addTexts(count){
+    var h='';
+    for(var i=tshown;i<tshown+count&&i<TEXTS.length;i++){
+      var t=TEXTS[i],n=num(i+1);
+      var cls='sheet'+(i%3===1?' dark':i%3===2?' y':'');
+      h+='<article class="tcard"><div class="'+cls+'"><div class="in"><span class="t '+sc(t.length)+'">'+lines(t)+'</span></div><span class="no">No. '+n+'</span><span class="q">?</span></div>'+
+        '<div class="row">'+(i===0?'<button class="btn" type="button" data-key="text-001">Free download</button>':'<button class="btn" type="button" data-key="text-'+n+'">Print pack, EUR 4</button>')+
+        '<button class="btn ghost" type="button" data-key="social-text-'+n+'">Free social pack</button></div></article>';
+    }
+    tshown=Math.min(tshown+count,TEXTS.length);
+    $('textGrid').insertAdjacentHTML('beforeend',h);
+    $('textCount').textContent='Showing '+tshown+' of '+TEXTS.length+'.';
+    if(tshown>=TEXTS.length)$('moreTexts').hidden=true;
+  }
+  addTexts(12);
+  $('moreTexts').addEventListener('click',function(){addTexts(12)});
+
+  /* ---------- packs ---------- */
+  var PACKS=[
+    {id:'figures-001-010',title:'Ten figures',kind:'fig',from:1,count:10,price:25,single:40,note:'Figures 001 to 010.'},
+    {id:'texts-001-010',title:'Ten texts',kind:'txt',from:1,count:10,price:25,single:40,note:'Texts 001 to 010.'},
+    {id:'all-50-figures',title:'All 50 figures',kind:'fig',from:1,count:50,price:79,single:200,note:'The whole batch.'},
+    {id:'all-50-texts',title:'All 50 texts',kind:'txt',from:1,count:50,price:79,single:200,note:'The whole batch.'}
+  ];
+  var pg='';
+  PACKS.forEach(function(pk){
+    var minis='',shownMax=6;
+    for(var k=0;k<Math.min(pk.count,shownMax);k++){
+      var idx=pk.from+k;
+      if(pk.kind==='fig'){var fg=figure(idx);minis+='<div class="sheet fig fixprint" style="background:'+fg.paper+'">'+fg.svg+'</div>'}
+      else{var t=TEXTS[idx-1],cl=((idx-1)%3===1?' dark':(idx-1)%3===2?' y':'');minis+='<div class="sheet fixprint'+cl+'"><div class="in" style="padding:10cqw 8cqw"><span class="t s3" style="--k:.9">'+lines(t)+'</span></div></div>'}
+    }
+    pg+='<article class="pack"><b>'+pk.title+'</b><div class="minis">'+minis+'</div><span class="small">'+pk.note+' Showing 6 of '+pk.count+'. Four sizes of every piece.</span>'+
+      '<span class="p">EUR '+pk.price+'<small>instead of EUR '+pk.single+'</small></span>'+
+      '<button class="btn" type="button" data-key="'+pk.id+'">Buy the pack</button></article>';
+  });
+  $('packGrid').innerHTML=pg;
+
+  /* ---------- wall ---------- */
+  (function(){
+    var f='',t='';
+    for(var i=1;i<=50;i++){var fg=figure(i);f+='<div class="sheet fig" style="background:'+fg.paper+'">'+fg.svg+'</div>'}
+    TEXTS.forEach(function(x,i){var c=i%3===1?' dark':i%3===2?' y':'';t+='<div class="sheet'+c+'"><div class="in"><span class="t '+sc(x.length)+'">'+lines(x)+'</span></div></div>'});
+    $('wallFigs').innerHTML=f;$('wallTexts').innerHTML=t;
+  })();
+
+  /* ---------- room ---------- */
+  function mini(txt,cls){return '<div class="sheet fixprint '+cls+'"><div class="in" style="padding:10cqw 10cqw 14cqw"><span class="t s2" style="--k:.9">'+lines(txt)+'</span></div></div>'}
+  var rf=figure(9);
+  $('roomMock').innerHTML=
+    '<div class="fr t1" style="background:'+rf.paper+'">'+rf.svg+'</div>'+
+    '<div class="fr t2">'+mini('Darkness is free.','')+'</div>'+
+    '<div class="fr t3">'+mini('Shoes off. Opinions may stay on.','y')+'</div>'+
+    '<div class="sofa"></div>';
+
+  /* ---------- format switch ---------- */
+  var PX={print:'A4 21 × 29.7 cm and 50 × 70 cm, print-ready PDF',instagram:'Instagram 1080 × 1350 px (4:5)',tiktok:'TikTok 1080 × 1920 px (9:16). Keep key content clear of the bottom and right edge.'};
+  function setFmt(f){
+    document.body.setAttribute('data-fmt',f);
+    document.querySelectorAll('#fmtSeg [data-f]').forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-f')===f)});
+    $('fmtPx').textContent=PX[f];
+  }
+  $('fmtSeg').addEventListener('click',function(e){var b=e.target.closest('[data-f]');if(b)setFmt(b.getAttribute('data-f'))});
+  setFmt('print');
+
+  /* ---------- checkout links ----------
+     Paste the Polar checkout link (or the download link for free items) after each key.
+     Empty means "Coming soon". */
+  var LINKS={
+    "figure-001": "",
+    "text-001": "",
+    "social-figure-001": "",
+    "social-text-001": "",
+    "figure-002": "",
+    "text-002": "",
+    "social-figure-002": "",
+    "social-text-002": "",
+    "figure-003": "",
+    "text-003": "",
+    "social-figure-003": "",
+    "social-text-003": "",
+    "figure-004": "",
+    "text-004": "",
+    "social-figure-004": "",
+    "social-text-004": "",
+    "figure-005": "",
+    "text-005": "",
+    "social-figure-005": "",
+    "social-text-005": "",
+    "figure-006": "",
+    "text-006": "",
+    "social-figure-006": "",
+    "social-text-006": "",
+    "figure-007": "",
+    "text-007": "",
+    "social-figure-007": "",
+    "social-text-007": "",
+    "figure-008": "",
+    "text-008": "",
+    "social-figure-008": "",
+    "social-text-008": "",
+    "figure-009": "",
+    "text-009": "",
+    "social-figure-009": "",
+    "social-text-009": "",
+    "figure-010": "",
+    "text-010": "",
+    "social-figure-010": "",
+    "social-text-010": "",
+    "figure-011": "",
+    "text-011": "",
+    "social-figure-011": "",
+    "social-text-011": "",
+    "figure-012": "",
+    "text-012": "",
+    "social-figure-012": "",
+    "social-text-012": "",
+    "figure-013": "",
+    "text-013": "",
+    "social-figure-013": "",
+    "social-text-013": "",
+    "figure-014": "",
+    "text-014": "",
+    "social-figure-014": "",
+    "social-text-014": "",
+    "figure-015": "",
+    "text-015": "",
+    "social-figure-015": "",
+    "social-text-015": "",
+    "figure-016": "",
+    "text-016": "",
+    "social-figure-016": "",
+    "social-text-016": "",
+    "figure-017": "",
+    "text-017": "",
+    "social-figure-017": "",
+    "social-text-017": "",
+    "figure-018": "",
+    "text-018": "",
+    "social-figure-018": "",
+    "social-text-018": "",
+    "figure-019": "",
+    "text-019": "",
+    "social-figure-019": "",
+    "social-text-019": "",
+    "figure-020": "",
+    "text-020": "",
+    "social-figure-020": "",
+    "social-text-020": "",
+    "figure-021": "",
+    "text-021": "",
+    "social-figure-021": "",
+    "social-text-021": "",
+    "figure-022": "",
+    "text-022": "",
+    "social-figure-022": "",
+    "social-text-022": "",
+    "figure-023": "",
+    "text-023": "",
+    "social-figure-023": "",
+    "social-text-023": "",
+    "figure-024": "",
+    "text-024": "",
+    "social-figure-024": "",
+    "social-text-024": "",
+    "figure-025": "",
+    "text-025": "",
+    "social-figure-025": "",
+    "social-text-025": "",
+    "figure-026": "",
+    "text-026": "",
+    "social-figure-026": "",
+    "social-text-026": "",
+    "figure-027": "",
+    "text-027": "",
+    "social-figure-027": "",
+    "social-text-027": "",
+    "figure-028": "",
+    "text-028": "",
+    "social-figure-028": "",
+    "social-text-028": "",
+    "figure-029": "",
+    "text-029": "",
+    "social-figure-029": "",
+    "social-text-029": "",
+    "figure-030": "",
+    "text-030": "",
+    "social-figure-030": "",
+    "social-text-030": "",
+    "figure-031": "",
+    "text-031": "",
+    "social-figure-031": "",
+    "social-text-031": "",
+    "figure-032": "",
+    "text-032": "",
+    "social-figure-032": "",
+    "social-text-032": "",
+    "figure-033": "",
+    "text-033": "",
+    "social-figure-033": "",
+    "social-text-033": "",
+    "figure-034": "",
+    "text-034": "",
+    "social-figure-034": "",
+    "social-text-034": "",
+    "figure-035": "",
+    "text-035": "",
+    "social-figure-035": "",
+    "social-text-035": "",
+    "figure-036": "",
+    "text-036": "",
+    "social-figure-036": "",
+    "social-text-036": "",
+    "figure-037": "",
+    "text-037": "",
+    "social-figure-037": "",
+    "social-text-037": "",
+    "figure-038": "",
+    "text-038": "",
+    "social-figure-038": "",
+    "social-text-038": "",
+    "figure-039": "",
+    "text-039": "",
+    "social-figure-039": "",
+    "social-text-039": "",
+    "figure-040": "",
+    "text-040": "",
+    "social-figure-040": "",
+    "social-text-040": "",
+    "figure-041": "",
+    "text-041": "",
+    "social-figure-041": "",
+    "social-text-041": "",
+    "figure-042": "",
+    "text-042": "",
+    "social-figure-042": "",
+    "social-text-042": "",
+    "figure-043": "",
+    "text-043": "",
+    "social-figure-043": "",
+    "social-text-043": "",
+    "figure-044": "",
+    "text-044": "",
+    "social-figure-044": "",
+    "social-text-044": "",
+    "figure-045": "",
+    "text-045": "",
+    "social-figure-045": "",
+    "social-text-045": "",
+    "figure-046": "",
+    "text-046": "",
+    "social-figure-046": "",
+    "social-text-046": "",
+    "figure-047": "",
+    "text-047": "",
+    "social-figure-047": "",
+    "social-text-047": "",
+    "figure-048": "",
+    "text-048": "",
+    "social-figure-048": "",
+    "social-text-048": "",
+    "figure-049": "",
+    "text-049": "",
+    "social-figure-049": "",
+    "social-text-049": "",
+    "figure-050": "",
+    "text-050": "",
+    "social-figure-050": "",
+    "social-text-050": "",
+    "figures-001-010": "",
+    "figures-011-020": "",
+    "figures-021-030": "",
+    "figures-031-040": "",
+    "figures-041-050": "",
+    "texts-001-010": "",
+    "texts-011-020": "",
+    "texts-021-030": "",
+    "texts-031-040": "",
+    "texts-041-050": "",
+    "all-50-figures": "",
+    "all-50-texts": ""
+  };
+
+  /* ---------- buttons ---------- */
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('[data-key]');
+    if(!b)return;
+    var url=LINKS[b.getAttribute('data-key')];
+    if(url){window.location.href=url}
+    else toast('Coming soon.');
+  });
 })();
 </script>
 </body>
