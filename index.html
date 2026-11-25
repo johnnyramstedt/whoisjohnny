@@ -71,12 +71,14 @@ details.acc .body{margin-top:10px;max-width:68ch}
 .sheet{position:relative;aspect-ratio:var(--ar);container-type:inline-size;overflow:hidden;font-weight:700;letter-spacing:-.02em;line-height:1.08;background:#fff;color:#111;border:1px solid var(--line);box-shadow:0 10px 22px rgba(0,0,0,.1)}
 .sheet.dark{background:#111;color:#fff;border-color:#111}
 .sheet.y{background:#ffe14d}
-.wall{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;margin:14px 0 26px}
+.wall{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:16px 0 26px}
+.tabs{margin:6px 0 0;display:inline-flex}
 .wall .sheet{--ar:4/5;box-shadow:none;transition:transform .15s}
-.wall .sheet:hover{transform:scale(1.8);z-index:5;box-shadow:0 12px 28px rgba(0,0,0,.25)}
+.wall .sheet:hover{transform:scale(1.06);z-index:5;box-shadow:0 12px 28px rgba(0,0,0,.25)}
 .wall .sheet .no,.wall .sheet .q{display:none}
 .wall .sheet>.in{padding:7cqw 6cqw}
-@media(max-width:700px){.wall{grid-template-columns:repeat(5,1fr)}}
+.wall .sheet[hidden]{display:none}
+@media(max-width:700px){.wall{grid-template-columns:repeat(3,1fr);gap:8px}}
 body[data-fmt="print"]{--r:.7071}body[data-fmt="instagram"]{--r:.8}body[data-fmt="tiktok"]{--r:.5625}
 .wall .sheet{cursor:pointer}
 .mdl{position:fixed;inset:0;background:rgba(17,17,17,.82);z-index:40;display:flex;align-items:center;justify-content:center;padding:16px;overflow:auto}
@@ -142,9 +144,7 @@ footer .ai{flex-basis:100%;font-size:12px}
     <a class="word" href="#top">WhoIsJohnny?</a>
     <nav aria-label="Sections">
       <a href="#story">Story</a>
-      <a href="#wall">All</a>
-      <a href="#figures">Figures</a>
-      <a href="#texts">Texts</a>
+      <a href="#browse">Browse</a>
       <a href="#packs">Packs</a>
       <a href="#room">In the room</a>
       <a href="#info">FAQ</a>
@@ -182,39 +182,17 @@ footer .ai{flex-basis:100%;font-size:12px}
     <p class="body">The original drawings are resting for now.</p>
   </section>
 
-  <section id="wall">
-    <h2>All of them</h2>
-    <p class="small">The whole batch on one wall. 50 figures, 50 texts. Hover to look closer.</p>
-    <div class="wall" id="wallFigs"></div>
-    <div class="wall" id="wallTexts"></div>
+  <section id="browse">
+    <h2>Browse</h2>
+    <p class="lede">50 figures. 50 texts. Pick one.</p>
+    <p class="body">Click any piece to see it large. Each comes in four sizes: A4, 50 x 70 cm, Instagram and TikTok. No. 001 is free, every piece has a free social pack, and a print pack is EUR 4.</p>
+    <div class="seg tabs" id="tabs" role="group" aria-label="Show">
+      <button type="button" data-tab="all" aria-pressed="true">All 100</button>
+      <button type="button" data-tab="figure" aria-pressed="false">Figures</button>
+      <button type="button" data-tab="text" aria-pressed="false">Texts</button>
+    </div>
+    <div class="wall" id="wall"></div>
   </section>
-
-  <section id="figures">
-    <h2>Figures</h2>
-    <p class="lede">Digital figures. No two alike.</p>
-    <p class="body">Every figure gets its own face, colours, hair and mood. Curated by Johnny. Each one comes in four sizes: A4, 50 × 70 cm, Instagram and TikTok.</p>
-    <ul class="facts">
-      <li>Fig. 001 is free in full</li>
-      <li>Free social pack for every figure</li>
-      <li>Print pack EUR 4, same as the texts</li>
-    </ul>
-    <div class="tgrid" id="figGrid"></div>
-    <div class="row more"><button class="btn ghost" id="moreFigs" type="button">Show 12 more</button><span class="small" id="figCount"></span></div>
-  </section>
-
-  <section id="texts">
-    <h2>Texts</h2>
-    <p class="lede">Dry sentences for your wall.</p>
-    <p class="body">Same rules as the figures. Four sizes in every pack. Curated by Johnny.</p>
-    <ul class="facts">
-      <li>A4: 21 × 29.7 cm / 8.3 × 11.7 in</li>
-      <li>Poster: 50 × 70 cm / 19.7 × 27.6 in</li>
-      <li>Instagram 4:5 and TikTok 9:16</li>
-    </ul>
-    <div class="tgrid" id="textGrid"></div>
-    <div class="row more"><button class="btn ghost" id="moreTexts" type="button">Show 12 more</button><span class="small" id="textCount"></span></div>
-  </section>
-
 
   <section id="packs">
     <h2>Packs</h2>
@@ -513,24 +491,7 @@ footer .ai{flex-basis:100%;font-size:12px}
   }
   /*FIG-END*/
 
-  /* ---------- figures grid ---------- */
-  var shown=0,TOTAL=50;
   function num(n){return ('00'+n).slice(-3)}
-  function addFigs(count){
-    var h='';
-    for(var i=0;i<count&&shown<TOTAL;i++){
-      shown++;
-      var fg=figure(shown);
-      h+='<article class="tcard"><div class="sheet fig" style="background:'+fg.paper+'">'+fg.svg+'<span class="no">Fig. '+num(shown)+'</span><span class="q">?</span></div>'+
-        '<div class="row">'+(shown===1?'<button class="btn" type="button" data-key="figure-001">Free download</button>':'<button class="btn" type="button" data-key="figure-'+num(shown)+'">Print pack, EUR 4</button>')+
-        '<button class="btn ghost" type="button" data-key="social-figure-'+num(shown)+'">Free social pack</button></div></article>';
-    }
-    $('figGrid').insertAdjacentHTML('beforeend',h);
-    $('figCount').textContent='Showing '+shown+' of '+TOTAL+'.';
-    if(shown>=TOTAL)$('moreFigs').hidden=true;
-  }
-  addFigs(12);
-  $('moreFigs').addEventListener('click',function(){addFigs(12)});
 
   /* ---------- texts ---------- */
   var TEXTS=[
@@ -585,24 +546,6 @@ footer .ai{flex-basis:100%;font-size:12px}
     "Please do not feed the thoughts.",
     "Everything is fine. It is just loud."
   ];
-  var tshown=0;
-  function addTexts(count){
-    var h='';
-    for(var i=tshown;i<tshown+count&&i<TEXTS.length;i++){
-      var t=TEXTS[i],n=num(i+1);
-      var cls='sheet'+(i%3===1?' dark':i%3===2?' y':'');
-      h+='<article class="tcard"><div class="'+cls+'"><div class="in"><span class="t '+sc(t.length)+'">'+lines(t)+'</span></div><span class="no">No. '+n+'</span><span class="q">?</span></div>'+
-        '<div class="row">'+(i===0?'<button class="btn" type="button" data-key="text-001">Free download</button>':'<button class="btn" type="button" data-key="text-'+n+'">Print pack, EUR 4</button>')+
-        '<button class="btn ghost" type="button" data-key="social-text-'+n+'">Free social pack</button></div></article>';
-    }
-    tshown=Math.min(tshown+count,TEXTS.length);
-    $('textGrid').insertAdjacentHTML('beforeend',h);
-    $('textCount').textContent='Showing '+tshown+' of '+TEXTS.length+'.';
-    if(tshown>=TEXTS.length)$('moreTexts').hidden=true;
-  }
-  addTexts(12);
-  $('moreTexts').addEventListener('click',function(){addTexts(12)});
-
   /* ---------- packs ---------- */
   var PACKS=[
     {id:'figures-001-010',title:'Ten figures',kind:'fig',from:1,count:10,price:25,single:40,note:'Figures 001 to 010.'},
@@ -626,10 +569,16 @@ footer .ai{flex-basis:100%;font-size:12px}
 
   /* ---------- wall ---------- */
   (function(){
-    var f='',t='';
-    for(var i=1;i<=50;i++){var fg=figure(i);f+='<div class="sheet fig" data-i="'+(i-1)+'" tabindex="0" role="button" aria-label="Figure '+i+'" style="background:'+fg.paper+'">'+fg.svg+'</div>'}
-    TEXTS.forEach(function(x,i){var c=i%3===1?' dark':i%3===2?' y':'';t+='<div class="sheet'+c+'" data-i="'+(50+i)+'" tabindex="0" role="button" aria-label="Text '+(i+1)+'"><div class="in"><span class="t '+sc(x.length)+'">'+lines(x)+'</span></div></div>'});
-    $('wallFigs').innerHTML=f;$('wallTexts').innerHTML=t;
+    var h='';
+    for(var i=1;i<=50;i++){var fg=figure(i);h+='<div class="sheet fig" data-i="'+(i-1)+'" data-kind="figure" tabindex="0" role="button" aria-label="Figure '+i+'" style="background:'+fg.paper+'">'+fg.svg+'</div>'}
+    TEXTS.forEach(function(x,i){var c=i%3===1?' dark':i%3===2?' y':'';h+='<div class="sheet'+c+'" data-i="'+(50+i)+'" data-kind="text" tabindex="0" role="button" aria-label="Text '+(i+1)+'"><div class="in"><span class="t '+sc(x.length)+'">'+lines(x)+'</span></div></div>'});
+    $('wall').innerHTML=h;
+    $('tabs').addEventListener('click',function(e){
+      var b=e.target.closest('[data-tab]');if(!b)return;
+      var t=b.getAttribute('data-tab');
+      document.querySelectorAll('#tabs [data-tab]').forEach(function(x){x.setAttribute('aria-pressed',x===b)});
+      document.querySelectorAll('#wall .sheet').forEach(function(x){x.hidden=!(t==='all'||x.getAttribute('data-kind')===t)});
+    });
   })();
 
   /* ---------- room ---------- */
@@ -672,21 +621,26 @@ footer .ai{flex-basis:100%;font-size:12px}
         '<div class="nav"><button class="btn ghost" type="button" id="mdlPrev">&larr; Previous</button><button class="btn ghost" type="button" id="mdlNext">Next &rarr;</button></div>';
       $('mdlPic').innerHTML=pic;$('mdlInfo').innerHTML=info;
     }
-    function open(i){cur=(i+100)%100;build(cur);$('mdl').hidden=false;document.body.style.overflow='hidden'}
-    function close(){$('mdl').hidden=true;document.body.style.overflow=''}
+    function visible(){var v=[];document.querySelectorAll('#wall .sheet').forEach(function(x){if(!x.hidden)v.push(+x.getAttribute('data-i'))});return v}
+    function step(d){var v=visible(),k=v.indexOf(cur);open(v[(k+d+v.length)%v.length])}
+    function setHash(idx){var n=idx<50?idx+1:idx-49;history.replaceState(null,'','#'+(idx<50?'figure':'text')+'-'+p3(n))}
+    function open(i){cur=i;build(cur);$('mdl').hidden=false;document.body.style.overflow='hidden';setHash(cur)}
+    function close(){$('mdl').hidden=true;document.body.style.overflow='';history.replaceState(null,'',location.pathname+location.search)}
+    function fromHash(){var m=/^#(figure|text)-(\d{3})$/.exec(location.hash);if(m){var n=+m[2];if(n>=1&&n<=50)open((m[1]==='figure'?0:50)+n-1)}}
+    window.addEventListener('hashchange',fromHash);fromHash();
     document.addEventListener('click',function(e){
-      var tile=e.target.closest('.wall .sheet[data-i]');
+      var tile=e.target.closest('#wall .sheet[data-i]');
       if(tile){open(+tile.getAttribute('data-i'));return}
-      if(e.target.id==='mdlPrev'){open(cur-1);return}
-      if(e.target.id==='mdlNext'){open(cur+1);return}
+      if(e.target.id==='mdlPrev'){step(-1);return}
+      if(e.target.id==='mdlNext'){step(1);return}
       if(e.target.id==='mdl'||e.target.id==='mdlX')close();
     });
     document.addEventListener('keydown',function(e){
       if(!$('mdl').hidden){
         if(e.key==='Escape')close();
-        else if(e.key==='ArrowLeft')open(cur-1);
-        else if(e.key==='ArrowRight')open(cur+1);
-      }else if((e.key==='Enter'||e.key===' ')&&e.target.matches&&e.target.matches('.wall .sheet[data-i]')){e.preventDefault();open(+e.target.getAttribute('data-i'))}
+        else if(e.key==='ArrowLeft')step(-1);
+        else if(e.key==='ArrowRight')step(1);
+      }else if((e.key==='Enter'||e.key===' ')&&e.target.matches&&e.target.matches('#wall .sheet[data-i]')){e.preventDefault();open(+e.target.getAttribute('data-i'))}
     });
     /* keep the card in step with the format switcher */
   })();
