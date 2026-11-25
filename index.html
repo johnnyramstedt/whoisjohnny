@@ -77,6 +77,20 @@ details.acc .body{margin-top:10px;max-width:68ch}
 .wall .sheet .no,.wall .sheet .q{display:none}
 .wall .sheet>.in{padding:7cqw 6cqw}
 @media(max-width:700px){.wall{grid-template-columns:repeat(5,1fr)}}
+body[data-fmt="print"]{--r:.7071}body[data-fmt="instagram"]{--r:.8}body[data-fmt="tiktok"]{--r:.5625}
+.wall .sheet{cursor:pointer}
+.mdl{position:fixed;inset:0;background:rgba(17,17,17,.82);z-index:40;display:flex;align-items:center;justify-content:center;padding:16px;overflow:auto}
+.mdl[hidden]{display:none}
+.mdl .box{background:var(--bg,#f1f0ec);max-width:880px;width:100%;display:flex;gap:28px;padding:24px;position:relative;align-items:flex-start;flex-wrap:wrap;justify-content:center}
+.mdl .pic{flex:0 0 auto;width:min(360px,70vw,calc(62vh*var(--r)))}
+.mdl .pic .sheet{width:100%}
+.mdl .info{flex:1 1 240px;min-width:220px;display:flex;flex-direction:column;gap:10px}
+.mdl .info h3{margin:0;font-size:22px}
+.mdl .info .btn{width:100%;text-align:center}
+.mdl .nav{display:flex;gap:8px;margin-top:6px}
+.mdl .nav .btn{width:auto;flex:1}
+.mdl .x{position:absolute;top:8px;right:12px;background:none;border:0;font-size:28px;cursor:pointer;line-height:1}
+.mdl .packs2{border-top:1px solid var(--line);padding-top:10px;margin-top:4px}
 .sheet.fixprint{--ar:210/297}
 .sheet>.in{display:flex;flex-direction:column;justify-content:center;gap:5cqw;padding:9cqw 9cqw 16cqw;height:100%}
 .t{display:block;font-size:calc(var(--b)*var(--k,1));overflow-wrap:anywhere}
@@ -318,6 +332,7 @@ footer .ai{flex-basis:100%;font-size:12px}
     <span>An art project by Johnny Ramstedt · johnnyramstedt.com</span>
   </footer>
 </div>
+<div class="mdl" id="mdl" hidden role="dialog" aria-modal="true" aria-label="Item"><div class="box"><button class="x" id="mdlX" type="button" aria-label="Close">&times;</button><div class="pic" id="mdlPic"></div><div class="info" id="mdlInfo"></div></div></div>
 <div class="toast" id="toast" role="status" hidden></div>
 
 <script>
@@ -612,8 +627,8 @@ footer .ai{flex-basis:100%;font-size:12px}
   /* ---------- wall ---------- */
   (function(){
     var f='',t='';
-    for(var i=1;i<=50;i++){var fg=figure(i);f+='<div class="sheet fig" style="background:'+fg.paper+'">'+fg.svg+'</div>'}
-    TEXTS.forEach(function(x,i){var c=i%3===1?' dark':i%3===2?' y':'';t+='<div class="sheet'+c+'"><div class="in"><span class="t '+sc(x.length)+'">'+lines(x)+'</span></div></div>'});
+    for(var i=1;i<=50;i++){var fg=figure(i);f+='<div class="sheet fig" data-i="'+(i-1)+'" tabindex="0" role="button" aria-label="Figure '+i+'" style="background:'+fg.paper+'">'+fg.svg+'</div>'}
+    TEXTS.forEach(function(x,i){var c=i%3===1?' dark':i%3===2?' y':'';t+='<div class="sheet'+c+'" data-i="'+(50+i)+'" tabindex="0" role="button" aria-label="Text '+(i+1)+'"><div class="in"><span class="t '+sc(x.length)+'">'+lines(x)+'</span></div></div>'});
     $('wallFigs').innerHTML=f;$('wallTexts').innerHTML=t;
   })();
 
@@ -635,6 +650,46 @@ footer .ai{flex-basis:100%;font-size:12px}
   }
   $('fmtSeg').addEventListener('click',function(e){var b=e.target.closest('[data-f]');if(b)setFmt(b.getAttribute('data-f'))});
   setFmt('print');
+
+
+  /* ---------- item card ---------- */
+  (function(){
+    var cur=0;
+    function p3(n){return ('00'+n).slice(-3)}
+    function build(idx){
+      var isFig=idx<50,n=isFig?idx+1:idx-49,pad=p3(n);
+      var pic,key,kind=isFig?'figure':'text';
+      if(isFig){var fg=figure(n);pic='<div class="sheet fig" style="background:'+fg.paper+'">'+fg.svg+'<span class="no">Fig. '+pad+'</span><span class="q">?</span></div>'}
+      else{var t=TEXTS[n-1],c=((n-1)%3===1?' dark':(n-1)%3===2?' y':'');pic='<div class="sheet'+c+'"><div class="in"><span class="t '+sc(t.length)+'">'+lines(t)+'</span></div><span class="no">No. '+pad+'</span><span class="q">?</span></div>'}
+      var st=Math.floor((n-1)/10)*10+1,range=p3(st)+'-'+p3(st+9);
+      var info='<h3>'+(isFig?'Figure':'Text')+' No. '+pad+'</h3>'+
+        '<p class="small">Four sizes in one download: A4, 50 x 70 cm, Instagram and TikTok.</p>'+
+        (n===1?'<button class="btn" type="button" data-key="'+kind+'-001">Free download</button>':'<button class="btn" type="button" data-key="'+kind+'-'+pad+'">Buy, EUR 4</button>')+
+        '<button class="btn ghost" type="button" data-key="social-'+kind+'-'+pad+'">Free social pack</button>'+
+        '<div class="packs2"><p class="small">Cheaper as a set</p>'+
+        '<button class="btn ghost" type="button" data-key="'+kind+'s-'+range+'">Ten '+kind+'s '+range+', EUR 25</button>'+
+        '<button class="btn ghost" type="button" data-key="all-50-'+kind+'s" style="margin-top:8px">All 50 '+kind+'s, EUR 79</button></div>'+
+        '<div class="nav"><button class="btn ghost" type="button" id="mdlPrev">&larr; Previous</button><button class="btn ghost" type="button" id="mdlNext">Next &rarr;</button></div>';
+      $('mdlPic').innerHTML=pic;$('mdlInfo').innerHTML=info;
+    }
+    function open(i){cur=(i+100)%100;build(cur);$('mdl').hidden=false;document.body.style.overflow='hidden'}
+    function close(){$('mdl').hidden=true;document.body.style.overflow=''}
+    document.addEventListener('click',function(e){
+      var tile=e.target.closest('.wall .sheet[data-i]');
+      if(tile){open(+tile.getAttribute('data-i'));return}
+      if(e.target.id==='mdlPrev'){open(cur-1);return}
+      if(e.target.id==='mdlNext'){open(cur+1);return}
+      if(e.target.id==='mdl'||e.target.id==='mdlX')close();
+    });
+    document.addEventListener('keydown',function(e){
+      if(!$('mdl').hidden){
+        if(e.key==='Escape')close();
+        else if(e.key==='ArrowLeft')open(cur-1);
+        else if(e.key==='ArrowRight')open(cur+1);
+      }else if((e.key==='Enter'||e.key===' ')&&e.target.matches&&e.target.matches('.wall .sheet[data-i]')){e.preventDefault();open(+e.target.getAttribute('data-i'))}
+    });
+    /* keep the card in step with the format switcher */
+  })();
 
   /* ---------- checkout links ----------
      Paste the Polar checkout link (or the download link for free items) after each key.
