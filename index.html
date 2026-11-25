@@ -185,7 +185,7 @@ footer .ai{flex-basis:100%;font-size:12px}
   <section id="browse">
     <h2>Browse</h2>
     <p class="lede">50 figures. 50 texts. Pick one.</p>
-    <p class="body">Click any piece to see it large. Each comes in four sizes: A4, 50 x 70 cm, Instagram and TikTok. No. 001 is free, every piece has a free social pack, and a print pack is EUR 4.</p>
+    <p class="body">Click any piece to see it large. Each comes in four sizes: A4 (21 × 29.7 cm / 8.3 × 11.7 in), 50 × 70 cm (19.7 × 27.6 in), Instagram and TikTok. No. 001 is free, every piece has a free social pack, and a print pack is EUR 4.</p>
     <div class="seg tabs" id="tabs" role="group" aria-label="Show">
       <button type="button" data-tab="all" aria-pressed="true">All 100</button>
       <button type="button" data-tab="figure" aria-pressed="false">Figures</button>
@@ -217,11 +217,11 @@ footer .ai{flex-basis:100%;font-size:12px}
   <section id="info">
     <h2>FAQ</h2>
     <p class="lede">Questions people ask.</p>
-    <details class="acc" open><summary>What do I get when I buy?</summary><div class="body">A download link by email. Nothing is shipped. Every figure and every text comes as one pack with four files: A4 (PDF), 50 × 70 cm (PDF), Instagram 4:5 (1080 × 1350 px, PNG) and TikTok 9:16 (1080 × 1920 px, PNG).</div></details>
+    <details class="acc" open><summary>What do I get when I buy?</summary><div class="body">A download link by email. Nothing is shipped. Every figure and every text comes as one pack with four files: A4 (21 × 29.7 cm / 8.3 × 11.7 in) as PDF, 50 × 70 cm (19.7 × 27.6 in) as PDF, Instagram 4:5 (1080 × 1350 px, PNG) and TikTok 9:16 (1080 × 1920 px, PNG).</div></details>
     <details class="acc"><summary>Is anything sent to me in the post?</summary><div class="body">No. Everything on this site is digital. You download the files and print them yourself, or have a print shop do it.</div></details>
     <details class="acc"><summary>Can I return it?</summary><div class="body">No. Because the files are delivered digitally and you can download them immediately, there is no right of return or refund once the download has started. If a file is broken or will not open, write to us and we will fix it or refund you. See the terms below.</div></details>
     <details class="acc"><summary>How do I download?</summary><div class="body">After payment you get an email with a personal download link. You can also reach your files from the order page. Save them somewhere safe. If you lose the link, write to us and we will send a new one.</div></details>
-    <details class="acc"><summary>Which size should I print?</summary><div class="body">A4 fits a normal home printer. 50 × 70 cm is a standard poster size in Europe and fits ready-made frames. Print shops can do it on request. See the printing guide below.</div></details>
+    <details class="acc"><summary>Which size should I print?</summary><div class="body">A4 (21 × 29.7 cm / 8.3 × 11.7 in) fits a normal home printer. 50 × 70 cm (19.7 × 27.6 in) is a standard poster size in Europe and fits ready-made frames. Print shops can do it on request. See the printing guide below.</div></details>
     <details class="acc"><summary>Can I print as many copies as I like?</summary><div class="body">Yes, for your own walls, your home and your own workplace. You may not resell the files or the prints, and you may not use the figures or texts on products you sell. See the terms below.</div></details>
     <details class="acc"><summary>What is the free social pack?</summary><div class="body">The Instagram and TikTok versions are free to use if you credit "WhoIsJohnny?" or tag @whoisjohnny2020 on Instagram or @whoisjohnny_2020 on TikTok. The images carry our web address, so please leave it in. No. 001 is free in all sizes.</div></details>
     <details class="acc"><summary>Are the figures and texts made by hand?</summary><div class="body">The figures and texts are generated with AI and curated by Johnny, who chooses what goes on the site. The original hand-drawn figures, Quidam, are resting for now.</div></details>
@@ -591,7 +591,7 @@ footer .ai{flex-basis:100%;font-size:12px}
     '<div class="sofa"></div>';
 
   /* ---------- format switch ---------- */
-  var PX={print:'A4 21 × 29.7 cm and 50 × 70 cm, print-ready PDF',instagram:'Instagram 1080 × 1350 px (4:5)',tiktok:'TikTok 1080 × 1920 px (9:16). Keep key content clear of the bottom and right edge.'};
+  var PX={print:'A4 21 × 29.7 cm / 8.3 × 11.7 in and 50 × 70 cm / 19.7 × 27.6 in, print-ready PDF',instagram:'Instagram 1080 × 1350 px (4:5)',tiktok:'TikTok 1080 × 1920 px (9:16). Keep key content clear of the bottom and right edge.'};
   function setFmt(f){
     document.body.setAttribute('data-fmt',f);
     document.querySelectorAll('#fmtSeg [data-f]').forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-f')===f)});
@@ -612,7 +612,7 @@ footer .ai{flex-basis:100%;font-size:12px}
       else{var t=TEXTS[n-1],c=((n-1)%3===1?' dark':(n-1)%3===2?' y':'');pic='<div class="sheet'+c+'"><div class="in"><span class="t '+sc(t.length)+'">'+lines(t)+'</span></div><span class="no">No. '+pad+'</span><span class="q">?</span></div>'}
       var st=Math.floor((n-1)/10)*10+1,range=p3(st)+'-'+p3(st+9);
       var info='<h3>'+(isFig?'Figure':'Text')+' No. '+pad+'</h3>'+
-        '<p class="small">Four sizes in one download: A4, 50 x 70 cm, Instagram and TikTok.</p>'+
+        '<p class="small">Four sizes in one download: A4 (21 × 29.7 cm / 8.3 × 11.7 in), 50 × 70 cm (19.7 × 27.6 in), Instagram and TikTok.</p>'+
         (n===1?'<button class="btn" type="button" data-key="'+kind+'-001">Free download</button>':'<button class="btn" type="button" data-key="'+kind+'-'+pad+'">Buy, EUR 4</button>')+
         '<button class="btn ghost" type="button" data-key="social-'+kind+'-'+pad+'">Free social pack</button>'+
         '<div class="packs2"><p class="small">Cheaper as a set</p>'+
