@@ -209,21 +209,21 @@ async function deliver(env, co, r, origin) {
   if (rec.g) {
     if (co.customer_email) jobs.push(sendMail(env, co.customer_email, nameOf(r.no) + ' is ready to give.', page(
       `<h1 style="font-size:34px;line-height:1.05;margin:0 0 14px">${name} is ready to give.</h1>
-<p style="font-size:17px;line-height:1.5;margin:0 0 20px">You gave ${name}, Nobody ${lab}, to ${esc(rec.o)}. It now lives in ${esc(rec.c)}, in the register and on the world map. ${rec.te ? 'We have emailed it to them.' : 'Send them the link below. Whoever has the link has ' + name + '.'}</p>
+<p style="font-size:17px;line-height:1.5;margin:0 0 20px">You gave ${name}, Nobody ${lab}, to ${esc(rec.o)}. It now lives in ${esc(rec.c)}, in the register and on the world map. ${rec.te ? 'We have emailed it to them.' : 'Send them the link below. Whoever has the link has ' + name + '.'} On the page they get pictures for Instagram, TikTok, Snapchat and Facebook, and an A4 poster to print at home or at a print shop.</p>
 ${btn(link, rec.te ? 'See the gift' : 'Open the gift link')}${linkLine(link)}`)));
     if (rec.te) jobs.push(sendMail(env, rec.te, esc(rec.f) === 'Somebody' ? 'Somebody gave you a Nobody.' : rec.f + ' gave you a Nobody.', page(
       `<h1 style="font-size:34px;line-height:1.05;margin:0 0 14px">${esc(rec.f)} gave you a Nobody.</h1>
 <p style="font-size:17px;line-height:1.5;margin:0 0 18px">Meet ${name}, Nobody ${lab}. It exists once, and now it is yours. It lives in ${esc(rec.c)}, on the world map.</p>
 ${rec.m ? `<p style="font-size:18px;line-height:1.45;margin:0 0 22px;padding:16px 18px;background:#f1e9d8;border:2px solid #151515;border-radius:10px">“${esc(rec.m)}”<br><span style="font-size:13px;color:#6a675f">${esc(rec.f)}</span></p>` : ''}
 ${btn(link, 'Meet ' + name)}
-<p style="font-size:15px;line-height:1.5;color:#3a3833;margin:0 0 6px">On the page you can save ${name} as pictures for Instagram, TikTok, Snapchat and Facebook, and as an A4 poster to print and hang up. Keep this email: the button is your own link.</p>
+<p style="font-size:15px;line-height:1.5;color:#3a3833;margin:0 0 6px">On the page you can save ${name} as pictures for Instagram, TikTok, Snapchat and Facebook, and as an A4 poster (PDF) to print at home or at a print shop. Keep this email: the button is your own link.</p>
 ${linkLine(link)}${CARE}`)));
   } else if (co.customer_email) {
     jobs.push(sendMail(env, co.customer_email, nameOf(r.no) + ' is yours.', page(
       `<h1 style="font-size:34px;line-height:1.05;margin:0 0 14px">${name} is yours.</h1>
 <p style="font-size:17px;line-height:1.5;margin:0 0 20px">You adopted ${name}, Nobody ${lab}. It now lives in ${esc(rec.c)}, in the register and on the world map. Nobody else will ever have this one.</p>
 ${btn(link, 'Get the pictures')}
-<p style="font-size:15px;line-height:1.5;color:#3a3833;margin:0 0 6px">On the page you get pictures for Instagram, TikTok, Snapchat and Facebook, and an A4 poster to print and hang up (matte paper, 200–250 g, actual size). Keep this email: the button is your own link.</p>
+<p style="font-size:15px;line-height:1.5;color:#3a3833;margin:0 0 6px">On the page you get pictures for Instagram, TikTok, Snapchat and Facebook, and an A4 poster (PDF) to print at home or at a print shop and hang up (matte paper, 200–250 g, actual size). Keep this email: the button is your own link.</p>
 ${linkLine(link)}${CARE}`)));
   }
   await Promise.all(jobs.map(j => j.catch(() => {})));
