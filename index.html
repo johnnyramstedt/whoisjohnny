@@ -165,6 +165,16 @@ h1.name{margin:-10px 0 0;font-size:clamp(56px,7vw,96px);line-height:.95;font-wei
 .legal{max-width:760px;padding:24px 24px 80px}
 .legal h3{font-size:18px;margin:24px 0 4px}
 .legal p{margin:0 0 10px;color:var(--soft)}
+.about{max-width:760px;padding:24px 24px 80px}
+.about h1{font-size:clamp(40px,7vw,72px);letter-spacing:-.03em;line-height:1;margin:0 0 20px}
+.about h2{font-size:24px;letter-spacing:-.02em;margin:40px 0 8px}
+.about p{font-size:18px;line-height:1.55;color:var(--soft);margin:0 0 12px}
+.about ul{margin:14px 0 0;padding:0;list-style:none;border-top:1px solid var(--line)}
+.about li{padding:14px 0;border-bottom:1px solid var(--line);color:var(--soft);font-size:17px;line-height:1.5}
+.about li b{color:var(--ink)}
+.about .btn{margin-top:28px}
+.teaser{max-width:760px;margin:-36px 0 0;padding:0 0 56px;font-size:18px;line-height:1.55;color:var(--soft)}
+.teaser a{color:var(--ink);font-weight:600}
 
 footer{border-top:1px solid var(--line);margin-top:0}
 footer .wrap{padding:28px 24px 48px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px 32px;font-size:14px;color:var(--muted)}
@@ -180,6 +190,7 @@ footer a{color:var(--muted)}
   <nav>
     <a href="/" data-link id="navShelf">Nobodies · <span id="cntShelf">50</span> on the shelf</a>
     <a href="/world" data-link id="navWorld">World · <span id="cntWorld">0</span> adopted</a>
+    <a href="/about" data-link id="navAbout">About</a>
   </nav>
 </header>
 
@@ -245,6 +256,7 @@ footer a{color:var(--muted)}
           <li><b>New litters</b> keep arriving. When only 20 are left on the shelf, 30 new ones appear. Nobody knows what they look like until then.</li>
         </ul>
       </div>
+      <p class="teaser">A Nobody is a small figure that exists once and does nothing in particular. Profile picture, poster, present. <a href="/about" data-link>More about the Nobodies →</a></p>
       <div class="faq">
         <h2>Questions</h2>
         <details><summary>What is a Nobody?</summary><p>A small figure with a name and a number. Drawn by Johnny, assembled by a machine. No two are the same, and no one ever gets made twice.</p></details>
@@ -277,6 +289,25 @@ footer a{color:var(--muted)}
     <div class="cities" id="cities"></div>
     <h2 id="regTitle" style="font-size:28px;letter-spacing:-.02em;margin:0 0 18px">The register</h2>
     <div class="reg" id="reg"></div>
+  </div></section>
+
+  <!-- ABOUT -->
+  <section id="vAbout" hidden><div class="wrap about">
+    <h1>About the Nobodies.</h1>
+    <p>A Nobody is a small figure with a name, a number and nowhere in particular to be. Johnny draws the parts: heads, hats, bodies, moods. A machine puts them together. Every combination is made once and never again, so each Nobody exists exactly one time, with one owner, in one city.</p>
+    <p>They are not useful. That is the point. Most things want something from you. A Nobody just stands there, slightly out of place, and makes an ordinary day a little less ordinary.</p>
+    <h2>What people do with them</h2>
+    <ul>
+      <li><b>Set it as a profile picture.</b> It fits Instagram, TikTok, Snapchat and Facebook. Nobody will ask why. Some will.</li>
+      <li><b>Post it in a story</b> or use it as a lock screen. Tag @whoisjohnny2020 on Instagram or @whoisjohnny_2020 on TikTok, and we may share it.</li>
+      <li><b>Print the poster.</b> A4, at home or at any print shop. Hallway, office, fridge, the back of a door.</li>
+      <li><b>Give one away.</b> To a colleague, a cousin, someone who has everything. It is the least necessary present there is.</li>
+      <li><b>Collect a few.</b> Some traits are rare. Once a Nobody is gone from the shelf, it does not come back.</li>
+      <li><b>Watch the map.</b> Every adopted Nobody becomes a dot in its owner's city. Slowly, they are spreading.</li>
+    </ul>
+    <h2>About the project</h2>
+    <p>WhoIsJohnny? is an art project by Johnny Ramstedt, a Helsinki-based artist. It is a small experiment in owning something that does nothing, and in seeing how far they travel.</p>
+    <a class="btn" href="/" data-link>Pick a Nobody · <span class="price">€9</span></a>
   </div></section>
 
   <!-- TERMS -->
@@ -321,7 +352,7 @@ footer a{color:var(--muted)}
 <footer><div class="wrap">
   <span><b>Drawn by Johnny. Assembled by a machine.</b><br>An art project by Johnny Ramstedt · johnnyramstedt.com</span>
   <span>hello@whoisjohnny.com<br>Instagram @whoisjohnny2020 · TikTok @whoisjohnny_2020</span>
-  <span><a href="/terms" data-link>Terms</a> · <a href="/privacy" data-link>Privacy</a><br>© 2026 Johnny Ramstedt</span>
+  <span><a href="/about" data-link>About</a> · <a href="/terms" data-link>Terms</a> · <a href="/privacy" data-link>Privacy</a><br>© 2026 Johnny Ramstedt</span>
 </div></footer>
 <div class="toast" id="toast" role="status" hidden></div>
 
@@ -354,9 +385,10 @@ async function load(){
 
 // ---------------------------------------------------------------- views
 function show(id){
-  ['vShelf','vItem','vDone','vWorld','vTerms','vPrivacy'].forEach(v=>$(v).hidden = v!==id);
+  ['vShelf','vItem','vDone','vWorld','vAbout','vTerms','vPrivacy'].forEach(v=>$(v).hidden = v!==id);
   $('navShelf').classList.toggle('on', id==='vShelf');
   $('navWorld').classList.toggle('on', id==='vWorld');
+  $('navAbout').classList.toggle('on', id==='vAbout');
   window.scrollTo(0,0);
 }
 
@@ -626,6 +658,7 @@ function route(){
   if (m) return renderItem(parseInt(m[1],10), q.get('key'), q.get('new')==='1');
   if (p==='/world') return renderWorld();
   if (p==='/done') return renderDone(q.get('checkout_id')||'');
+  if (p==='/about'){ show('vAbout'); return; }
   if (p==='/terms'){ show('vTerms'); return; }
   if (p==='/privacy'){ show('vPrivacy'); return; }
   renderShelf();
