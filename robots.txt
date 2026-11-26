@@ -1,3 +1,2 @@
 User-agent: *
-Disallow: /texts/
-Disallow: /library/
+Allow: /
