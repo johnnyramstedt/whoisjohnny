@@ -8,7 +8,7 @@
 //   RESEND_KEY        Resend API key (secret). Optional: without it no email is sent.
 //   POLAR_API         Optional. Set to https://sandbox-api.polar.sh to test with Polar's sandbox.
 
-import { nameOf, pad } from '../../assets/nobody.js';
+import { nameOf, pad, label, isXmas, XMAS_FROM, XMAS_TO } from '../../assets/nobody.js';
 
 const START = 50;        // Nobodies on the first shelf
 const REFILL_AT = 20;    // when this few are left...
@@ -61,6 +61,17 @@ function freeList(ix) {
   }
   return out;
 }
+function freeXmas(ix) {
+  const now = Date.now(), out = [];
+  for (let n = XMAS_FROM; n <= XMAS_TO; n++) {
+    if (ix.owned[n]) continue;
+    const h = ix.holds[n];
+    if (h && h.u > now) continue;
+    out.push(n);
+  }
+  return out;
+}
+const onShelf = (ix, no) => isXmas(no) || (no >= 1 && no <= ix.max);
 
 async function polar(env, path, opts = {}) {
   const base = env.POLAR_API || 'https://api.polar.sh';
@@ -111,7 +122,7 @@ async function shelf(env, url, ctx) {
 
   const held = Object.keys(ix.holds).map(Number).filter(n => ix.holds[n].u > now && !ix.owned[n]);
   const owned = Object.keys(ix.owned).map(Number).map(n => ({ no: n, owner: ix.owned[n].o, city: ix.owned[n].c, since: ix.owned[n].s }));
-  return { price: PRICE, max: ix.max, newFrom: ix.lastLitter || 0, free: freeList(ix), held, owned };
+  return { price: PRICE, max: ix.max, newFrom: ix.lastLitter || 0, free: freeList(ix), xmas: freeXmas(ix), held, owned };
 }
 
 // ---------------------------------------------------------------- adopt
@@ -129,7 +140,7 @@ async function adopt(request, env, url) {
   if (toEmail && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(toEmail)) return json({ error: 'Their email does not look right. Leave it empty to send the link yourself.' }, 400);
 
   const ix = await getIndex(env);
-  if (!(no >= 1 && no <= ix.max)) return json({ error: 'That Nobody is not on the shelf.' }, 400);
+  if (!onShelf(ix, no)) return json({ error: 'That Nobody is not on the shelf.' }, 400);
   const done = await env.NOBODIES.get('own:' + no);
   if (ix.owned[no] || done) return json({ error: nameOf(no) + ' already belongs to somebody.', taken: true }, 409);
   const h = ix.holds[no];
@@ -193,16 +204,16 @@ const linkLine = link => `<p style="font-size:13px;line-height:1.5;color:#6a675f
 // After a paid adoption: email the buyer, and the receiver if it is a gift with an email.
 async function deliver(env, co, r, origin) {
   if (!env.RESEND_KEY) return;
-  const link = origin + '/no/' + pad(r.no) + '?key=' + r.key, rec = r.rec, name = esc(nameOf(r.no)), num = pad(r.no);
+  const link = origin + '/no/' + pad(r.no) + '?key=' + r.key, rec = r.rec, name = esc(nameOf(r.no)), lab = label(r.no);
   const jobs = [];
   if (rec.g) {
     if (co.customer_email) jobs.push(sendMail(env, co.customer_email, nameOf(r.no) + ' is ready to give.', page(
       `<h1 style="font-size:34px;line-height:1.05;margin:0 0 14px">${name} is ready to give.</h1>
-<p style="font-size:17px;line-height:1.5;margin:0 0 20px">You gave ${name}, Nobody No. ${num}, to ${esc(rec.o)}. It now lives in ${esc(rec.c)}, in the register and on the world map. ${rec.te ? 'We have emailed it to them.' : 'Send them the link below. Whoever has the link has ' + name + '.'}</p>
+<p style="font-size:17px;line-height:1.5;margin:0 0 20px">You gave ${name}, Nobody ${lab}, to ${esc(rec.o)}. It now lives in ${esc(rec.c)}, in the register and on the world map. ${rec.te ? 'We have emailed it to them.' : 'Send them the link below. Whoever has the link has ' + name + '.'}</p>
 ${btn(link, rec.te ? 'See the gift' : 'Open the gift link')}${linkLine(link)}`)));
     if (rec.te) jobs.push(sendMail(env, rec.te, esc(rec.f) === 'Somebody' ? 'Somebody gave you a Nobody.' : rec.f + ' gave you a Nobody.', page(
       `<h1 style="font-size:34px;line-height:1.05;margin:0 0 14px">${esc(rec.f)} gave you a Nobody.</h1>
-<p style="font-size:17px;line-height:1.5;margin:0 0 18px">Meet ${name}, Nobody No. ${num}. It exists once, and now it is yours. It lives in ${esc(rec.c)}, on the world map.</p>
+<p style="font-size:17px;line-height:1.5;margin:0 0 18px">Meet ${name}, Nobody ${lab}. It exists once, and now it is yours. It lives in ${esc(rec.c)}, on the world map.</p>
 ${rec.m ? `<p style="font-size:18px;line-height:1.45;margin:0 0 22px;padding:16px 18px;background:#f1e9d8;border:2px solid #151515;border-radius:10px">“${esc(rec.m)}”<br><span style="font-size:13px;color:#6a675f">${esc(rec.f)}</span></p>` : ''}
 ${btn(link, 'Meet ' + name)}
 <p style="font-size:15px;line-height:1.5;color:#3a3833;margin:0 0 6px">On the page you can save ${name} as pictures for Instagram, TikTok, Snapchat and Facebook. Keep this email: the button is your own link.</p>
@@ -210,7 +221,7 @@ ${linkLine(link)}${CARE}`)));
   } else if (co.customer_email) {
     jobs.push(sendMail(env, co.customer_email, nameOf(r.no) + ' is yours.', page(
       `<h1 style="font-size:34px;line-height:1.05;margin:0 0 14px">${name} is yours.</h1>
-<p style="font-size:17px;line-height:1.5;margin:0 0 20px">You adopted ${name}, Nobody No. ${num}. It now lives in ${esc(rec.c)}, in the register and on the world map. Nobody else will ever have this one.</p>
+<p style="font-size:17px;line-height:1.5;margin:0 0 20px">You adopted ${name}, Nobody ${lab}. It now lives in ${esc(rec.c)}, in the register and on the world map. Nobody else will ever have this one.</p>
 ${btn(link, 'Get the pictures')}
 <p style="font-size:15px;line-height:1.5;color:#3a3833;margin:0 0 6px">The pictures are made for Instagram, TikTok, Snapchat and Facebook. Keep this email: the button is your own link.</p>
 ${linkLine(link)}${CARE}`)));
@@ -232,7 +243,7 @@ async function one(env, url) {
   const no = parseInt(url.searchParams.get('no'), 10);
   const key = url.searchParams.get('key') || '';
   const ix = await getIndex(env);
-  if (!(no >= 1 && no <= ix.max)) return json({ exists: false });
+  if (!onShelf(ix, no)) return json({ exists: false });
   const o = ix.owned[no];
   if (o) {
     let mine = false;
