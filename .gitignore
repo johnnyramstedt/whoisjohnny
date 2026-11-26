@@ -5,3 +5,8 @@ whoisjohnny-cmyk-print-files.zip
 whoisjohnny-001-cmyk/
 whoisjohnny-001-cmyk.zip
 .DS_Store
+
+# local helper with a Polar token: never upload
+polar-setup.js
+# old draft
+whoisjohnny-ny-sida.html
