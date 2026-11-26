@@ -96,7 +96,7 @@ async function shelf(env, url, ctx) {
       const co = await polar(env, '/v1/checkouts/' + h.k);
       if (co.status === 'succeeded') {
         const r = await finalize(env, co, ix); changed = true;
-        if (r.isNew && env.RESEND_KEY && co.customer_email) ctx.waitUntil(sendMail(env, co.customer_email, r.no, url.origin + '/no/' + pad(r.no) + '?key=' + r.key, r.rec.c).catch(() => {}));
+        if (r.isNew) ctx.waitUntil(deliver(env, co, r, url.origin));
       }
       else if (co.status === 'open' || co.status === 'confirmed') { h.u = now + 5 * 60 * 1000; changed = true; }
       else { delete ix.holds[n]; changed = true; }
@@ -121,7 +121,12 @@ async function adopt(request, env, url) {
   const no = parseInt(body.no, 10);
   const city = clean(body.city, 40);
   const owner = clean(body.owner, 30);
-  if (!city) return json({ error: 'Please tell us the city.' }, 400);
+  const gift = !!body.gift;
+  const toEmail = gift ? clean(body.toEmail, 120).toLowerCase() : '';
+  const note = gift ? clean(body.note, 200) : '';
+  const from = gift ? clean(body.from, 30) : '';
+  if (!city) return json({ error: gift ? 'Please tell us the city they live in.' : 'Please tell us the city.' }, 400);
+  if (toEmail && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(toEmail)) return json({ error: 'Their email does not look right. Leave it empty to send the link yourself.' }, 400);
 
   const ix = await getIndex(env);
   if (!(no >= 1 && no <= ix.max)) return json({ error: 'That Nobody is not on the shelf.' }, 400);
@@ -136,7 +141,9 @@ async function adopt(request, env, url) {
       products: [env.POLAR_PRODUCT_ID],
       success_url: url.origin + '/done?checkout_id={CHECKOUT_ID}',
       return_url: url.origin + '/no/' + pad(no),
-      metadata: { nobody: no, nobody_name: nameOf(no), city, owner: owner || 'Anonymous' },
+      metadata: gift
+        ? { nobody: no, nobody_name: nameOf(no), city, owner: owner || 'Anonymous', gift: '1', from: from || 'Somebody', note, to_email: toEmail }
+        : { nobody: no, nobody_name: nameOf(no), city, owner: owner || 'Anonymous' },
     }),
   });
 
@@ -152,7 +159,9 @@ async function finalize(env, co, ix) {
   const key = await keyFor(co.id, no);
   const existing = await env.NOBODIES.get('own:' + no, 'json');
   if (existing && existing.checkout !== co.id) throw new Error('This Nobody already belongs to somebody else.');
-  const rec = existing || { key, checkout: co.id, o: clean(co.metadata.owner, 30) || 'Anonymous', c: clean(co.metadata.city, 40) || 'Somewhere', s: Date.now() };
+  const md = co.metadata;
+  const rec = existing || { key, checkout: co.id, o: clean(md.owner, 30) || 'Anonymous', c: clean(md.city, 40) || 'Somewhere', s: Date.now() };
+  if (!existing && String(md.gift) === '1') { rec.g = 1; rec.f = clean(md.from, 30) || 'Somebody'; rec.m = clean(md.note, 200); rec.te = clean(md.to_email, 120); }
   if (!existing) await env.NOBODIES.put('own:' + no, JSON.stringify(rec));
   ix.owned[no] = { o: rec.o, c: rec.c, s: rec.s };
   delete ix.holds[no];
@@ -169,31 +178,51 @@ async function done(env, url, ctx) {
   const ix = await getIndex(env);
   const r = await finalize(env, co, ix);
   await putIndex(env, ix);
-  const link = url.origin + '/no/' + pad(r.no) + '?key=' + r.key;
-  if (r.isNew && env.RESEND_KEY && co.customer_email) {
-    ctx.waitUntil(sendMail(env, co.customer_email, r.no, link, r.rec.c).catch(() => {}));
-  }
-  return json({ ok: true, no: r.no, name: nameOf(r.no), key: r.key });
+  if (r.isNew) ctx.waitUntil(deliver(env, co, r, url.origin));
+  return json({ ok: true, no: r.no, name: nameOf(r.no), key: r.key, gift: !!r.rec.g });
 }
 
-async function sendMail(env, to, no, link, city) {
-  const name = nameOf(no);
-  const html = `<!doctype html><html><body style="margin:0;background:#f7f6f2;font-family:Arial,Helvetica,sans-serif;color:#151515">
-<div style="max-width:520px;margin:0 auto;padding:32px 24px">
-<p style="font-size:13px;color:#6a675f;margin:0 0 8px">WhoIsJohnny?</p>
-<h1 style="font-size:34px;line-height:1.05;margin:0 0 14px">${esc(name)} is yours.</h1>
-<p style="font-size:17px;line-height:1.5;margin:0 0 20px">You adopted ${esc(name)}, Nobody No. ${pad(no)}. It now lives in ${esc(city)}, in the register and on the world map. Nobody else will ever have this one.</p>
-<p style="margin:0 0 24px"><a href="${link}" style="display:inline-block;background:#151515;color:#f7f6f2;text-decoration:none;font-weight:bold;padding:14px 22px;border-radius:999px">Get the pictures</a></p>
+// ---------------------------------------------------------------- email
+const CARE = `<p style="font-size:15px;font-weight:bold;margin:0 0 6px">Care instructions</p>
+<p style="font-size:15px;line-height:1.6;color:#3a3833;margin:0 0 28px">Your Nobody does not eat. Please do not offer.<br>It lives in your phone. It will not mind.<br>It knows one command: Stay. It does this very well.<br>It cannot be returned. It has nowhere to go.</p>`;
+const FOOT = `<p style="font-size:13px;color:#6a675f;margin:0">Drawn by Johnny. Assembled by a machine. · whoisjohnny.com · @whoisjohnny2020</p>`;
+const btn = (href, label) => `<p style="margin:0 0 24px"><a href="${href}" style="display:inline-block;background:#151515;color:#f7f6f2;text-decoration:none;font-weight:bold;padding:14px 22px;border-radius:999px">${label}</a></p>`;
+const page = inner => `<!doctype html><html><body style="margin:0;background:#f7f6f2;font-family:Arial,Helvetica,sans-serif;color:#151515"><div style="max-width:520px;margin:0 auto;padding:32px 24px"><p style="font-size:13px;color:#6a675f;margin:0 0 8px">WhoIsJohnny?</p>${inner}${FOOT}</div></body></html>`;
+const linkLine = link => `<p style="font-size:13px;line-height:1.5;color:#6a675f;margin:0 0 28px;word-break:break-all">${link}</p>`;
+
+// After a paid adoption: email the buyer, and the receiver if it is a gift with an email.
+async function deliver(env, co, r, origin) {
+  if (!env.RESEND_KEY) return;
+  const link = origin + '/no/' + pad(r.no) + '?key=' + r.key, rec = r.rec, name = esc(nameOf(r.no)), num = pad(r.no);
+  const jobs = [];
+  if (rec.g) {
+    if (co.customer_email) jobs.push(sendMail(env, co.customer_email, nameOf(r.no) + ' is ready to give.', page(
+      `<h1 style="font-size:34px;line-height:1.05;margin:0 0 14px">${name} is ready to give.</h1>
+<p style="font-size:17px;line-height:1.5;margin:0 0 20px">You gave ${name}, Nobody No. ${num}, to ${esc(rec.o)}. It now lives in ${esc(rec.c)}, in the register and on the world map. ${rec.te ? 'We have emailed it to them.' : 'Send them the link below. Whoever has the link has ' + name + '.'}</p>
+${btn(link, rec.te ? 'See the gift' : 'Open the gift link')}${linkLine(link)}`)));
+    if (rec.te) jobs.push(sendMail(env, rec.te, esc(rec.f) === 'Somebody' ? 'Somebody gave you a Nobody.' : rec.f + ' gave you a Nobody.', page(
+      `<h1 style="font-size:34px;line-height:1.05;margin:0 0 14px">${esc(rec.f)} gave you a Nobody.</h1>
+<p style="font-size:17px;line-height:1.5;margin:0 0 18px">Meet ${name}, Nobody No. ${num}. It exists once, and now it is yours. It lives in ${esc(rec.c)}, on the world map.</p>
+${rec.m ? `<p style="font-size:18px;line-height:1.45;margin:0 0 22px;padding:16px 18px;background:#f1e9d8;border:2px solid #151515;border-radius:10px">“${esc(rec.m)}”<br><span style="font-size:13px;color:#6a675f">${esc(rec.f)}</span></p>` : ''}
+${btn(link, 'Meet ' + name)}
+<p style="font-size:15px;line-height:1.5;color:#3a3833;margin:0 0 6px">On the page you can save ${name} as pictures for Instagram, TikTok, Snapchat and Facebook. Keep this email: the button is your own link.</p>
+${linkLine(link)}${CARE}`)));
+  } else if (co.customer_email) {
+    jobs.push(sendMail(env, co.customer_email, nameOf(r.no) + ' is yours.', page(
+      `<h1 style="font-size:34px;line-height:1.05;margin:0 0 14px">${name} is yours.</h1>
+<p style="font-size:17px;line-height:1.5;margin:0 0 20px">You adopted ${name}, Nobody No. ${num}. It now lives in ${esc(rec.c)}, in the register and on the world map. Nobody else will ever have this one.</p>
+${btn(link, 'Get the pictures')}
 <p style="font-size:15px;line-height:1.5;color:#3a3833;margin:0 0 6px">The pictures are made for Instagram, TikTok, Snapchat and Facebook. Keep this email: the button is your own link.</p>
-<p style="font-size:13px;line-height:1.5;color:#6a675f;margin:0 0 28px;word-break:break-all">${link}</p>
-<p style="font-size:15px;font-weight:bold;margin:0 0 6px">Care instructions</p>
-<p style="font-size:15px;line-height:1.6;color:#3a3833;margin:0 0 28px">Your Nobody does not eat. Please do not offer.<br>It lives in your phone. It will not mind.<br>It knows one command: Stay. It does this very well.<br>It cannot be returned. It has nowhere to go.</p>
-<p style="font-size:13px;color:#6a675f;margin:0">Drawn by Johnny. Assembled by a machine. · whoisjohnny.com · @whoisjohnny2020</p>
-</div></body></html>`;
+${linkLine(link)}${CARE}`)));
+  }
+  await Promise.all(jobs.map(j => j.catch(() => {})));
+}
+
+async function sendMail(env, to, subject, html, replyTo) {
   const r = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { authorization: 'Bearer ' + env.RESEND_KEY, 'content-type': 'application/json' },
-    body: JSON.stringify({ from: FROM, to: [to], reply_to: 'hello@whoisjohnny.com', subject: name + ' is yours.', html }),
+    body: JSON.stringify({ from: FROM, to: [to], reply_to: replyTo || 'hello@whoisjohnny.com', subject, html }),
   });
   if (!r.ok) throw new Error('Resend ' + r.status);
 }
@@ -207,8 +236,13 @@ async function one(env, url) {
   const o = ix.owned[no];
   if (o) {
     let mine = false;
-    if (key) { const rec = await env.NOBODIES.get('own:' + no, 'json'); mine = !!(rec && rec.key === key); }
-    return json({ exists: true, owned: true, owner: o.o, city: o.c, since: o.s, mine });
+    let extra = {};
+    if (key) {
+      const rec = await env.NOBODIES.get('own:' + no, 'json');
+      mine = !!(rec && rec.key === key);
+      if (mine && rec.g) extra = { gift: true, from: rec.f, note: rec.m || '', toSent: !!rec.te };
+    }
+    return json({ exists: true, owned: true, owner: o.o, city: o.c, since: o.s, mine, ...extra });
   }
   const h = ix.holds[no];
   return json({ exists: true, owned: false, held: !!(h && h.u > Date.now()), price: PRICE });
