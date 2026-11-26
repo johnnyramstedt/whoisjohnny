@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>WhoIsJohnny? Pick a Nobody.</title>
-<meta name="description" content="Nobodies. Small figures, each one exists once. Pick one from the shelf, give it a city, keep it in your phone. €9.">
+<meta name="description" content="Nobodies. Small figures, each one exists once. Keep one, collect a few, or give one as a gift, and watch them spread across the world. €9.">
 <meta property="og:title" content="WhoIsJohnny? Pick a Nobody.">
-<meta property="og:description" content="Small figures. Each one exists once. €9.">
+<meta property="og:description" content="Small figures. Each one exists once. Keep one, or give one away. €9.">
 <meta property="og:image" content="https://whoisjohnny.com/og-image.png">
 <meta property="og:type" content="website">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -47,6 +47,36 @@ h1.big{margin:0;font-size:clamp(56px,10vw,124px);line-height:.92;font-weight:600
 @keyframes waddle{0%{transform:rotate(-4deg)}50%{transform:rotate(0) translateY(-5px)}100%{transform:rotate(4deg)}}
 @media (prefers-reduced-motion:reduce){.track,.hop,.walker{animation:none}}
 
+.ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:10px}
+.ctas .btn2{font-size:18px;padding:14px 26px;min-height:48px;text-decoration:none;display:inline-flex;align-items:center}
+.out{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 20px;margin:-28px 0 56px;font-size:18px;color:var(--soft);text-decoration:none}
+.out b{color:var(--ink);font-weight:600}
+h2.sec{font-size:clamp(28px,3.4vw,40px);letter-spacing:-.03em;line-height:1.05;margin:0 0 6px;font-weight:600}
+.sub{margin:0 0 26px;color:var(--muted);font-size:17px}
+.gift{background:#f1e9d8;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);margin:0 0 64px}
+.gift .wrap{display:flex;flex-wrap:wrap;gap:40px 64px;align-items:center;padding:72px 24px}
+.gift-text{flex:1 1 360px;display:flex;flex-direction:column;gap:14px;max-width:560px}
+.gift .kick{font-size:13px;letter-spacing:.1em;color:var(--muted);font-weight:600}
+.gift h2{margin:0;font-size:clamp(44px,6vw,76px);line-height:.95;letter-spacing:-.04em;font-weight:600}
+.gift p{margin:0;font-size:19px;color:var(--soft)}
+.gift-card{flex:0 1 340px;background:#fff;border:2px solid var(--ink);border-radius:12px;padding:22px;transform:rotate(-2.5deg);box-shadow:8px 8px 0 var(--ink)}
+.gift-card .to{font-size:13px;letter-spacing:.08em;color:var(--muted)}
+.gift-card img{width:100%;aspect-ratio:3/4;display:block;border-radius:6px;margin:10px 0}
+.gift-card .note{font-size:17px;line-height:1.4}
+.what{max-width:760px;padding:0 0 64px}
+.what ul{margin:14px 0 0;padding:0;list-style:none;border-top:1px solid var(--line)}
+.what li{padding:14px 0;border-bottom:1px solid var(--line);color:var(--soft);font-size:17px}
+.what li b{color:var(--ink);font-weight:600}
+.seg{display:flex;border:1.5px solid var(--ink);border-radius:999px;padding:3px;gap:3px;align-self:flex-start}
+.seg button{font-size:15px;font-weight:600;padding:9px 18px;border:0;border-radius:999px;background:transparent;cursor:pointer;color:var(--ink)}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.box textarea{font-size:16px;padding:12px 14px;border:1px solid #b9b5aa;border-radius:8px;width:100%;min-height:84px;resize:vertical;font-family:inherit}
+.box input[type=email]{font-size:16px;padding:12px 14px;min-height:44px;border:1px solid #b9b5aa;border-radius:8px;width:100%;background:#fff}
+.hint{font-size:13px;color:var(--muted);margin-top:-4px}
+.giftnote{padding:18px 20px;background:#f1e9d8;border:2px solid var(--ink);border-radius:10px;max-width:480px;font-size:18px;line-height:1.45}
+.giftnote .from{display:block;font-size:13px;letter-spacing:.08em;color:var(--muted);margin-bottom:6px}
+.linkrow{display:flex;gap:8px;flex-wrap:wrap;max-width:520px}
+.linkrow input{flex:1 1 260px;font-size:14px;padding:10px 12px;border:1px solid #b9b5aa;border-radius:8px;background:#fff;min-height:42px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:28px 18px;padding-bottom:88px}
 @media (max-width:420px){.grid{grid-template-columns:1fr 1fr;gap:22px 12px}.cap{font-size:14px;flex-wrap:wrap}}
 .card{text-decoration:none;display:flex;flex-direction:column;gap:10px;transition:transform .15s ease}
@@ -139,10 +169,23 @@ footer a{color:var(--muted)}
   <section id="vShelf">
     <div class="wrap hero">
       <h1 class="big">Pick a Nobody.</h1>
-      <p class="lede">Small figures. Each one exists once, with its own name and number. <span class="price">€9</span>. You get it as pictures for Instagram, TikTok, Snapchat and Facebook.</p>
+      <p class="lede">Small figures with nowhere to be. Each one exists once, with its own name and number. Keep one, collect a few, or give one away. Then watch where they end up.</p>
+      <div class="ctas"><a class="btn" href="#shelf">Pick one · <span class="price">€9</span></a><a class="btn2" href="#gift">Give one as a gift</a></div>
     </div>
     <div class="parade" aria-label="Nobodies walking by"><div class="track" id="parade"></div></div>
-    <div class="wrap"><div class="grid" id="grid"></div></div>
+    <div class="wrap"><a class="out" href="/world" data-link id="outStrip"><span id="outText">The first Nobodies are leaving the shelf.</span> <b>See the map →</b></a></div>
+    <div class="gift" id="gift"><div class="wrap">
+      <div class="gift-text">
+        <div class="kick">FOR SOMEBODY ELSE</div>
+        <h2>Give a Nobody.</h2>
+        <p>A small present for no reason at all. Pick one, choose <b>As a gift</b>, and write where they live and a short note. We email it to them, or you send the link yourself.</p>
+        <p class="muted">No wrapping. No shipping. It is already there. <span class="price">€9</span>.</p>
+        <a class="btn" href="#shelf">Pick a gift</a>
+      </div>
+      <div class="gift-card" aria-hidden="true" id="giftDemo"></div>
+    </div></div>
+
+    <div class="wrap" id="shelf"><h2 class="sec">On the shelf now</h2><p class="sub">Every one is different. When one is gone, it is gone.</p><div class="grid" id="grid"></div></div>
 
     <div class="band"><div class="wrap">
       <div>
@@ -158,16 +201,27 @@ footer a{color:var(--muted)}
 
     <div class="wrap">
       <div class="steps">
-        <div><h3>Pick one.</h3><p>Only the ones on the shelf. Nothing is random. It is held for you while you pay. Then it leaves the shelf for good.</p></div>
-        <div><h3>Give it a city.</h3><p>Where will it live? It goes in the register and on the world map. Only the city, never more.</p></div>
-        <div><h3>Keep it.</h3><p>Pictures for Instagram, TikTok, Snapchat and Facebook. Your own link comes by email.</p></div>
-        <div><h3>Always about 50.</h3><p>When only 20 are left, 30 new ones arrive. Nobody knows what they look like until then.</p></div>
+        <div><h3>1. Pick one.</h3><p>Only the ones on the shelf. Nothing is random. It is held for you while you pay, then it leaves the shelf for good.</p></div>
+        <div><h3>2. Give it a home.</h3><p>Your city, or the city of the person you give it to. It goes in the register and on the world map. Only the city, never more.</p></div>
+        <div><h3>3. Keep it, or give it.</h3><p>It lives in a phone. As a profile picture, a story, a lock screen. Or in somebody else's.</p></div>
+        <div><h3>4. Watch them travel.</h3><p>Every adopted Nobody shows up on the map. Helsinki, Lisbon, Tokyo. Nobody knows where the next one goes.</p></div>
+      </div>
+      <div class="what">
+        <h2 class="sec">What you get</h2>
+        <ul>
+          <li><b>One Nobody that exists once.</b> Its name, its number, its traits. Nobody else will ever have it.</li>
+          <li><b>A place in the register</b> and a dot on the world map.</li>
+          <li><b>Pictures sized for Instagram, TikTok, Snapchat and Facebook.</b> PNG, ready to post or set as a profile picture.</li>
+          <li><b>Your own link</b> by email. Care instructions included.</li>
+          <li><b>New litters</b> keep arriving. When only 20 are left on the shelf, 30 new ones appear. Nobody knows what they look like until then.</li>
+        </ul>
       </div>
       <div class="faq">
         <h2>Questions</h2>
         <details><summary>What is a Nobody?</summary><p>A small figure with a name and a number. Drawn by Johnny, assembled by a machine. No two are the same, and no one ever gets made twice.</p></details>
-        <details><summary>Why would I want one?</summary><p>No good reason. It does not do anything. It just stays. Some people collect them. Some give them away. Some set one as their profile picture and forget about it. All of these are correct.</p></details>
-        <details><summary>Can I give one as a gift?</summary><p>Yes. Adopt it, then send the pictures or the link. Put their city in the register if you like.</p></details>
+        <details><summary>Why would I want one?</summary><p>No good reason. It does not do anything. It just stays, and makes an ordinary day slightly less ordinary. Some people collect them. Some give them away. Some set one as their profile picture and forget about it. All of these are correct.</p></details>
+        <details><summary>How does giving one work?</summary><p>Pick a Nobody and choose "As a gift". Write their name, their city and a short note. If you add their email, we send it to them right away. If not, you get the gift link and send it yourself, in a message, a card or a text. Either way it is theirs from the start, and it shows up on the map in their city.</p></details>
+        <details><summary>Can I collect them?</summary><p>Yes. Adopt as many as you like. Each one is different, and some traits are rarer than others. Once the shelf is empty of a kind, there will never be another one quite like it.</p></details>
         <details><summary>What are the rare ones?</summary><p>Every Nobody has traits. Under each one you see how often a trait turns up, for example "Crown · 1 in 14". The price is the same for all of them.</p></details>
         <details><summary>Can I swap or sell it?</summary><p>No. Once it is yours, it stays yours. It has nowhere else to go.</p></details>
         <details><summary>Where do I post it?</summary><p>Anywhere. Tag @whoisjohnny2020 on Instagram or @whoisjohnny_2020 on TikTok and we may show it.</p></details>
@@ -204,13 +258,13 @@ footer a{color:var(--muted)}
     <h3>2. What you buy</h3>
     <p>One Nobody: a unique digital figure with a name and a number, your entry in the public register on whoisjohnny.com, and image files of it for social media. Nothing physical is sent. It is not an NFT or any kind of token, and it has no value outside this site.</p>
     <h3>3. Delivery</h3>
-    <p>Right after payment you get a personal link to your Nobody's page, where you can download the pictures. The link is also sent by email. Keep it to yourself.</p>
+    <p>Right after payment you get a personal link to your Nobody's page, where you can download the pictures. The link is also sent by email. Keep it to yourself. If you buy it as a gift, the link is the gift: whoever has it has the Nobody. If you give us the receiver's email, we send the link to them as well.</p>
     <h3>4. Right of withdrawal</h3>
     <p>This is digital content delivered at once. When you buy, you ask for delivery to start straight away and you accept that the 14-day right of withdrawal ends when delivery starts. If something does not work, write to us and we will fix it or refund you.</p>
     <h3>5. What you may do with it</h3>
     <p>You may keep it, show it and post the pictures on your own social media, for example as a profile picture. You may not sell it, put it on products you sell or use it in advertising. Copyright stays with Johnny Ramstedt.</p>
     <h3>6. The register</h3>
-    <p>Each adopted Nobody shows a name you choose (or "Anonymous") and a city. This is public. Do not write anything you do not want others to see. We may remove names that are offensive.</p>
+    <p>Each adopted Nobody shows a name you choose (or "Anonymous") and a city. For a gift, that is the receiver's name and city, so only write what they would be happy to see in public. This is public. Do not write anything you do not want others to see. We may remove names that are offensive.</p>
     <h3>7. Prices</h3>
     <p>Prices are in EUR and include VAT where it applies. The final price is shown at checkout.</p>
     <h3>8. Liability, law</h3>
@@ -224,7 +278,7 @@ footer a{color:var(--muted)}
     <h3>Who is responsible</h3>
     <p>Johnny Ramstedt, a private individual in Finland. Contact: hello@whoisjohnny.com.</p>
     <h3>What we keep</h3>
-    <p>When you adopt a Nobody, we keep the name you give for the register (or "Anonymous") and the city. These are shown publicly. Polar handles your payment, email and billing details as merchant of record. We use your email only to send you your Nobody, through our email provider Resend. If you sign up for news, we keep your email address until you ask us to remove it.</p>
+    <p>When you adopt a Nobody, we keep the name you give for the register (or "Anonymous") and the city. These are shown publicly. Polar handles your payment, email and billing details as merchant of record. We use your email only to send you your Nobody, through our email provider Resend. If you give a Nobody as a gift, we keep the note and the name you sign it with, and show them only to whoever has the gift link. If you add the receiver's email, we use it once, to send them the gift, and for nothing else. If you sign up for news, we keep your email address until you ask us to remove it.</p>
     <h3>Who gets it</h3>
     <p>Polar (payment and VAT), Resend (sending email) and Cloudflare (hosting). We do not sell personal data and do not use it for advertising. The site sets no tracking cookies.</p>
     <h3>Your rights</h3>
@@ -246,7 +300,7 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const LINES = ['Has been on the shelf a while. Did not mind.','Does not know you yet. Will not mind either way.','Was made on a Tuesday. Has not mentioned it since.','Looks like it is thinking about something. It is not.','Prefers to be left alone. Which works out.','Will not come when called. Will not leave either.'];
 const FORMATS = [['instagram','Instagram','Post or story',1080,1350],['tiktok','TikTok','Video or profile',1080,1920],['snapchat','Snapchat','Story',1080,1920],['facebook','Facebook','Post or profile picture',1080,1080]];
-let DATA = null, mapCity = null;
+let DATA = null, mapCity = null, giftMode = false;
 
 function toast(m){ const t=$('toast'); t.textContent=m; t.hidden=false; clearTimeout(toast.h); toast.h=setTimeout(()=>t.hidden=true,3000); }
 function fmtDate(ms){ const d=new Date(ms); return d.getDate()+'.'+(d.getMonth()+1)+'.'+d.getFullYear(); }
@@ -284,6 +338,11 @@ function renderShelf(){
   let pick = DATA.free.filter((n,i)=>i%3===0).slice(0,14); if (pick.length<8) pick=DATA.free.slice(0,14);
   const one = pick.map((n,i)=>{ const b=nobody(n); return `<a href="/no/${b.num}" data-link aria-label="${esc(b.name)}, No. ${b.num}"><div class="hop" style="animation-delay:${(-(i*2.3)%9).toFixed(1)}s"><div class="walker" style="animation-delay:${(-(i*.37)%.9).toFixed(2)}s;animation-duration:${(.8+(n%5)*.08).toFixed(2)}s"><img src="${b.src}" alt=""></div></div></a>`; }).join('');
   $('parade').innerHTML = one+one;
+  const own = DATA.owned, nc = new Set(own.map(o=>o.city)).size;
+  $('outText').textContent = own.length ? `${own.length} Nobod${own.length===1?'y lives':'ies live'} out in the world, in ${nc} cit${nc===1?'y':'ies'}.` : 'The first Nobodies are about to leave the shelf.';
+  const g = nobody(DATA.free[Math.min(4, DATA.free.length-1)] || 7);
+  $('giftDemo').innerHTML = `<div class="to">TO: MAYA · LISBON</div><img src="${g.src}" alt="" style="background:${g.paper}"><div class="note">“Saw ${esc(g.name)} and thought of you. It does nothing. Neither do we on Sundays.”</div>`;
+  if (location.hash) { const t=document.querySelector(location.hash); if (t) t.scrollIntoView(); }
 }
 
 async function renderItem(n, key, isNew){
@@ -306,8 +365,27 @@ async function renderItem(n, key, isNew){
     const days = Math.max(0, Math.round((Date.now()-info.since)/86400000));
     let html = `<div class="box"><div class="label">THE REGISTER</div><div style="font-size:20px;font-weight:600">Somebody's since ${fmtDate(info.since)}.</div><div style="font-size:17px;color:var(--soft)">Belongs to ${esc(info.owner)}. Lives in ${esc(info.city)}.</div><div class="muted" style="font-size:15px">${days===0?'Adopted today. Has not noticed yet.':'Has been somebody\'s for '+days+' day'+(days===1?'':'s')+'. Has not noticed.'}</div></div>`;
     if (info.mine){
-      if (isNew) document.querySelector('h1.name').textContent = b.name+' is yours.';
-      html += `<p style="margin:0;font-size:16px;max-width:480px">${isNew?'It has left the shelf for good. We also sent this link to your email. ':''}This page is your own link. Keep it.</p><div class="dl">${FORMATS.map(f=>`<div><div><b>${f[1]}</b><span>${f[2]} · ${f[3]} × ${f[4]} · PNG</span></div><button class="btn2" type="button" data-fmt="${f[0]}">Save</button></div>`).join('')}</div>`;
+      const h1 = document.querySelector('h1.name');
+      let intro;
+      if (info.gift && isNew){
+        h1.textContent = b.name+' is ready to give.';
+        const link = location.origin+'/no/'+b.num+'?key='+encodeURIComponent(key);
+        intro = `<p style="margin:0;font-size:17px;max-width:480px">${info.toSent ? 'We are emailing '+esc(b.name)+' to them now, and sent you a copy. Want to tell them yourself too? Here is the link.' : 'Send them this link, in a message, a card or a text. Whoever has the link has '+esc(b.name)+'. We also emailed it to you.'}</p>
+          <div class="linkrow"><input id="giftLink" readonly value="${esc(link)}"><button class="btn2" type="button" id="copyLink">Copy link</button>${navigator.share?'<button class="btn2" type="button" id="shareLink">Share</button>':''}</div>`;
+        setTimeout(()=>{
+          $('copyLink').onclick=async()=>{ try{ await navigator.clipboard.writeText(link); toast('Link copied.'); }catch(e){ $('giftLink').select(); document.execCommand('copy'); toast('Link copied.'); } };
+          if ($('shareLink')) $('shareLink').onclick=()=>navigator.share({title:'A Nobody for you', text:(info.from&&info.from!=='Somebody'?info.from+' gave you a Nobody.':'Somebody gave you a Nobody.'), url:link}).catch(()=>{});
+        });
+      } else if (info.gift){
+        h1.textContent = b.name+' is yours.';
+        document.querySelector('.kicker').textContent = 'A gift · No. '+b.num;
+        intro = `<p style="margin:0;font-size:17px;max-width:480px">Somebody thought of you. ${esc(b.name)} now lives in ${esc(info.city)}, in the register and on the world map. This page is your own link. Keep it.</p>`;
+      } else {
+        if (isNew) h1.textContent = b.name+' is yours.';
+        intro = `<p style="margin:0;font-size:16px;max-width:480px">${isNew?'It has left the shelf for good. We also sent this link to your email. ':''}This page is your own link. Keep it.</p>`;
+      }
+      if (info.gift) html = `<div class="giftnote"><span class="from">A GIFT FROM ${esc((info.from||'Somebody').toUpperCase())}</span>${info.note?'“'+esc(info.note)+'”':'No note. It speaks for itself. It does not speak.'}</div>` + html;
+      html += intro + `<div class="dl">${FORMATS.map(f=>`<div><div><b>${f[1]}</b><span>${f[2]} · ${f[3]} × ${f[4]} · PNG</span></div><button class="btn2" type="button" data-fmt="${f[0]}">Save</button></div>`).join('')}</div>`;
     }
     st.outerHTML = html;
     document.querySelectorAll('[data-fmt]').forEach(btn=>btn.onclick=()=>savePng(n, btn.dataset.fmt));
@@ -318,24 +396,53 @@ async function renderItem(n, key, isNew){
 
   st.outerHTML = `<form class="box" id="adoptForm">
     <div style="font-size:17px">${esc(b.name)}, No. ${b.num} · €${DATA.price}</div>
-    <label class="f" for="city">Where will ${esc(b.name)} live? Your city</label>
-    <input id="city" type="text" list="cityList" required maxlength="40" placeholder="e.g. Helsinki" autocomplete="address-level2">
+    <div class="seg" role="group" aria-label="Who is it for?"><button type="button" data-for="me" aria-pressed="${giftMode?'false':'true'}">For me</button><button type="button" data-for="gift" aria-pressed="${giftMode?'true':'false'}">As a gift</button></div>
+    <div id="giftFields" ${giftMode?'':'hidden'} style="display:flex;flex-direction:column;gap:12px">
+      <label class="f" for="toName">Their name</label>
+      <input id="toName" type="text" maxlength="30" placeholder="e.g. Maya">
+      <div class="hint">Shown in the register as the owner. Leave empty for "Anonymous".</div>
+      <label class="f" for="toEmail">Their email <span class="muted" style="font-weight:400">(optional)</span></label>
+      <input id="toEmail" type="email" maxlength="120" placeholder="maya@example.com" autocomplete="off">
+      <div class="hint">We send ${esc(b.name)} to them right after you pay. Leave empty if you want to give the link yourself.</div>
+      <label class="f" for="note">A short note <span class="muted" style="font-weight:400">(optional)</span></label>
+      <textarea id="note" maxlength="200" placeholder="Saw this and thought of you."></textarea>
+      <label class="f" for="fromName">From</label>
+      <input id="fromName" type="text" maxlength="30" placeholder="Your name">
+    </div>
+    <label class="f" for="city" id="cityLabel">${giftMode?'Where do they live? Their city':'Where will '+esc(b.name)+' live? Your city'}</label>
+    <input id="city" type="text" list="cityList" required maxlength="40" placeholder="e.g. Helsinki" autocomplete="${giftMode?'off':'address-level2'}">
     <datalist id="cityList">${CITIES.map(c=>`<option value="${esc(c[0])}">`).join('')}</datalist>
-    <div class="muted" style="font-size:13px;margin-top:-4px">Shown on the world map. Only the city, never more.</div>
-    <label class="f" for="owner">Your name in the register <span class="muted" style="font-weight:400">(optional)</span></label>
-    <input id="owner" type="text" maxlength="30" placeholder="Anonymous">
+    <div class="hint">Shown on the world map. Only the city, never more.</div>
+    <div id="meFields" ${giftMode?'hidden':''} style="display:flex;flex-direction:column;gap:12px">
+      <label class="f" for="owner">Your name in the register <span class="muted" style="font-weight:400">(optional)</span></label>
+      <input id="owner" type="text" maxlength="30" placeholder="Anonymous">
+    </div>
     <label class="tick"><input type="checkbox" id="consent" required> Deliver it now. I understand the 14-day right of withdrawal ends when delivery starts.</label>
-    <button class="btn" type="submit" id="adoptBtn">Adopt ${esc(b.name)} · €${DATA.price}</button>
+    <button class="btn" type="submit" id="adoptBtn"></button>
     <div class="err" id="adoptErr" hidden></div>
     <div class="muted" style="font-size:13px">You pay on the next page, with Polar. ${esc(b.name)} is held for you for 15 minutes.</div>
   </form>`;
+  const label = ()=> (giftMode?'Give ':'Adopt ')+b.name+' · €'+DATA.price;
+  const setMode = gm=>{
+    giftMode = gm;
+    document.querySelectorAll('[data-for]').forEach(x=>x.setAttribute('aria-pressed', String((x.dataset.for==='gift')===gm)));
+    $('giftFields').hidden = !gm; $('meFields').hidden = gm;
+    $('cityLabel').textContent = gm ? 'Where do they live? Their city' : 'Where will '+b.name+' live? Your city';
+    $('adoptBtn').textContent = label();
+  };
+  document.querySelectorAll('[data-for]').forEach(x=>x.onclick=()=>setMode(x.dataset.for==='gift'));
+  setMode(giftMode);
   $('adoptForm').onsubmit = async e=>{
     e.preventDefault();
     const btn=$('adoptBtn'), err=$('adoptErr'); err.hidden=true; btn.disabled=true; btn.textContent='One moment…';
-    if (DATA.offline){ err.textContent='The shop is not connected here. This is a preview.'; err.hidden=false; btn.disabled=false; btn.textContent='Adopt '+b.name+' · €'+DATA.price; return; }
-    const d = await api('adopt', {no:n, city:$('city').value, owner:$('owner').value});
+    const fail = m=>{ err.textContent=m; err.hidden=false; btn.disabled=false; btn.textContent=label(); };
+    if (DATA.offline) return fail('The shop is not connected here. This is a preview.');
+    const body = giftMode
+      ? {no:n, city:$('city').value, gift:true, owner:$('toName').value, toEmail:$('toEmail').value, note:$('note').value, from:$('fromName').value}
+      : {no:n, city:$('city').value, owner:$('owner').value};
+    const d = await api('adopt', body);
     if (d.url){ location.href = d.url; return; }
-    err.textContent = d.error || 'Something went wrong.'; err.hidden=false; btn.disabled=false; btn.textContent='Adopt '+b.name+' · €'+DATA.price;
+    fail(d.error || 'Something went wrong.');
   };
 }
 
@@ -428,6 +535,8 @@ function route(){
   renderShelf();
 }
 document.addEventListener('click', e=>{
+  const h = e.target.closest('a[href^="#"]');
+  if (h){ const t=document.querySelector(h.getAttribute('href')); if (t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth'}); if (h.getAttribute('href')==='#shelf') giftMode = !!h.closest('#gift'); } return; }
   const a = e.target.closest('a[data-link]');
   if (!a || e.metaKey || e.ctrlKey || e.shiftKey) return;
   e.preventDefault(); history.pushState(null,'',a.getAttribute('href')); route();
