@@ -301,7 +301,7 @@ var STORIES={
 46:'Named Happes. Not especially happy. Not especially anything.',
 47:'Just remembered something embarrassing from 2009. Right now, actually.',
 48:'Sat down once. Has not seen a reason to get up.',
-49:'Wears a hard hat. Has never been near a building site. Likes to be ready.',
+49:'Wears a beanie indoors. Has never been cold. Likes to be ready.',
 50:'Last one on the first shelf. Wears the top hat to make up for it.',
 9001:'Was told it would snow. It did. Zobi has not commented.',
 9002:'Applied to pull a sleigh. Was not called back. Still smiling about it, which is worse.',
