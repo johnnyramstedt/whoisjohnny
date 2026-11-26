@@ -92,6 +92,10 @@ h2.sec{font-size:clamp(28px,3.4vw,40px);letter-spacing:-.03em;line-height:1.05;m
 .xcard.gone{opacity:.75}
 .xcard .tag{position:absolute;top:10px;left:10px;font-size:11px;font-weight:600;letter-spacing:.08em;padding:4px 8px;background:#c93c2b;color:#fff;border-radius:999px}
 @media (max-width:420px){.xgrid{grid-template-columns:1fr 1fr;gap:22px 12px}.xcard .story{font-size:13px}}
+.howto{max-width:520px;border-top:0;padding:4px 0 0}
+.howto summary{font-size:16px}
+.howto ul{margin:10px 0 0;padding:0 0 0 18px;color:var(--soft);font-size:15px;line-height:1.5}
+.howto li{margin:0 0 8px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:28px 18px;padding-bottom:88px}
 @media (max-width:420px){.grid{grid-template-columns:1fr 1fr;gap:22px 12px}.cap{font-size:14px;flex-wrap:wrap}}
 .card{text-decoration:none;display:flex;flex-direction:column;gap:10px;transition:transform .15s ease}
@@ -235,6 +239,7 @@ footer a{color:var(--muted)}
           <li><b>One Nobody that exists once.</b> Its name, its number, its traits. Nobody else will ever have it.</li>
           <li><b>A place in the register</b> and a dot on the world map.</li>
           <li><b>Pictures sized for Instagram, TikTok, Snapchat and Facebook.</b> PNG, ready to post or set as a profile picture.</li>
+          <li><b>A poster to print and hang up.</b> A4 (21 × 29.7 cm / 8.3 × 11.7 in), PDF, with its story, your city and the day it became yours.</li>
           <li><b>Your own link</b> by email. Care instructions included.</li>
           <li><b>New litters</b> keep arriving. When only 20 are left on the shelf, 30 new ones appear. Nobody knows what they look like until then.</li>
         </ul>
@@ -244,6 +249,7 @@ footer a{color:var(--muted)}
         <details><summary>What is a Nobody?</summary><p>A small figure with a name and a number. Drawn by Johnny, assembled by a machine. No two are the same, and no one ever gets made twice.</p></details>
         <details><summary>Why would I want one?</summary><p>No good reason. It does not do anything. It just stays, and makes an ordinary day slightly less ordinary. Some people collect them. Some give them away. Some set one as their profile picture and forget about it. All of these are correct.</p></details>
         <details><summary>How does giving one work?</summary><p>Pick a Nobody and choose "As a gift". Write their name, their city and a short note. If you add their email, we send it to them right away. If not, you get the gift link and send it yourself, in a message, a card or a text. Either way it is theirs from the start, and it shows up on the map in their city.</p></details>
+        <details><summary>How do I print the poster?</summary><p>Use A4 matte paper, 200–250 g/m², print at actual size (100 %) in best quality, borderless if your printer can. On US Letter, choose "Fit to page". No printer? Any print shop or photo kiosk can print the PDF on A4 matte for a euro or two. It fits a standard A4 frame, and looks best in a 30 × 40 cm frame with a white mat.</p></details>
         <details><summary>Can I collect them?</summary><p>Yes. Adopt as many as you like. Each one is different, and some traits are rarer than others. Once the shelf is empty of a kind, there will never be another one quite like it.</p></details>
         <details><summary>What are the rare ones?</summary><p>Every Nobody has traits. Under each one you see how often a trait turns up, for example "Crown · 1 in 14". The price is the same for all of them.</p></details>
         <details><summary>Can I swap or sell it?</summary><p>No. Once it is yours, it stays yours. It has nowhere else to go.</p></details>
@@ -416,10 +422,22 @@ async function renderItem(n, key, isNew){
         intro = `<p style="margin:0;font-size:16px;max-width:480px">${isNew?'It has left the shelf for good. We also sent this link to your email. ':''}This page is your own link. Keep it.</p>`;
       }
       if (info.gift) html = `<div class="giftnote"><span class="from">A GIFT FROM ${esc((info.from||'Somebody').toUpperCase())}</span>${info.note?'“'+esc(info.note)+'”':'No note. It speaks for itself. It does not speak.'}</div>` + html;
-      html += intro + `<div class="dl">${FORMATS.map(f=>`<div><div><b>${f[1]}</b><span>${f[2]} · ${f[3]} × ${f[4]} · PNG</span></div><button class="btn2" type="button" data-fmt="${f[0]}">Save</button></div>`).join('')}</div>`;
+      html += intro + `<div class="dl">${FORMATS.map(f=>`<div><div><b>${f[1]}</b><span>${f[2]} · ${f[3]} × ${f[4]} · PNG</span></div><button class="btn2" type="button" data-fmt="${f[0]}">Save</button></div>`).join('')}
+        <div><div><b>Poster A4</b><span>21 × 29.7 cm / 8.3 × 11.7 in · PDF · to print and hang up</span></div><button class="btn2" type="button" id="posterBtn">Save</button></div></div>
+        <details class="howto"><summary>How to print the poster</summary>
+          <ul>
+            <li><b>Paper.</b> A4, matte, 200–250 g/m² (heavy matte or matte photo paper). Ordinary 80 g copy paper works, but it curls and looks thin. Glossy works too, but it reflects behind glass.</li>
+            <li><b>Printer settings.</b> Actual size / 100 %. Best quality. Colour. Choose borderless if your printer has it. If not, a thin white edge is fine.</li>
+            <li><b>US Letter.</b> Choose "Fit to page". It still looks right.</li>
+            <li><b>No printer?</b> Take the PDF to a print shop or a photo kiosk and ask for A4 on 200 g matte. It usually costs a euro or two.</li>
+            <li><b>Frame.</b> Any standard A4 frame (21 × 29.7 cm / 8.3 × 11.7 in). It looks best in a 30 × 40 cm (12 × 16 in) frame with a white passe-partout (mat).</li>
+            <li><b>Your poster is yours alone.</b> It carries your city and the day you got it. You may print it as many times as you like for yourself, but not sell it.</li>
+          </ul>
+        </details>`;
     }
     st.outerHTML = html;
     document.querySelectorAll('[data-fmt]').forEach(btn=>btn.onclick=()=>savePng(n, btn.dataset.fmt));
+    if ($('posterBtn')) $('posterBtn').onclick=async()=>{ const bt=$('posterBtn'); bt.disabled=true; bt.textContent='Making…'; try{ await savePoster(n, {city:info.city, since:fmtDate(info.since)}); } catch(e){ toast('Could not make the poster. Try again.'); } bt.disabled=false; bt.textContent='Save'; };
     return;
   }
 
@@ -534,11 +552,55 @@ function makePng(n, W, H){
 async function savePng(n, key){
   const f=FORMATS.find(x=>x[0]===key), b=nobody(n);
   const blob = await makePng(n, f[3], f[4]);
-  const name = 'nobody-'+b.num+'-'+b.name.toLowerCase()+'-'+key+'.png';
-  const file = new File([blob], name, {type:'image/png'});
+  await saveBlob(blob, 'nobody-'+b.num+'-'+b.name.toLowerCase()+'-'+key+'.png', 'image/png', b.name);
+}
+
+// ---------------------------------------------------------------- poster (A4 PDF, 300 dpi)
+const loadImg = src => new Promise((res,rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=src; });
+async function posterJpeg(n, info){
+  const b=nobody(n), W=2480, H=3508, k=W/210; // px per mm
+  await Promise.all([document.fonts.load('600 40px "Instrument Sans"'), document.fonts.load('400 40px "Instrument Sans"')]).catch(()=>{});
+  const c=document.createElement('canvas'); c.width=W; c.height=H; const x=c.getContext('2d');
+  x.fillStyle=b.paper; x.fillRect(0,0,W,H);
+  const fig=await loadImg(b.src); const fw=150*k, fh=fw*266/200; x.drawImage(fig,(W-fw)/2,34*k,fw,fh);
+  const F=(w,mm)=>`${w} ${mm*k}px "Instrument Sans", Arial, sans-serif`;
+  const txt=(t,mx,my,w,mm,col,align)=>{ x.font=F(w,mm); x.fillStyle=col; x.textAlign=align||'left'; x.fillText(t,mx*k,my*k); };
+  txt('WhoIsJohnny?',14,22,600,4,'#151515');
+  txt(b.label,196,22,400,3.6,'#3a3833','right');
+  txt(b.name+'.',14,248,600,15,'#151515');
+  x.font=F(400,4.4); const words=(storyOf(n)||LINES[n%LINES.length]).split(' '), lines=[]; let cur='';
+  for(const w of words){ const t=(cur?cur+' ':'')+w; if(x.measureText(t).width>182*k && cur){ lines.push(cur); cur=w; } else cur=t; } lines.push(cur);
+  lines.slice(0,2).forEach((l,i)=>txt(l,14,258+i*6,400,4.4,'#3a3833'));
+  txt('Lives in '+info.city+' · Somebody\'s since '+info.since,14,276,400,3.2,'#3a3833');
+  txt('Drawn by Johnny. Assembled by a machine.',196,276,400,3.2,'#6a675f','right');
+  return await new Promise((res,rej)=>c.toBlob(bl=>bl?res(bl):rej(new Error('No image')),'image/jpeg',0.92));
+}
+// A one-page PDF holding the JPEG at full A4 size. No library needed.
+async function jpegToPdf(jpeg, wPx, hPx){
+  const img=new Uint8Array(await jpeg.arrayBuffer()), enc=new TextEncoder(), parts=[], offs=[]; let len=0;
+  const add=p=>{ const u=typeof p==='string'?enc.encode(p):p; parts.push(u); len+=u.length; };
+  const obj=(i,body)=>{ offs[i]=len; add(i+' 0 obj\n'); body(); add('\nendobj\n'); };
+  const PW=595.28, PH=841.89, content='q '+PW+' 0 0 '+PH+' 0 0 cm /Im0 Do Q';
+  add('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n');
+  obj(1,()=>add('<< /Type /Catalog /Pages 2 0 R >>'));
+  obj(2,()=>add('<< /Type /Pages /Kids [3 0 R] /Count 1 >>'));
+  obj(3,()=>add('<< /Type /Page /Parent 2 0 R /MediaBox [0 0 '+PW+' '+PH+'] /Resources << /XObject << /Im0 5 0 R >> >> /Contents 4 0 R >>'));
+  obj(4,()=>add('<< /Length '+content.length+' >>\nstream\n'+content+'\nendstream'));
+  obj(5,()=>{ add('<< /Type /XObject /Subtype /Image /Width '+wPx+' /Height '+hPx+' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length '+img.length+' >>\nstream\n'); add(img); add('\nendstream'); });
+  const xref=len; add('xref\n0 6\n0000000000 65535 f \n'+[1,2,3,4,5].map(i=>String(offs[i]).padStart(10,'0')+' 00000 n \n').join(''));
+  add('trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n'+xref+'\n%%EOF');
+  return new Blob(parts,{type:'application/pdf'});
+}
+async function savePoster(n, info){
+  const b=nobody(n), pdf=await jpegToPdf(await posterJpeg(n, info), 2480, 3508);
+  await saveBlob(pdf, 'nobody-'+b.num+'-'+b.name.toLowerCase()+'-poster-a4.pdf', 'application/pdf', b.name);
+}
+
+async function saveBlob(blob, name, type, title){
+  const file = new File([blob], name, {type});
   const touch = matchMedia('(pointer:coarse)').matches;
   if (touch && navigator.canShare && navigator.canShare({files:[file]})){
-    try { await navigator.share({files:[file], title:b.name}); return; } catch(e){ if (e.name==='AbortError') return; }
+    try { await navigator.share({files:[file], title}); return; } catch(e){ if (e.name==='AbortError') return; }
   }
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click();
   setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 1000);
