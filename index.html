@@ -77,6 +77,21 @@ h2.sec{font-size:clamp(28px,3.4vw,40px);letter-spacing:-.03em;line-height:1.05;m
 .giftnote .from{display:block;font-size:13px;letter-spacing:.08em;color:var(--muted);margin-bottom:6px}
 .linkrow{display:flex;gap:8px;flex-wrap:wrap;max-width:520px}
 .linkrow input{flex:1 1 260px;font-size:14px;padding:10px 12px;border:1px solid #b9b5aa;border-radius:8px;background:#fff;min-height:42px}
+.xmas{background:#1f5c33;color:#fbfaf6;padding:64px 0 72px;margin:0 0 56px;border-bottom:2px solid var(--ink);background-image:radial-gradient(#ffffff33 1.6px,transparent 1.8px),radial-gradient(#ffffff22 1.2px,transparent 1.4px);background-size:44px 44px,27px 27px;background-position:0 0,13px 19px}
+.xhead{display:flex;flex-direction:column;gap:10px;max-width:640px;margin-bottom:32px}
+.xmas .kick{font-size:13px;letter-spacing:.1em;font-weight:600;color:#f3d34a}
+.xmas h2{margin:0;font-size:clamp(44px,6.4vw,80px);line-height:.95;letter-spacing:-.04em;font-weight:600}
+.xmas .xhead p{margin:0;font-size:19px;color:#dfe8de}
+.xgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:28px 20px}
+.xcard{text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:8px;transition:transform .15s ease}
+.xcard:hover{transform:translateY(-4px)}
+.xcard .pic{border:2px solid #151515}
+.xcard .cap{color:#fbfaf6}
+.xcard .cap .muted{color:#b9cbb9}
+.xcard .story{font-size:14px;line-height:1.4;color:#dfe8de}
+.xcard.gone{opacity:.75}
+.xcard .tag{position:absolute;top:10px;left:10px;font-size:11px;font-weight:600;letter-spacing:.08em;padding:4px 8px;background:#c93c2b;color:#fff;border-radius:999px}
+@media (max-width:420px){.xgrid{grid-template-columns:1fr 1fr;gap:22px 12px}.xcard .story{font-size:13px}}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:28px 18px;padding-bottom:88px}
 @media (max-width:420px){.grid{grid-template-columns:1fr 1fr;gap:22px 12px}.cap{font-size:14px;flex-wrap:wrap}}
 .card{text-decoration:none;display:flex;flex-direction:column;gap:10px;transition:transform .15s ease}
@@ -170,9 +185,17 @@ footer a{color:var(--muted)}
     <div class="wrap hero">
       <h1 class="big">Pick a Nobody.</h1>
       <p class="lede">Small figures with nowhere to be. Each one exists once, with its own name and number. Keep one, collect a few, or give one away. Then watch where they end up.</p>
-      <div class="ctas"><a class="btn" href="#shelf">Pick one · <span class="price">€9</span></a><a class="btn2" href="#gift">Give one as a gift</a></div>
+      <div class="ctas"><a class="btn" href="#shelf">Pick one · <span class="price">€9</span></a><a class="btn2" href="#gift">Give one as a gift</a><a class="btn2" href="#xmas">Christmas edition</a></div>
     </div>
     <div class="parade" aria-label="Nobodies walking by"><div class="track" id="parade"></div></div>
+    <section class="xmas" id="xmas"><div class="wrap">
+      <div class="xhead">
+        <div class="kick">CHRISTMAS EDITION</div>
+        <h2>Ten Christmas Nobodies.</h2>
+        <p>Only ten. There will never be more. Keep one, or give one as the least necessary present under the tree. <span class="price">€9</span>.</p>
+      </div>
+      <div class="xgrid" id="xgrid"></div>
+    </div></section>
     <div class="wrap"><a class="out" href="/world" data-link id="outStrip"><span id="outText">The first Nobodies are leaving the shelf.</span> <b>See the map →</b></a></div>
     <div class="gift" id="gift"><div class="wrap">
       <div class="gift-text">
@@ -294,7 +317,7 @@ footer a{color:var(--muted)}
 <div class="toast" id="toast" role="status" hidden></div>
 
 <script type="module">
-import { nobody, traitsOf, pad, CITIES, cityRow, MAP_SVG } from '/assets/nobody.js';
+import { nobody, traitsOf, pad, CITIES, cityRow, MAP_SVG, storyOf, XMAS_FROM, XMAS_TO } from '/assets/nobody.js';
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -314,7 +337,7 @@ async function api(path, body){
 
 async function load(){
   try { DATA = await api('shelf'); if (DATA.error) throw new Error(DATA.error); }
-  catch(e){ console.warn('Shelf offline, showing a preview.', e); const f=[]; for(let i=1;i<=50;i++) f.push(i); DATA={price:9,max:50,newFrom:0,free:f,held:[],owned:[],offline:true}; }
+  catch(e){ console.warn('Shelf offline, showing a preview.', e); const f=[]; for(let i=1;i<=50;i++) f.push(i); const x=[]; for(let i=XMAS_FROM;i<=XMAS_TO;i++) x.push(i); DATA={price:9,max:50,newFrom:0,free:f,xmas:x,held:[],owned:[],offline:true}; }
   $('cntShelf').textContent = DATA.free.length;
   $('cntWorld').textContent = DATA.owned.length;
   document.querySelectorAll('.price').forEach(e=>e.textContent='€'+DATA.price);
@@ -333,11 +356,19 @@ function renderShelf(){
   document.title = 'WhoIsJohnny? Pick a Nobody.';
   $('grid').innerHTML = DATA.free.map(n=>{
     const b=nobody(n), isNew = DATA.newFrom>50 && n>=DATA.newFrom;
-    return `<a class="card" href="/no/${b.num}" data-link><div class="pic" style="background:${b.paper}"><img src="${b.src}" alt="${esc(b.name)}, No. ${b.num}" loading="lazy">${isNew?'<span class="badge">NEW</span>':''}</div><div class="cap"><span><b>${esc(b.name)}</b> <span class="muted">No. ${b.num}</span></span><span class="muted">€${DATA.price}</span></div></a>`;
+    return `<a class="card" href="/no/${b.num}" data-link><div class="pic" style="background:${b.paper}"><img src="${b.src}" alt="${esc(b.name)}, ${b.label}" loading="lazy">${isNew?'<span class="badge">NEW</span>':''}</div><div class="cap"><span><b>${esc(b.name)}</b> <span class="muted">${b.label}</span></span><span class="muted">€${DATA.price}</span></div></a>`;
   }).join('');
   let pick = DATA.free.filter((n,i)=>i%3===0).slice(0,14); if (pick.length<8) pick=DATA.free.slice(0,14);
-  const one = pick.map((n,i)=>{ const b=nobody(n); return `<a href="/no/${b.num}" data-link aria-label="${esc(b.name)}, No. ${b.num}"><div class="hop" style="animation-delay:${(-(i*2.3)%9).toFixed(1)}s"><div class="walker" style="animation-delay:${(-(i*.37)%.9).toFixed(2)}s;animation-duration:${(.8+(n%5)*.08).toFixed(2)}s"><img src="${b.src}" alt=""></div></div></a>`; }).join('');
+  (DATA.xmas||[]).slice(0,4).forEach((x,i)=>pick.splice(1+i*3,0,x));
+  const one = pick.map((n,i)=>{ const b=nobody(n); return `<a href="/no/${b.num}" data-link aria-label="${esc(b.name)}, ${b.label}"><div class="hop" style="animation-delay:${(-(i*2.3)%9).toFixed(1)}s"><div class="walker" style="animation-delay:${(-(i*.37)%.9).toFixed(2)}s;animation-duration:${(.8+(n%5)*.08).toFixed(2)}s"><img src="${b.src}" alt=""></div></div></a>`; }).join('');
   $('parade').innerHTML = one+one;
+  const xFree = new Set(DATA.xmas||[]), xOwned = {}; DATA.owned.forEach(o=>xOwned[o.no]=o);
+  const xs=[]; for(let i=XMAS_FROM;i<=XMAS_TO;i++) xs.push(i);
+  $('xgrid').innerHTML = xs.map(n=>{
+    const b=nobody(n), o=xOwned[n], free=xFree.has(n);
+    const right = o ? 'Lives in '+esc(o.city) : free ? '€'+DATA.price : 'Being adopted';
+    return `<a class="xcard${o?' gone':''}" href="/no/${b.num}" data-link><div class="pic" style="background:${b.paper}"><img src="${b.src}" alt="${esc(b.name)}, ${b.label}" loading="lazy">${o?'<span class="tag">ADOPTED</span>':''}</div><div class="cap"><span><b>${esc(b.name)}</b> <span class="muted">${b.label}</span></span><span class="muted">${right}</span></div><div class="story">${esc(storyOf(n))}</div></a>`;
+  }).join('');
   const own = DATA.owned, nc = new Set(own.map(o=>o.city)).size;
   $('outText').textContent = own.length ? `${own.length} Nobod${own.length===1?'y lives':'ies live'} out in the world, in ${nc} cit${nc===1?'y':'ies'}.` : 'The first Nobodies are about to leave the shelf.';
   const g = nobody(DATA.free[Math.min(4, DATA.free.length-1)] || 7);
@@ -348,14 +379,14 @@ function renderShelf(){
 async function renderItem(n, key, isNew){
   show('vItem');
   const b = nobody(n);
-  document.title = b.name+', No. '+b.num+' · WhoIsJohnny?';
-  const traits = traitsOf(n).map(t=>`<span class="chip"><b>${esc(t.label)}</b> <span class="muted">· 1 in ${t.odds}</span></span>`).join('');
-  const head = `<a class="back" href="/" data-link>← All Nobodies</a><div class="kicker">No. ${b.num}</div>`;
-  const pic = `<div class="big-pic" style="background:${b.paper}"><img src="${b.src}" alt="${esc(b.name)}, No. ${b.num}"></div>`;
-  $('item').innerHTML = `<div class="item">${pic}<div class="side">${head}<h1 class="name">${esc(b.name)}.</h1><p class="line">${LINES[n%LINES.length]}</p><div class="chips">${traits}</div><div id="state" class="muted">One moment…</div></div></div>`;
+  document.title = b.name+', '+b.label+' · WhoIsJohnny?';
+  const traits = traitsOf(n).map(t=>`<span class="chip"><b>${esc(t.label)}</b> <span class="muted">· ${t.text||'1 in '+t.odds}</span></span>`).join('');
+  const head = `<a class="back" href="/" data-link>← All Nobodies</a><div class="kicker">${b.label}</div>`;
+  const pic = `<div class="big-pic" style="background:${b.paper}"><img src="${b.src}" alt="${esc(b.name)}, ${b.label}"></div>`;
+  $('item').innerHTML = `<div class="item">${pic}<div class="side">${head}<h1 class="name">${esc(b.name)}.</h1><p class="line">${esc(storyOf(n)||LINES[n%LINES.length])}</p><div class="chips">${traits}</div><div id="state" class="muted">One moment…</div></div></div>`;
 
   let info;
-  if (DATA.offline) info = {exists:n<=50, owned:false, held:false};
+  if (DATA.offline) info = {exists:n<=50||(n>=XMAS_FROM&&n<=XMAS_TO), owned:false, held:false};
   else info = await api('nobody?no='+n+(key?'&key='+encodeURIComponent(key):''));
   const st = $('state'); if (!st) return;
 
@@ -378,7 +409,7 @@ async function renderItem(n, key, isNew){
         });
       } else if (info.gift){
         h1.textContent = b.name+' is yours.';
-        document.querySelector('.kicker').textContent = 'A gift · No. '+b.num;
+        document.querySelector('.kicker').textContent = 'A gift · '+b.label;
         intro = `<p style="margin:0;font-size:17px;max-width:480px">Somebody thought of you. ${esc(b.name)} now lives in ${esc(info.city)}, in the register and on the world map. This page is your own link. Keep it.</p>`;
       } else {
         if (isNew) h1.textContent = b.name+' is yours.';
@@ -395,7 +426,7 @@ async function renderItem(n, key, isNew){
   if (info.held){ st.outerHTML = `<p class="line">Somebody is adopting ${esc(b.name)} right now. Pick another, or come back in 15 minutes.</p>`; return; }
 
   st.outerHTML = `<form class="box" id="adoptForm">
-    <div style="font-size:17px">${esc(b.name)}, No. ${b.num} · €${DATA.price}</div>
+    <div style="font-size:17px">${esc(b.name)}, ${b.label} · €${DATA.price}</div>
     <div class="seg" role="group" aria-label="Who is it for?"><button type="button" data-for="me" aria-pressed="${giftMode?'false':'true'}">For me</button><button type="button" data-for="gift" aria-pressed="${giftMode?'true':'false'}">As a gift</button></div>
     <div id="giftFields" ${giftMode?'':'hidden'} style="display:flex;flex-direction:column;gap:12px">
       <label class="f" for="toName">Their name</label>
@@ -479,7 +510,7 @@ function renderWorld(){
   $('cities').innerHTML = (cities.length?`<button type="button" data-c="" class="${mapCity?'':'on'}">Everywhere</button>`:'') + cities.map(c=>`<button type="button" data-c="${esc(c)}" class="${mapCity===c?'on':''}">${esc(c)} ${byCity[c]}</button>`).join('');
   $('cities').querySelectorAll('button').forEach(b=>b.onclick=()=>{ mapCity=b.dataset.c||null; renderWorld(); });
   $('regTitle').textContent = mapCity ? 'Living in '+mapCity : 'The register';
-  $('reg').innerHTML = owned.filter(o=>!mapCity||o.city===mapCity).sort((a,b)=>b.since-a.since).map(o=>{ const b=nobody(o.no); return `<a href="/no/${b.num}" data-link><div class="pic" style="background:${b.paper}"><img src="${b.src}" alt="${esc(b.name)}, No. ${b.num}" loading="lazy"></div><span><b>${esc(b.name)}</b> <span class="muted">No. ${b.num}</span><br><span style="color:var(--soft)">${esc(o.owner)} · ${esc(o.city)}</span></span></a>`; }).join('');
+  $('reg').innerHTML = owned.filter(o=>!mapCity||o.city===mapCity).sort((a,b)=>b.since-a.since).map(o=>{ const b=nobody(o.no); return `<a href="/no/${b.num}" data-link><div class="pic" style="background:${b.paper}"><img src="${b.src}" alt="${esc(b.name)}, ${b.label}" loading="lazy"></div><span><b>${esc(b.name)}</b> <span class="muted">${b.label}</span><br><span style="color:var(--soft)">${esc(o.owner)} · ${esc(o.city)}</span></span></a>`; }).join('');
 }
 
 // ---------------------------------------------------------------- pictures
@@ -490,7 +521,7 @@ function exportSvg(n, W, H){
   const inner = b.svg.replace('<svg ','<svg x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+fw.toFixed(1)+'" height="'+fh.toFixed(1)+'" ');
   const fs=Math.round(W*0.028), by = ratio>1.6 ? H*0.9 : H-fs*2;
   const t = (tx,anchor,xx)=>`<text x="${xx}" y="${by}" text-anchor="${anchor}" font-family="Arial, Helvetica, sans-serif" font-size="${fs}" font-weight="700" fill="#1a1a1a" opacity=".75">${tx}</text>`;
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><rect width="100%" height="100%" fill="${b.paper}"/>${inner}${t('No. '+b.num+' · '+esc(b.name),'start',fs*2)}${t('whoisjohnny.com','end',W-fs*2)}</svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><rect width="100%" height="100%" fill="${b.paper}"/>${inner}${t(b.label+' · '+esc(b.name),'start',fs*2)}${t('whoisjohnny.com','end',W-fs*2)}</svg>`;
 }
 function makePng(n, W, H){
   return new Promise((res,rej)=>{
