@@ -20,6 +20,9 @@ const FROM = 'WhoIsJohnny? <hello@whoisjohnny.com>';
 // No payment, no Polar: the email is asked on the page. One per email address.
 const XMAS_FREE_UNTIL = Date.parse('2026-12-25T22:00:00Z');
 const xmasFree = () => Date.now() < XMAS_FREE_UNTIL;
+// For now every Nobody is free: no payment, no Polar. Set to false to bring payment back.
+const ALL_FREE = true;
+const FREE_PER_EMAIL = 5; // regular Nobodies one email can take while everything is free
 
 export async function onRequest(ctx) {
   const { request, env } = ctx;
@@ -126,7 +129,7 @@ async function shelf(env, url, ctx) {
 
   const held = Object.keys(ix.holds).map(Number).filter(n => ix.holds[n].u > now && !ix.owned[n]);
   const owned = Object.keys(ix.owned).map(Number).map(n => ({ no: n, owner: ix.owned[n].o, city: ix.owned[n].c, since: ix.owned[n].s }));
-  return { price: PRICE, xmasFree: xmasFree(), xmasFreeUntil: XMAS_FREE_UNTIL, max: ix.max, newFrom: ix.lastLitter || 0, free: freeList(ix), xmas: freeXmas(ix), held, owned };
+  return { price: ALL_FREE ? 0 : PRICE, allFree: ALL_FREE, xmasFree: xmasFree(), xmasFreeUntil: XMAS_FREE_UNTIL, max: ix.max, newFrom: ix.lastLitter || 0, free: freeList(ix), xmas: freeXmas(ix), held, owned };
 }
 
 // ---------------------------------------------------------------- adopt
@@ -153,15 +156,24 @@ async function adopt(request, env, url, ctx) {
     ? { nobody: no, nobody_name: nameOf(no), city, owner: owner || 'Anonymous', gift: '1', from: from || 'Somebody', note, to_email: toEmail }
     : { nobody: no, nobody_name: nameOf(no), city, owner: owner || 'Anonymous' };
 
-  // Free Christmas Nobody: adopted at once, the link goes to the email given.
-  if (isXmas(no) && xmasFree()) {
+  // Free Nobody (all of them for now, Christmas ones until Christmas): adopted at once, the link goes to the email given.
+  const xm = isXmas(no);
+  if (ALL_FREE || (xm && xmasFree())) {
     const email = clean(body.email, 120).toLowerCase();
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json({ error: 'Please give your email, so we can send you the link.' }, 400);
-    if (await env.NOBODIES.get('xfree:' + email)) return json({ error: 'This email already got a Christmas Nobody. One each, so there are some left for others.' }, 409);
+    let count = 0;
+    if (xm) {
+      if (await env.NOBODIES.get('xfree:' + email)) return json({ error: 'This email already got a Christmas Nobody. One each, so there are some left for others.' }, 409);
+    } else {
+      const got = await env.NOBODIES.get('free:' + email, 'json');
+      count = got && got.n || 0;
+      if (count >= FREE_PER_EMAIL) return json({ error: 'This email already has ' + FREE_PER_EMAIL + ' free Nobodies. Leave some for others.' }, 409);
+    }
     const co = { id: 'free-' + crypto.randomUUID(), metadata: meta, customer_email: email };
     const r = await finalize(env, co, ix);
     await putIndex(env, ix);
-    await env.NOBODIES.put('xfree:' + email, JSON.stringify({ no, t: Date.now() }));
+    if (xm) await env.NOBODIES.put('xfree:' + email, JSON.stringify({ no, t: Date.now() }));
+    else await env.NOBODIES.put('free:' + email, JSON.stringify({ n: count + 1, t: Date.now() }));
     if (ctx) ctx.waitUntil(deliver(env, co, r, url.origin));
     return json({ ok: true, no, key: r.key });
   }
@@ -220,7 +232,7 @@ const btn = (href, label) => `<p style="margin:0 0 24px"><a href="${href}" style
 const page = inner => `<!doctype html><html><body style="margin:0;background:#f7f6f2;font-family:Arial,Helvetica,sans-serif;color:#151515"><div style="max-width:520px;margin:0 auto;padding:32px 24px"><p style="font-size:13px;color:#6a675f;margin:0 0 8px">WhoIsJohnny?</p>${inner}${FOOT}</div></body></html>`;
 const linkLine = link => `<p style="font-size:13px;line-height:1.5;color:#6a675f;margin:0 0 28px;word-break:break-all">${link}</p>`;
 
-// After a paid adoption: email the buyer, and the receiver if it is a gift with an email.
+// After an adoption: email the buyer, and the receiver if it is a gift with an email.
 async function deliver(env, co, r, origin) {
   if (!env.RESEND_KEY) return;
   const link = origin + '/no/' + pad(r.no) + '?key=' + r.key, rec = r.rec, name = esc(nameOf(r.no)), lab = label(r.no);
@@ -275,7 +287,7 @@ async function one(env, url) {
     return json({ exists: true, owned: true, owner: o.o, city: o.c, since: o.s, mine, ...extra });
   }
   const h = ix.holds[no];
-  return json({ exists: true, owned: false, held: !!(h && h.u > Date.now()), price: isXmas(no) && xmasFree() ? 0 : PRICE });
+  return json({ exists: true, owned: false, held: !!(h && h.u > Date.now()), price: ALL_FREE || (isXmas(no) && xmasFree()) ? 0 : PRICE });
 }
 
 // ---------------------------------------------------------------- news signup
