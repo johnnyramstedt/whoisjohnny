@@ -11,7 +11,7 @@ export async function onRequestGet({ request, env, params }) {
   if (!n) return page;
   try {
     const t = textOf(n), title = t + ' · WhoIsJohnny?';
-    const desc = 'A deadpan text, chosen by Johnny. Free pictures for your phone and posters to print.';
+    const desc = 'A deadpan text, chosen by Johnny. Pictures for your phone and posters to print.';
     const img = url.origin + '/og/t' + tpad(n) + '.png';
     const set = v => ({ element(e) { e.setAttribute('content', v); } });
     return new HTMLRewriter()

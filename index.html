@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>WhoIsJohnny? Deadpan texts.</title>
-<meta name="description" content="Deadpan texts, chosen by Johnny. Pick one, keep it or send it as a gift. Pictures for Instagram, TikTok, Snapchat, Facebook, LinkedIn and Pinterest, and posters to print in A4 and 50 × 70 cm. Free.">
+<meta name="description" content="Deadpan texts, chosen by Johnny. Pick one, keep it or send it as a gift. Pictures for Instagram, TikTok, Snapchat, Facebook, LinkedIn and Pinterest, and posters to print in A4 and 50 × 70 cm.">
 <meta property="og:title" content="WhoIsJohnny? Deadpan texts.">
-<meta property="og:description" content="Deadpan texts. Pictures for your phone, posters for your wall. Free.">
+<meta property="og:description" content="Deadpan texts. Pictures for your phone, posters for your wall.">
 <meta property="og:image" content="https://whoisjohnny.com/og/t001.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -318,7 +318,7 @@ footer a{color:var(--muted)}
   <section id="vTexts" hidden>
     <div class="wrap hero">
       <h1 class="big">Pick a text.</h1>
-      <p class="lede">Short deadpan texts, chosen by Johnny. Pick one for yourself, or send it to somebody as a gift. Free.</p>
+      <p class="lede">Short deadpan texts, chosen by Johnny. Pick one for yourself, or send it to somebody as a gift.</p>
       <p class="muted">Every text comes with pictures for Instagram, TikTok, Snapchat, Facebook, LinkedIn and Pinterest, an A4 poster (21 × 29.7 cm / 8.3 × 11.7 in) and a 50 × 70 cm poster (19.7 × 27.6 in), both as PDFs to print. Give your email and the link comes there. One text per email address.</p>
     </div>
     <div class="wrap">
@@ -358,7 +358,7 @@ footer a{color:var(--muted)}
   <section id="vAbout" hidden><div class="wrap about">
     <h1>About the texts.</h1>
     <p>Short deadpan lines on white, yellow or black paper. Johnny chooses them. They say what everybody thinks and nobody prints.</p>
-    <p>They are free. Pick one, give your email, and you get a link with pictures for your phone and posters for your wall. One text per email address, so choose well. Or send it to somebody else, with a short note.</p>
+    <p>Pick one, give your email, and you get a link with pictures for your phone and posters for your wall. One text per email address, so choose well. Or send it to somebody else, with a short note.</p>
     <h2>What people do with them</h2>
     <ul>
       <li><b>Post it.</b> Instagram, TikTok, Snapchat, Facebook, LinkedIn, Pinterest. The pictures are already the right size. Tag @whoisjohnny2020, and we may share it.</li>
@@ -367,7 +367,7 @@ footer a{color:var(--muted)}
     </ul>
     <h2>About the project</h2>
     <p>WhoIsJohnny? is an art project by Johnny Ramstedt, a Helsinki-based artist.</p>
-    <a class="btn" href="/" data-link>Pick a text · Free</a>
+    <a class="btn" href="/" data-link>Pick a text</a>
   </div></section>
 
   <!-- TERMS -->
@@ -378,8 +378,8 @@ footer a{color:var(--muted)}
     <p>whoisjohnny.com is run by Johnny Ramstedt, a private individual in Finland. Contact: hello@whoisjohnny.com.</p>
     <h3>2. What you get</h3>
     <p>One text: a link to a page where you can download pictures of it for Instagram, TikTok, Snapchat, Facebook, LinkedIn and Pinterest, and posters as PDFs in A4 (21 × 29.7 cm / 8.3 × 11.7 in) and 50 × 70 cm (19.7 × 27.6 in). Nothing physical is sent; printing is up to you.</p>
-    <h3>3. Free, one per email</h3>
-    <p>The texts are free. Each email address can get one text, for yourself or as a gift. The link is sent to your email, and you can use it as many times as you like. If you send it as a gift, the link is the gift. If you give us the receiver's email, we send the link to them as well.</p>
+    <h3>3. One per email</h3>
+    <p>Each email address can get one text, for yourself or as a gift. The link is sent to your email, and you can use it as many times as you like. If you send it as a gift, the link is the gift. If you give us the receiver's email, we send the link to them as well.</p>
     <h3>4. What you may do with it</h3>
     <p>You may post the pictures on your own social media and print the posters for yourself, at home or at a print shop, and hang them up or give the print away. You may not sell it or prints of it, put it on products you sell or use it in advertising. Copyright stays with Johnny Ramstedt.</p>
     <h3>5. If something goes wrong</h3>
@@ -852,7 +852,7 @@ async function renderText(n, key, isNew){
   const t=textOf(n), slug=slugOf(n), file=slug.slice(0,48);
   document.title = t+' · WhoIsJohnny?';
   const big = drawText(n, 960, 1358, 'thumb').toDataURL('image/png');
-  $('item').innerHTML = `<div class="item"><div class="tleft"><div class="big-pic tpic"><img src="${big}" alt="${esc(t)}"></div><div class="room room1" aria-label="The text framed on a wall"><div class="fr"><img src="${big}" alt=""></div><div class="bench"></div></div><p class="mock">Mock-up. Frames are not included.</p></div><div class="side"><a class="back" href="/" data-link>← All texts</a><div class="kicker">Deadpan · Free</div><h1 class="name tname">${esc(t)}</h1><div id="state" class="muted">One moment…</div></div></div>`;
+  $('item').innerHTML = `<div class="item"><div class="tleft"><div class="big-pic tpic"><img src="${big}" alt="${esc(t)}"></div><div class="room room1" aria-label="The text framed on a wall"><div class="fr"><img src="${big}" alt=""></div><div class="bench"></div></div><p class="mock">Mock-up. Frames are not included.</p></div><div class="side"><a class="back" href="/" data-link>← All texts</a><div class="kicker">Deadpan</div><h1 class="name tname">${esc(t)}</h1><div id="state" class="muted">One moment…</div></div></div>`;
 
   let info;
   if (DATA.offline || !key) info = {exists:true, mine:false};
@@ -908,9 +908,9 @@ async function renderText(n, key, isNew){
     <label class="consent"><input type="checkbox" id="newsOk"><span>${esc(NEWS_CONSENT)}</span></label>
     <button class="btn" type="submit" id="adoptBtn"></button>
     <div class="err" id="adoptErr" hidden></div>
-    <div class="muted" style="font-size:13px">Free. One text per email address, so choose well. <a href="/privacy" data-link style="color:inherit">Privacy</a>.</div>
+    <div class="muted" style="font-size:13px">One text per email address, so choose well. <a href="/privacy" data-link style="color:inherit">Privacy</a>.</div>
   </form>`;
-  const label = ()=> giftMode ? 'Send it as a gift · Free' : 'Get it · Free';
+  const label = ()=> giftMode ? 'Send it as a gift' : 'Get it';
   const setMode = gm=>{
     giftMode = gm;
     document.querySelectorAll('[data-for]').forEach(x=>x.setAttribute('aria-pressed', String((x.dataset.for==='gift')===gm)));
