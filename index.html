@@ -183,6 +183,18 @@ h1.name{margin:-10px 0 0;font-size:clamp(56px,7vw,96px);line-height:.95;font-wei
 .teaser{max-width:760px;margin:-36px 0 0;padding:0 0 56px;font-size:18px;line-height:1.55;color:var(--soft)}
 .teaser a{color:var(--ink);font-weight:600}
 
+.tpic{background:#fff;border:1px solid var(--line)}
+.tpic img{aspect-ratio:210/297!important;object-fit:cover}
+.item .big-pic.tpic img{aspect-ratio:210/297}
+.tgrid{grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
+.card.gone{opacity:.6}
+.tband{border-top:2px solid var(--ink);padding:64px 0 0}
+.thead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:20px 40px;margin-bottom:32px}
+.thead>div{max-width:620px;display:flex;flex-direction:column;gap:10px}
+.thead .kick{font-size:13px;letter-spacing:.1em;color:var(--muted);font-weight:600}
+.thead h2{margin:0;font-size:clamp(44px,6vw,76px);line-height:.95;letter-spacing:-.04em;font-weight:600;color:#e4002b}
+.thead p{margin:0;font-size:19px;color:var(--soft)}
+.tband .grid{padding-bottom:64px}
 footer{border-top:1px solid var(--line);margin-top:0}
 footer .wrap{padding:28px 24px 48px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px 32px;font-size:14px;color:var(--muted)}
 footer b{color:var(--ink);font-weight:600}
@@ -196,6 +208,7 @@ footer a{color:var(--muted)}
   <a class="word" href="/" data-link>WhoIsJohnny?</a>
   <nav>
     <a href="/" data-link id="navShelf">Nobodies · <span id="cntShelf">50</span> on the shelf</a>
+    <a href="/texts" data-link id="navTexts">Texts · <span id="cntTexts">94</span> left</a>
     <a href="/world" data-link id="navWorld">World · <span id="cntWorld">0</span> adopted</a>
     <a href="/about" data-link id="navAbout">About</a>
   </nav>
@@ -232,6 +245,11 @@ footer a{color:var(--muted)}
     </div></div>
 
     <div class="wrap" id="shelf"><h2 class="sec">On the shelf now</h2><p class="sub">Every one is different. When one is gone, it is gone.</p><div class="grid" id="grid"></div></div>
+
+    <div class="tband"><div class="wrap">
+      <div class="thead"><div><div class="kick">ALSO ON THE SHELF</div><h2>Texts.</h2><p><span class="tcnt">94</span> deadpan texts, chosen by Johnny. Each one exists once, like a Nobody. Adopt one for yourself or give it away. Pictures for your phone, and posters to print in A4 and 50 × 70 cm (19.7 × 27.6 in). Free.</p></div><a class="btn" href="/texts" data-link>See all texts</a></div>
+      <div class="grid tgrid" id="tteaser"></div>
+    </div></div>
 
     <div class="band"><div class="wrap">
       <div>
@@ -278,6 +296,16 @@ footer a{color:var(--muted)}
     </div>
   </section>
 
+  <!-- THE TEXTS -->
+  <section id="vTexts" hidden>
+    <div class="wrap hero">
+      <h1 class="big">Pick a text.</h1>
+      <p class="lede">Short deadpan texts, chosen by Johnny. Each one exists once, with one owner, in one city. When it is gone, it is gone.</p>
+      <p class="muted">Every text comes with pictures for Instagram, TikTok, Snapchat and Facebook, an A4 poster (21 × 29.7 cm / 8.3 × 11.7 in) and a 50 × 70 cm poster (19.7 × 27.6 in), both as PDFs to print. Free.</p>
+    </div>
+    <div class="wrap"><div class="grid tgrid" id="tgrid"></div></div>
+  </section>
+
   <!-- ONE NOBODY -->
   <section id="vItem" hidden><div class="wrap" id="item"></div></section>
 
@@ -290,7 +318,7 @@ footer a{color:var(--muted)}
 
   <!-- THE WORLD -->
   <section id="vWorld" hidden><div class="wrap" style="padding-top:28px">
-    <h1 class="big" style="font-size:clamp(48px,8vw,96px)">Where the Nobodies live.</h1>
+    <h1 class="big" style="font-size:clamp(48px,8vw,96px)">Where they live.</h1>
     <p class="stats" id="stats" style="margin-top:16px"></p>
     <div class="mapwrap" id="mapwrap"><img id="mapImg" alt="World map"></div>
     <div class="cities" id="cities"></div>
@@ -312,6 +340,8 @@ footer a{color:var(--muted)}
       <li><b>Collect a few.</b> Some traits are rare. Once a Nobody is gone from the shelf, it does not come back.</li>
       <li><b>Watch the map.</b> Every adopted Nobody becomes a dot in its owner's city. Slowly, they are spreading.</li>
     </ul>
+    <h2>The texts</h2>
+    <p>Next to the Nobodies there are texts: short, deadpan lines chosen by Johnny, set in red on white. They work the same way. Each one exists once, gets one owner and one city, and shows up on the map. You get pictures for your phone, an A4 poster and a 50 × 70 cm (19.7 × 27.6 in) poster to print. <a href="/texts" data-link>See the texts →</a></p>
     <h2>About the project</h2>
     <p>WhoIsJohnny? is an art project by Johnny Ramstedt, a Helsinki-based artist. It is a small experiment in owning something that does nothing, and in seeing how far they travel.</p>
     <a class="btn" href="/" data-link>Pick a Nobody · <span class="price">Free</span></a>
@@ -324,17 +354,17 @@ footer a{color:var(--muted)}
     <h3>1. Who sells</h3>
     <p>whoisjohnny.com is run by Johnny Ramstedt, a private individual in Finland. Contact: hello@whoisjohnny.com. For now every Nobody is free. Nothing is paid.</p>
     <h3>2. What you get</h3>
-    <p>One Nobody: a unique digital figure with a name and a number, your entry in the public register on whoisjohnny.com, image files of it for Instagram, TikTok, Snapchat and Facebook, and an A4 poster as a PDF that you can print yourself. Nothing physical is sent; printing is up to you. It is not an NFT or any kind of token, and it has no value outside this site.</p>
+    <p>One Nobody or one text. A Nobody is a unique digital figure with a name and a number, your entry in the public register on whoisjohnny.com, image files of it for Instagram, TikTok, Snapchat and Facebook, and an A4 poster as a PDF that you can print yourself. A text is a unique short text with a number, your entry in the register, the same pictures, and posters as PDFs in A4 and 50 × 70 cm (19.7 × 27.6 in). Nothing physical is sent; printing is up to you. It is not an NFT or any kind of token, and it has no value outside this site.</p>
     <h3>3. Delivery</h3>
-    <p>Right after adopting you get a personal link to your Nobody's page, where you can download the pictures and the poster, as many times as you like. The link is also sent by email. Keep it to yourself. If you give it as a gift, the link is the gift: whoever has it has the Nobody. If you give us the receiver's email, we send the link to them as well.</p>
+    <p>Right after adopting you get a personal link to its page, where you can download the pictures and the poster, as many times as you like. The link is also sent by email. Keep it to yourself. If you give it as a gift, the link is the gift: whoever has it has the Nobody. If you give us the receiver's email, we send the link to them as well.</p>
     <h3>4. If something goes wrong</h3>
     <p>If something does not work, write to us and we will fix it.</p>
     <h3>5. What you may do with it</h3>
     <p>You may keep it, show it and post the pictures on your own social media, for example as a profile picture. You may print the poster for yourself, at home or at a print shop, and hang it up or give the print away. You may not sell it or prints of it, put it on products you sell or use it in advertising. Copyright stays with Johnny Ramstedt.</p>
     <h3>6. The register</h3>
-    <p>Each adopted Nobody shows a name you choose (or "Anonymous") and a city. For a gift, that is the receiver's name and city, so only write what they would be happy to see in public. This is public. Do not write anything you do not want others to see. We may remove names that are offensive.</p>
+    <p>Each adopted Nobody or text shows a name you choose (or "Anonymous") and a city. For a gift, that is the receiver's name and city, so only write what they would be happy to see in public. This is public. Do not write anything you do not want others to see. We may remove names that are offensive.</p>
     <h3>7. Price</h3>
-    <p>Nobodies are free for now. One email address can adopt up to five, plus one Christmas Nobody.</p>
+    <p>Nobodies and texts are free for now. One email address can adopt up to five Nobodies, one Christmas Nobody and five texts.</p>
     <h3>8. Liability, law</h3>
     <p>The Nobodies are given as they are. Finnish law applies, and consumers in the EU keep the mandatory protection of their own country.</p>
   </div></section>
@@ -346,11 +376,11 @@ footer a{color:var(--muted)}
     <h3>Who is responsible</h3>
     <p>Johnny Ramstedt, a private individual in Finland. Contact: hello@whoisjohnny.com.</p>
     <h3>What we keep</h3>
-    <p>When you adopt a Nobody, we keep the name you give for the register (or "Anonymous") and the city. These are shown publicly. We keep your email address and use it only to send you your Nobody, through our email provider Resend. If you give a Nobody as a gift, we keep the note and the name you sign it with, and show them only to whoever has the gift link. If you add the receiver's email, we use it once, to send them the gift, and for nothing else. If you sign up for news, we keep your email address until you ask us to remove it.</p>
+    <p>When you adopt a Nobody or a text, we keep the name you give for the register (or "Anonymous") and the city. These are shown publicly. We keep your email address and use it only to send you what you adopted, through our email provider Resend. If you give one as a gift, we keep the note and the name you sign it with, and show them only to whoever has the gift link. If you add the receiver's email, we use it once, to send them the gift, and for nothing else. If you sign up for news, we keep your email address until you ask us to remove it.</p>
     <h3>Who gets it</h3>
     <p>Resend (sending email) and Cloudflare (hosting). We do not sell personal data and do not use it for advertising. The fonts come from Bunny Fonts, which says it does not log or track visitors. The site sets no tracking cookies.</p>
     <h3>Pictures and poster</h3>
-    <p>The pictures and the A4 poster are made in your own browser when you download them. They are not stored by us, and nothing about the download is sent anywhere.</p>
+    <p>The pictures and the posters are made in your own browser when you download them. They are not stored by us, and nothing about the download is sent anywhere.</p>
     <h3>Your rights</h3>
     <p>You can ask to see, correct or delete your data, for example your entry in the register. Write to hello@whoisjohnny.com. You can also complain to the Finnish Data Protection Ombudsman (tietosuoja.fi).</p>
   </div></section>
@@ -365,6 +395,7 @@ footer a{color:var(--muted)}
 
 <script type="module">
 import { nobody, traitsOf, pad, CITIES, cityRow, MAP_SVG, storyOf, XMAS_FROM, XMAS_TO } from '/assets/nobody.js';
+import { TEXT_COUNT, tpad, tlabel, textOf, TEXT_RED } from '/assets/texts.js';
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -384,18 +415,21 @@ async function api(path, body){
 
 async function load(){
   try { DATA = await api('shelf'); if (DATA.error) throw new Error(DATA.error); }
-  catch(e){ console.warn('Shelf offline, showing a preview.', e); const f=[]; for(let i=1;i<=50;i++) f.push(i); const x=[]; for(let i=XMAS_FROM;i<=XMAS_TO;i++) x.push(i); DATA={price:0,allFree:true,max:50,newFrom:0,free:f,xmas:x,held:[],owned:[],offline:true}; }
+  catch(e){ console.warn('Shelf offline, showing a preview.', e); const f=[]; for(let i=1;i<=50;i++) f.push(i); const x=[]; for(let i=XMAS_FROM;i<=XMAS_TO;i++) x.push(i); DATA={tcount:TEXT_COUNT,towned:[],price:0,allFree:true,max:50,newFrom:0,free:f,xmas:x,held:[],owned:[],offline:true}; }
   $('cntShelf').textContent = DATA.free.length;
-  $('cntWorld').textContent = DATA.owned.length;
+  DATA.tcount = DATA.tcount || TEXT_COUNT; DATA.towned = DATA.towned || [];
+  $('cntTexts').textContent = DATA.tcount - DATA.towned.length;
+  $('cntWorld').textContent = DATA.owned.length + DATA.towned.length;
   document.querySelectorAll('.price').forEach(e=>e.textContent=DATA.allFree?'Free':'€'+DATA.price);
   if (DATA.xmasFree){ $('xPrice').textContent='Free until Christmas Day. One each'; $('xKick').textContent='CHRISTMAS EDITION · FREE UNTIL CHRISTMAS'; $('xCta').textContent='Christmas edition · free'; }
 }
 
 // ---------------------------------------------------------------- views
 function show(id){
-  ['vShelf','vItem','vDone','vWorld','vAbout','vTerms','vPrivacy'].forEach(v=>$(v).hidden = v!==id);
+  ['vShelf','vTexts','vItem','vDone','vWorld','vAbout','vTerms','vPrivacy'].forEach(v=>$(v).hidden = v!==id);
   $('navShelf').classList.toggle('on', id==='vShelf');
   $('navWorld').classList.toggle('on', id==='vWorld');
+  $('navTexts').classList.toggle('on', id==='vTexts' || (id==='vItem' && location.pathname.startsWith('/t/')));
   $('navAbout').classList.toggle('on', id==='vAbout');
   window.scrollTo(0,0);
 }
@@ -422,6 +456,7 @@ function renderShelf(){
   $('outText').textContent = own.length ? `${own.length} Nobod${own.length===1?'y lives':'ies live'} out in the world, in ${nc} cit${nc===1?'y':'ies'}.` : 'The first Nobodies are about to leave the shelf.';
   const g = nobody(DATA.free[Math.min(4, DATA.free.length-1)] || 7);
   $('giftDemo').innerHTML = `<div class="to">TO: MAYA · LISBON</div><img src="${g.src}" alt="" style="background:${g.paper}"><div class="note">“Saw ${esc(g.name)} and thought of you. It does nothing. Neither do we on Sundays.”</div>`;
+  textTeaser();
   if (location.hash) { const t=document.querySelector(location.hash); if (t) t.scrollIntoView(); }
 }
 
@@ -571,18 +606,20 @@ async function renderDone(id){
 
 function renderWorld(){
   show('vWorld');
-  document.title = 'Where the Nobodies live · WhoIsJohnny?';
+  document.title = 'Where they live · WhoIsJohnny?';
   $('mapImg').src = 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(MAP_SVG);
-  const owned = DATA.owned, byCity = {}, countries = {};
+  const owned = DATA.owned.map(o=>({...o, kind:'n'})).concat((DATA.towned||[]).map(o=>({...o, kind:'t'}))), byCity = {}, countries = {};
+  const nN = DATA.owned.length, nT = (DATA.towned||[]).length;
   owned.forEach(o=>{ byCity[o.city]=(byCity[o.city]||0)+1; const c=cityRow(o.city); if(c) countries[c[1]]=1; });
   const nc = Object.keys(byCity).length, nk = Object.keys(countries).length;
-  $('stats').textContent = owned.length ? `${owned.length} Nobod${owned.length===1?'y is':'ies are'} somebody's. In ${nc} cit${nc===1?'y':'ies'} and ${nk} countr${nk===1?'y':'ies'}.` : 'No Nobody has been adopted yet. The map is waiting.';
+  const parts = [nN ? nN+' Nobod'+(nN===1?'y':'ies') : '', nT ? nT+' text'+(nT===1?'':'s') : ''].filter(Boolean).join(' and ');
+  $('stats').textContent = owned.length ? `${parts} ${owned.length===1?'is':'are'} somebody's. In ${nc} cit${nc===1?'y':'ies'} and ${nk} countr${nk===1?'y':'ies'}.` : 'Nothing has been adopted yet. The map is waiting.';
   const wrap=$('mapwrap'); wrap.querySelectorAll('.dot').forEach(d=>d.remove());
   Object.keys(byCity).forEach(city=>{
     const c=cityRow(city); if(!c) return;
     const sz=12+Math.min(4,byCity[city]-1)*5, d=document.createElement('button');
     d.type='button'; d.className='dot'+(mapCity===city?' on':''); d.title=city+' · '+byCity[city];
-    d.setAttribute('aria-label', city+', '+byCity[city]+' Nobod'+(byCity[city]===1?'y':'ies'));
+    d.setAttribute('aria-label', city+', '+byCity[city]+' adopted');
     d.style.cssText=`left:${(c[3]+180)/360*100}%;top:${(84-c[2])/142*100}%;width:${sz}px;height:${sz}px`;
     d.onclick=()=>{ mapCity = mapCity===city?null:city; renderWorld(); };
     wrap.appendChild(d);
@@ -591,7 +628,7 @@ function renderWorld(){
   $('cities').innerHTML = (cities.length?`<button type="button" data-c="" class="${mapCity?'':'on'}">Everywhere</button>`:'') + cities.map(c=>`<button type="button" data-c="${esc(c)}" class="${mapCity===c?'on':''}">${esc(c)} ${byCity[c]}</button>`).join('');
   $('cities').querySelectorAll('button').forEach(b=>b.onclick=()=>{ mapCity=b.dataset.c||null; renderWorld(); });
   $('regTitle').textContent = mapCity ? 'Living in '+mapCity : 'The register';
-  $('reg').innerHTML = owned.filter(o=>!mapCity||o.city===mapCity).sort((a,b)=>b.since-a.since).map(o=>{ const b=nobody(o.no); return `<a href="/no/${b.num}" data-link><div class="pic" style="background:${b.paper}"><img src="${b.src}" alt="${esc(b.name)}, ${b.label}" loading="lazy"></div><span><b>${esc(b.name)}</b> <span class="muted">${b.label}</span><br><span style="color:var(--soft)">${esc(o.owner)} · ${esc(o.city)}</span></span></a>`; }).join('');
+  $('reg').innerHTML = owned.filter(o=>!mapCity||o.city===mapCity).sort((a,b)=>b.since-a.since).map(o=>{ if (o.kind==='t') return `<a href="/t/${tpad(o.no)}" data-link><div class="pic tpic"><img src="${textThumb(o.no)}" alt="${esc(textOf(o.no))}" loading="lazy"></div><span><b>${tlabel(o.no)}</b><br><span style="color:var(--soft)">${esc(o.owner)} · ${esc(o.city)}</span></span></a>`; const b=nobody(o.no); return `<a href="/no/${b.num}" data-link><div class="pic" style="background:${b.paper}"><img src="${b.src}" alt="${esc(b.name)}, ${b.label}" loading="lazy"></div><span><b>${esc(b.name)}</b> <span class="muted">${b.label}</span><br><span style="color:var(--soft)">${esc(o.owner)} · ${esc(o.city)}</span></span></a>`; }).join('');
 }
 
 // ---------------------------------------------------------------- pictures
@@ -690,6 +727,242 @@ async function saveBlob(blob, name, type, title){
   toast('Saved: '+name);
 }
 
+// ---------------------------------------------------------------- texts
+// A text sheet: white paper, red bold type, a red question mark. Same look on screen, in pictures and on posters.
+const TFONT = 'Arial, Helvetica, "Liberation Sans", sans-serif';
+const TFORMATS = [['instagram','Instagram','Post or story',1080,1350],['tiktok','TikTok','Video or profile',1080,1920],['snapchat','Snapchat','Story',1080,1920],['facebook','Facebook','Post or profile picture',1080,1080]];
+const TPOSTERS = [['a4','Poster A4','21 × 29.7 cm / 8.3 × 11.7 in',210,297],['50x70','Poster 50 × 70 cm','50 × 70 cm / 19.7 × 27.6 in',500,700]];
+const mctx = document.createElement('canvas').getContext('2d');
+function wrapLines(text, size, maxW){
+  mctx.font = 'bold '+size+'px '+TFONT;
+  const words = text.split(/\s+/).filter(Boolean), lines=[]; let cur='';
+  for (const w of words){ const t = cur ? cur+' '+w : w; if (mctx.measureText(t).width <= maxW || !cur) cur=t; else { lines.push(cur); cur=w; } }
+  if (cur) lines.push(cur); return lines;
+}
+// Biggest size where the text fits the box. All numbers in the units of W.
+function fitText(text, maxW, maxH, start, min){
+  let size=start, lines=[];
+  for (; size>=min; size-=start/60){
+    lines = wrapLines(text, size, maxW);
+    mctx.font = 'bold '+size+'px '+TFONT;
+    const widest = Math.max(...lines.map(l=>mctx.measureText(l).width));
+    if (lines.length*size*1.02 <= maxH && widest <= maxW) break;
+  }
+  return {size, lines};
+}
+// mode: 'thumb' | 'social' | 'share'. info: {city, since, gift}
+function drawText(n, W, H, mode, info){
+  info = info||{};
+  const c=document.createElement('canvas'); c.width=W; c.height=H; const x=c.getContext('2d');
+  const u=W/100, t=textOf(n), story = H/W > 1.6, social = mode!=='thumb';
+  x.fillStyle='#fff'; x.fillRect(0,0,W,H);
+  const lift = story ? 22*u : 0, M=8*u;
+  const top = mode==='share' ? 16*u : (story ? 24 : 9)*u;
+  const reserve = (mode==='share' ? 34 : social ? 23.5 : 13)*u + lift;
+  const {size, lines} = fitText(t, W-2*M, H-top-reserve, 26*u, 4*u);
+  x.font='bold '+size+'px '+TFONT; x.fillStyle=TEXT_RED; x.textAlign='left'; x.textBaseline='alphabetic';
+  try { x.letterSpacing=(-size*0.02)+'px'; } catch(e){}
+  lines.forEach((l,k)=>x.fillText(l, M, top+size*0.86+k*size*1.02));
+  try { x.letterSpacing='0px'; } catch(e){}
+  x.fillStyle='#111';
+  if (mode==='share'){
+    x.font='bold '+(3.4*u)+'px '+TFONT; x.fillText('WhoIsJohnny?', M, 9*u);
+    x.textAlign='right'; x.font=(3.2*u)+'px '+TFONT; x.fillText(tlabel(n), W-M, 9*u); x.textAlign='left';
+    const l1 = info.gift ? 'Somebody gave me a text.' : 'I adopted a text.';
+    x.font='bold '+(6.4*u)+'px '+TFONT; x.fillText(l1, M, H-22*u);
+    x.font=(4.2*u)+'px '+TFONT; x.fillStyle='#3a3833'; x.fillText('It lives in '+info.city+' now.', M, H-15.5*u);
+    x.fillStyle='#111'; x.font='bold '+(3*u)+'px '+TFONT; x.fillText('whoisjohnny.com/t/'+tpad(n), M, H-5*u);
+  } else if (social){
+    x.font='bold '+(3.4*u)+'px '+TFONT; x.fillText('WhoIsJohnny?', M, H-lift-15*u);
+    x.font=(2.9*u)+'px '+TFONT;
+    x.fillText('whoisjohnny.com', M, H-lift-11.5*u);
+    x.fillText('@whoisjohnny2020', M, H-lift-8*u);
+    x.fillText(tlabel(n)+(info.city?'  ·  '+info.city:''), M, H-lift-4.6*u);
+  } else {
+    x.font=(2.9*u)+'px '+TFONT; x.fillText(tlabel(n), M, H-4.6*u);
+  }
+  x.fillStyle=TEXT_RED; x.font='bold '+(8*u)+'px '+TFONT; x.textAlign='right';
+  x.fillText('?', W-M, H-lift-4.6*u);
+  return c;
+}
+const THUMB = {};
+function textThumb(n){ return THUMB[n] || (THUMB[n] = drawText(n, 420, 594, 'thumb').toDataURL('image/png')); }
+const toBlob = c => new Promise((res,rej)=>c.toBlob(b=>b?res(b):rej(new Error('No image')),'image/png'));
+
+// Posters are real vector PDFs (Helvetica Bold), so the text is sharp at any size, also at 50 × 70 cm.
+function pdfStr(s){
+  const map={'’':0x92,'‘':0x91,'“':0x93,'”':0x94,'–':0x96,'—':0x97,'…':0x85,'€':0x80};
+  let o='(';
+  for (const ch of String(s)){ let c=ch.codePointAt(0); if (map[ch]) c=map[ch]; else if (c>255) c=63;
+    if (c===40||c===41||c===92) o+='\\'+ch; else if (c<32||c>126) o+='\\'+c.toString(8).padStart(3,'0'); else o+=ch; }
+  return o+')';
+}
+function textPdf(n, wmm, hmm, info){
+  const pt=72/25.4, PW=wmm*pt, PH=hmm*pt, u=PW/100, M=8*u, top=9*u, reserve=13*u, t=textOf(n);
+  const {size, lines} = fitText(t, PW-2*M, PH-top-reserve, 26*u, 4*u);
+  const f = v => v.toFixed(2);
+  let s = '0.894 0 0.169 rg BT /F1 '+f(size)+' Tf '+f(-size*0.02)+' Tc\n';
+  lines.forEach((l,k)=>{ s += '1 0 0 1 '+f(M)+' '+f(PH-(top+size*0.86+k*size*1.02))+' Tm '+pdfStr(l)+' Tj\n'; });
+  s += 'ET\n';
+  const small = 2.2*u, foot = tlabel(n)+'  ·  '+info.city+'  ·  Somebody\'s since '+info.since;
+  s += '0.067 0.067 0.067 rg BT /F2 '+f(small)+' Tf 0 Tc 1 0 0 1 '+f(M)+' '+f(4.6*u)+' Tm '+pdfStr(foot)+' Tj ET\n';
+  s += 'BT /F2 '+f(small)+' Tf 1 0 0 1 '+f(M)+' '+f(4.6*u+small*1.5)+' Tm '+pdfStr('WhoIsJohnny?  ·  Chosen by Johnny.')+' Tj ET\n';
+  mctx.font='bold 100px '+TFONT; const qw = mctx.measureText('?').width*8*u/100;
+  s += '0.894 0 0.169 rg BT /F1 '+f(8*u)+' Tf 1 0 0 1 '+f(PW-M-qw)+' '+f(4.6*u)+' Tm (?) Tj ET\n';
+  const enc=new TextEncoder(), parts=[], offs=[]; let len=0;
+  const add=p=>{ const b = typeof p==='string' ? Uint8Array.from(p, ch=>ch.charCodeAt(0)&255) : p; parts.push(b); len+=b.length; };
+  const obj=(i,body)=>{ offs[i]=len; add(i+' 0 obj\n'+body+'\nendobj\n'); };
+  add('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n');
+  obj(1,'<< /Type /Catalog /Pages 2 0 R >>');
+  obj(2,'<< /Type /Pages /Kids [3 0 R] /Count 1 >>');
+  obj(3,'<< /Type /Page /Parent 2 0 R /MediaBox [0 0 '+f(PW)+' '+f(PH)+'] /Resources << /Font << /F1 5 0 R /F2 6 0 R >> >> /Contents 4 0 R >>');
+  obj(4,'<< /Length '+s.length+' >>\nstream\n'+s+'\nendstream');
+  obj(5,'<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>');
+  obj(6,'<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>');
+  const xref=len; add('xref\n0 7\n0000000000 65535 f \n'+[1,2,3,4,5,6].map(i=>String(offs[i]).padStart(10,'0')+' 00000 n \n').join(''));
+  add('trailer\n<< /Size 7 /Root 1 0 R >>\nstartxref\n'+xref+'\n%%EOF');
+  return new Blob(parts,{type:'application/pdf'});
+}
+
+function renderTexts(){
+  show('vTexts');
+  document.title = 'WhoIsJohnny? Pick a text.';
+  const own = {}; (DATA.towned||[]).forEach(o=>own[o.no]=o);
+  const items=[]; for(let n=1;n<=DATA.tcount;n++) items.push(n);
+  $('tgrid').innerHTML = items.map(n=>{
+    const o=own[n];
+    return `<a class="card${o?' gone':''}" href="/t/${tpad(n)}" data-link><div class="pic tpic"><img src="${textThumb(n)}" alt="${esc(textOf(n))}" loading="lazy">${o?'<span class="badge">ADOPTED</span>':''}</div><div class="cap"><span><b>${tlabel(n)}</b></span><span class="muted">${o?'Lives in '+esc(o.city):'Free'}</span></div></a>`;
+  }).join('');
+}
+function textTeaser(){
+  const own = new Set((DATA.towned||[]).map(o=>o.no)), pick=[];
+  for (let n=1; n<=DATA.tcount && pick.length<6; n+=7) if (!own.has(n)) pick.push(n);
+  $('tteaser').innerHTML = pick.map(n=>`<a class="card" href="/t/${tpad(n)}" data-link><div class="pic tpic"><img src="${textThumb(n)}" alt="${esc(textOf(n))}" loading="lazy"></div><div class="cap"><span><b>${tlabel(n)}</b></span><span class="muted">Free</span></div></a>`).join('');
+}
+
+async function renderText(n, key, isNew){
+  show('vItem');
+  if (!(n>=1 && n<=DATA.tcount)){ $('item').innerHTML = `<div class="item"><div class="side"><a class="back" href="/texts" data-link>← All texts</a><h1 class="name">No such text.</h1><p class="line">There are ${DATA.tcount}. This is not one of them.</p></div></div>`; return; }
+  const t=textOf(n), lab=tlabel(n);
+  document.title = lab+' · WhoIsJohnny?';
+  const big = drawText(n, 960, 1358, 'thumb').toDataURL('image/png');
+  $('item').innerHTML = `<div class="item"><div class="big-pic tpic"><img src="${big}" alt="${esc(t)}"></div><div class="side"><a class="back" href="/texts" data-link>← All texts</a><div class="kicker">A text · exists once</div><h1 class="name">${lab}.</h1><p class="line">${esc(t)}</p><div id="state" class="muted">One moment…</div></div></div>`;
+
+  let info;
+  if (DATA.offline) info = {exists:true, owned:false};
+  else info = await api('text?no='+n+(key?'&key='+encodeURIComponent(key):''));
+  const st = $('state'); if (!st) return;
+  if (!info.exists){ st.outerHTML = `<p class="line">No such text.</p>`; return; }
+
+  if (info.owned){
+    const days = Math.max(0, Math.round((Date.now()-info.since)/86400000));
+    let html = `<div class="box"><div class="label">THE REGISTER</div><div style="font-size:20px;font-weight:600">Somebody's since ${fmtDate(info.since)}.</div><div style="font-size:17px;color:var(--soft)">Belongs to ${esc(info.owner)}. Lives in ${esc(info.city)}.</div><div class="muted" style="font-size:15px">${days===0?'Adopted today. Has not changed its mind.':'Has been somebody\'s for '+days+' day'+(days===1?'':'s')+'. Still means it.'}</div></div>`;
+    if (info.mine){
+      const h1 = document.querySelector('h1.name'); let intro;
+      const link = location.origin+'/t/'+tpad(n)+'?key='+encodeURIComponent(key);
+      if (info.gift && isNew){
+        h1.textContent = lab+' is ready to give.';
+        intro = `<p style="margin:0;font-size:17px;max-width:480px">${info.toSent ? 'We are emailing it to them now, and sent you a copy. Want to tell them yourself too? Here is the link.' : 'Send them this link, in a message, a card or a text. Whoever has the link has the text. We also emailed it to you.'}</p>
+          <div class="linkrow"><input id="giftLink" readonly value="${esc(link)}"><button class="btn2" type="button" id="copyLink">Copy link</button>${navigator.share?'<button class="btn2" type="button" id="shareLink">Share</button>':''}</div>`;
+        setTimeout(()=>{
+          $('copyLink').onclick=async()=>{ try{ await navigator.clipboard.writeText(link); }catch(e){ $('giftLink').select(); document.execCommand('copy'); } toast('Link copied.'); };
+          if ($('shareLink')) $('shareLink').onclick=()=>navigator.share({title:'A text for you', text:(info.from&&info.from!=='Somebody'?info.from+' gave you a text.':'Somebody gave you a text.'), url:link}).catch(()=>{});
+        });
+      } else {
+        if (isNew || info.gift) h1.textContent = lab+' is yours.';
+        if (info.gift) document.querySelector('.kicker').textContent = 'A gift · exists once';
+        intro = `<p style="margin:0;font-size:16px;max-width:480px">${info.gift?'Somebody thought of you. It now lives in '+esc(info.city)+', in the register and on the world map. ':''}${isNew&&!info.gift?'It has left the shelf for good. We also sent this link to your email. ':''}This page is your own link. Keep it.</p>`;
+      }
+      if (info.gift) html = `<div class="giftnote"><span class="from">A GIFT FROM ${esc((info.from||'Somebody').toUpperCase())}</span>${info.note?'“'+esc(info.note)+'”':'No note. The text says enough.'}</div>` + html;
+      html += intro + `<div class="sharebox"><img id="shareImg" alt="Your share picture"><div><div class="label">SHOW IT OFF</div><p style="margin:0 0 12px;font-size:16px">A ready picture that says the text is yours, and where it lives. The link in it is public, your own link stays private.</p><div class="linkrow" style="margin:0"><button class="btn2" type="button" id="shareCard">${matchMedia('(pointer:coarse)').matches?'Share':'Save'} picture</button><button class="btn2" type="button" id="copyPublic">Copy public link</button></div></div></div><div class="dl">${TFORMATS.map(f=>`<div><div><b>${f[1]}</b><span>${f[2]} · ${f[3]} × ${f[4]} · PNG</span></div><button class="btn2" type="button" data-tfmt="${f[0]}">Save</button></div>`).join('')}
+        ${TPOSTERS.map(p=>`<div><div><b>${p[1]}</b><span>${p[2]} · PDF · to print and hang up</span></div><button class="btn2" type="button" data-tposter="${p[0]}">Save</button></div>`).join('')}</div>
+        <details class="howto"><summary>How to print the posters</summary>
+          <ul>
+            <li><b>Two sizes.</b> A4 is 21 × 29.7 cm (8.3 × 11.7 in). The big one is 50 × 70 cm (19.7 × 27.6 in). Both are vector PDFs, so the text stays sharp at any size.</li>
+            <li><b>Paper.</b> Matte, 200–250 g/m². Ordinary copy paper works for A4, but it curls and looks thin.</li>
+            <li><b>Printer settings.</b> Actual size / 100 %. Colour. On US Letter, choose "Fit to page".</li>
+            <li><b>50 × 70 cm.</b> Most home printers cannot do it. Send the PDF to a print shop or an online poster printer and ask for 50 × 70 cm on matte paper. For US frames, 20 × 28 in fits almost exactly; choose "fit" so nothing is cut.</li>
+            <li><b>Frame.</b> A4 fits any standard A4 frame. 50 × 70 cm is a standard poster frame size in Europe.</li>
+            <li><b>Your poster is yours alone.</b> It carries your city and the day you got it. Print it as many times as you like for yourself, but do not sell it.</li>
+          </ul>
+        </details>`;
+    }
+    st.outerHTML = html;
+    const meta = {city:info.city, since:fmtDate(info.since), gift:!!info.gift};
+    document.querySelectorAll('[data-tfmt]').forEach(b=>b.onclick=async()=>{ const f=TFORMATS.find(x=>x[0]===b.dataset.tfmt); await saveBlob(await toBlob(drawText(n,f[3],f[4],'social',meta)), 'text-'+tpad(n)+'-'+f[0]+'.png', 'image/png', lab); });
+    document.querySelectorAll('[data-tposter]').forEach(b=>b.onclick=async()=>{ const p=TPOSTERS.find(x=>x[0]===b.dataset.tposter); try { await saveBlob(textPdf(n,p[3],p[4],meta), 'text-'+tpad(n)+'-poster-'+p[0]+'.pdf', 'application/pdf', lab); } catch(e){ toast('Could not make the poster. Try again.'); } });
+    if ($('shareCard')){
+      const pub = location.origin+'/t/'+tpad(n);
+      const card = ()=>drawText(n,1080,1350,'share',meta);
+      toBlob(card()).then(bl=>{ if($('shareImg')) $('shareImg').src=URL.createObjectURL(bl); }).catch(()=>{});
+      $('shareCard').onclick=async()=>{
+        const bl = await toBlob(card()), file = new File([bl], 'text-'+tpad(n)+'-share.png', {type:'image/png'});
+        if (matchMedia('(pointer:coarse)').matches && navigator.canShare && navigator.canShare({files:[file]})){
+          try { await navigator.share({files:[file], title:lab, text:pub}); return; } catch(e){ if (e.name==='AbortError') return; }
+        }
+        saveBlob(bl, file.name, 'image/png', lab);
+      };
+      $('copyPublic').onclick=async()=>{ try{ await navigator.clipboard.writeText(pub); }catch(e){} toast('Copied: '+pub.replace(/^https?:\/\//,'')); };
+    }
+    return;
+  }
+
+  st.outerHTML = `<form class="box" id="adoptForm">
+    <div style="font-size:17px">${lab} · Free</div>
+    <div class="seg" role="group" aria-label="Who is it for?"><button type="button" data-for="me">For me</button><button type="button" data-for="gift">As a gift</button></div>
+    <div id="giftFields" style="display:flex;flex-direction:column;gap:12px">
+      <label class="f" for="toName">Their name</label>
+      <input id="toName" type="text" maxlength="30" placeholder="e.g. Maya">
+      <div class="hint">Shown in the register as the owner. Leave empty for "Anonymous".</div>
+      <label class="f" for="toEmail">Their email <span class="muted" style="font-weight:400">(optional)</span></label>
+      <input id="toEmail" type="email" maxlength="120" placeholder="maya@example.com" autocomplete="off">
+      <div class="hint">We send the text to them right away. Leave empty if you want to give the link yourself.</div>
+      <label class="f" for="note">A short note <span class="muted" style="font-weight:400">(optional)</span></label>
+      <textarea id="note" maxlength="200" placeholder="Saw this and thought of you."></textarea>
+      <label class="f" for="fromName">From</label>
+      <input id="fromName" type="text" maxlength="30" placeholder="Your name">
+    </div>
+    <label class="f" for="city" id="cityLabel"></label>
+    <input id="city" type="text" list="cityList" required maxlength="40" placeholder="e.g. Helsinki">
+    <datalist id="cityList">${CITIES.map(c=>`<option value="${esc(c[0])}">`).join('')}</datalist>
+    <div class="hint">Shown on the world map. Only the city, never more.</div>
+    <div id="meFields" style="display:flex;flex-direction:column;gap:12px">
+      <label class="f" for="owner">Your name in the register <span class="muted" style="font-weight:400">(optional)</span></label>
+      <input id="owner" type="text" maxlength="30" placeholder="Anonymous">
+    </div>
+    <label class="f" for="email">Your email</label>
+    <input id="email" type="email" required maxlength="120" placeholder="you@example.com" autocomplete="email">
+    <div class="hint" id="emailHint"></div>
+    <button class="btn" type="submit" id="adoptBtn"></button>
+    <div class="err" id="adoptErr" hidden></div>
+    <div class="muted" style="font-size:13px">Includes pictures for Instagram, TikTok, Snapchat and Facebook, an A4 poster and a 50 × 70 cm (19.7 × 27.6 in) poster to print. Free, no payment.</div>
+  </form>`;
+  const label = ()=> (giftMode?'Give ':'Adopt ')+lab+' · Free';
+  const setMode = gm=>{
+    giftMode = gm;
+    document.querySelectorAll('[data-for]').forEach(x=>x.setAttribute('aria-pressed', String((x.dataset.for==='gift')===gm)));
+    $('giftFields').hidden = !gm; $('meFields').hidden = gm;
+    $('cityLabel').textContent = gm ? 'Where do they live? Their city' : 'Where will it live? Your city';
+    $('city').autocomplete = gm ? 'off' : 'address-level2';
+    $('emailHint').textContent = 'We send '+(gm?'the gift link':'your own link')+' here. Nothing else, unless you sign up for news.';
+    $('adoptBtn').textContent = label();
+  };
+  document.querySelectorAll('[data-for]').forEach(x=>x.onclick=()=>setMode(x.dataset.for==='gift'));
+  setMode(giftMode);
+  $('adoptForm').onsubmit = async e=>{
+    e.preventDefault();
+    const btn=$('adoptBtn'), err=$('adoptErr'); err.hidden=true; btn.disabled=true; btn.textContent='One moment…';
+    const fail = m=>{ err.textContent=m; err.hidden=false; btn.disabled=false; btn.textContent=label(); };
+    if (DATA.offline) return fail('The shop is not connected here. This is a preview.');
+    const body = giftMode
+      ? {no:n, city:$('city').value, gift:true, owner:$('toName').value, toEmail:$('toEmail').value, note:$('note').value, from:$('fromName').value, email:$('email').value}
+      : {no:n, city:$('city').value, owner:$('owner').value, email:$('email').value};
+    const d = await api('tadopt', body);
+    if (d.ok){ await load(); history.pushState(null,'','/t/'+tpad(d.no)+'?key='+encodeURIComponent(d.key)+'&new=1'); return route(); }
+    fail(d.error || 'Something went wrong.');
+  };
+}
+
 // ---------------------------------------------------------------- news
 $('newsForm').onsubmit = async e=>{
   e.preventDefault();
@@ -704,6 +977,9 @@ function route(){
   const p = location.pathname.replace(/\/+$/,'') || '/', q = new URLSearchParams(location.search);
   const m = p.match(/^\/no\/(\d{1,6})$/);
   if (m) return renderItem(parseInt(m[1],10), q.get('key'), q.get('new')==='1');
+  const tm = p.match(/^\/t\/(\d{1,4})$/);
+  if (tm) return renderText(parseInt(tm[1],10), q.get('key'), q.get('new')==='1');
+  if (p==='/texts') return renderTexts();
   if (p==='/world') return renderWorld();
   if (p==='/done') return renderDone(q.get('checkout_id')||'');
   if (p==='/about'){ show('vAbout'); return; }
