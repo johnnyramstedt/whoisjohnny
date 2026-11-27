@@ -104,3 +104,6 @@ export function tpad(n){ return String(n).padStart(3,'0'); }
 export function tlabel(n){ return 'Text '+tpad(n); }
 export function textOf(n){ return TEXTS[n-1] ? TEXTS[n-1].toUpperCase() : ''; }
 export var TEXT_RED = '#e4002b';
+// Each text has a web address made from its words, e.g. /t/keep-out-of-reach-of-deadlines
+export function slugOf(n){ return String(TEXTS[n-1]||'').toLowerCase().replace(/['’]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,80); }
+export function bySlug(s){ s=String(s||'').toLowerCase(); for (var i=1;i<=TEXTS.length;i++) if (slugOf(i)===s) return i; return 0; }

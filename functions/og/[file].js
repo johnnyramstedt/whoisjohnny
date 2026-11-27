@@ -35,17 +35,14 @@ export async function onRequestGet({ request, env, params }) {
   }
 }
 
-// /og/t012.png : the link preview picture for one text.
+// /og/t012.png : the link preview picture for one text (the number is internal only).
 async function textOg(env, url, n, fallback) {
   try {
     if (!(n >= 1 && n <= TEXT_COUNT)) return fallback();
-    const tix = env.NOBODIES ? (await env.NOBODIES.get('tindex', 'json')) || { owned: {} } : { owned: {} };
-    const o = tix.owned[n];
-    const info = o ? { owned: true, city: o.c } : { owned: false };
-    const cacheKey = 'ogt:' + n + ':' + (o ? 'o:' + o.c : 'f') + ':v1';
+    const cacheKey = 'ogt:' + n + ':v2';
     let png = env.NOBODIES ? await env.NOBODIES.get(cacheKey, 'arrayBuffer') : null;
     if (!png) {
-      png = await textCardPng(env, url.origin, n, info);
+      png = await textCardPng(env, url.origin, n, {});
       if (env.NOBODIES) await env.NOBODIES.put(cacheKey, png);
     }
     return new Response(png, { headers: { 'content-type': 'image/png', 'cache-control': 'public, max-age=3600' } });
