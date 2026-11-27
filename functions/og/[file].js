@@ -39,7 +39,7 @@ export async function onRequestGet({ request, env, params }) {
 async function textOg(env, url, n, fallback) {
   try {
     if (!(n >= 1 && n <= TEXT_COUNT)) return fallback();
-    const cacheKey = 'ogt:' + n + ':v3';
+    const cacheKey = 'ogt:' + n + ':v4';
     let png = env.NOBODIES ? await env.NOBODIES.get(cacheKey, 'arrayBuffer') : null;
     if (!png) {
       png = await textCardPng(env, url.origin, n, {});

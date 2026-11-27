@@ -779,12 +779,12 @@ function drawText(n, W, H, mode){
   try { x.letterSpacing='0px'; } catch(e){}
   x.fillStyle=k.foot; x.textAlign='right';
   if (social){
-    x.font='bold '+(3.4*u)+'px '+TFONT; x.fillText('WhoIsJohnny?', W-M, H-lift-11.5*u);
-    x.font=(2.9*u)+'px '+TFONT;
-    x.fillText('whoisjohnny.com', W-M, H-lift-8*u);
-    x.fillText('@whoisjohnny2020', W-M, H-lift-4.6*u);
+    x.font='bold '+(2.4*u)+'px '+TFONT; x.fillText('WhoIsJohnny?', W-M, H-lift-10*u);
+    x.font=(2.1*u)+'px '+TFONT;
+    x.fillText('whoisjohnny.com', W-M, H-lift-7.3*u);
+    x.fillText('@whoisjohnny2020', W-M, H-lift-4.8*u);
   } else {
-    x.font='bold '+(3.4*u)+'px '+TFONT; x.fillText('WhoIsJohnny?', W-M, H-6*u);
+    x.font='bold '+(2.3*u)+'px '+TFONT; x.fillText('WhoIsJohnny?', W-M, H-5.5*u);
   }
   return c;
 }
@@ -809,7 +809,7 @@ function textPdf(n, wmm, hmm){
   s += rgb(k.fg)+'BT /F1 '+f(size)+' Tf '+f(-size*0.02)+' Tc\n';
   lines.forEach((l,k)=>{ s += '1 0 0 1 '+f(M)+' '+f(PH-(top+size*0.86+k*size*1.02))+' Tm '+pdfStr(l)+' Tj\n'; });
   s += 'ET\n';
-  const small = 2.6*u;
+  const small = 1.8*u;
   mctx.font='bold 100px '+TFONT; const fw = mctx.measureText('WhoIsJohnny?').width*small/100;
   s += rgb(k.foot)+'BT /F1 '+f(small)+' Tf 0 Tc 1 0 0 1 '+f(PW-M-fw)+' '+f(4.6*u)+' Tm (WhoIsJohnny?) Tj ET\n';
   const enc=new TextEncoder(), parts=[], offs=[]; let len=0;
