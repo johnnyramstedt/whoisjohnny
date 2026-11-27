@@ -148,7 +148,15 @@ export var SCHEMES = {
   yellow: { bg:'#ffd60a', fg:'#111111', mark:'#111111', foot:'#111111' },
   black:  { bg:'#111111', fg:'#ffffff', mark:'#ffd60a', foot:'#ffffff' }
 };
-export function schemeKey(n){ return ['white','yellow','black'][(n-1)%3]; }
+// The collection: the 24 texts shown on the site, 8 of each colour, in the order they are shown.
+// The other texts stay in TEXTS (old links and gifts keep working) but are not shown.
+export var COLLECTION = [12, 26, 48, 61, 41, 75, 72, 30, 13, 11, 32, 2, 62, 25, 10, 63, 29, 87, 68, 42, 88, 82, 93, 57];
+var COLOUR = {12:'white',61:'white',72:'white',11:'white',62:'white',63:'white',68:'white',82:'white',
+  26:'yellow',41:'yellow',30:'yellow',32:'yellow',25:'yellow',29:'yellow',42:'yellow',93:'yellow',
+  48:'black',75:'black',13:'black',2:'black',10:'black',87:'black',88:'black',57:'black'};
+// The web address printed in the corner of every text.
+export var CORNER = 'www.whoisjohnny.com';
+export function schemeKey(n){ return COLOUR[n] || ['white','yellow','black'][(n-1)%3]; }
 export function schemeOf(n){ return SCHEMES[schemeKey(n)]; }
 // Each text has a web address made from its words, e.g. /t/keep-out-of-reach-of-deadlines
 export function slugOf(n){ return String(TEXTS[n-1]||'').toLowerCase().replace(/['’]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,80); }

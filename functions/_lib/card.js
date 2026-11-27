@@ -6,7 +6,7 @@
 import { initWasm, Resvg } from './resvg.mjs';
 import wasm from './resvg.wasm';
 import { nobody } from '../../assets/nobody.js';
-import { textOf, schemeOf } from '../../assets/texts.js';
+import { textOf, schemeOf, CORNER } from '../../assets/texts.js';
 
 let ready = null;
 function start() { return ready || (ready = initWasm(wasm)); }
@@ -70,7 +70,7 @@ export function textCardSvg(n, info) {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
 <rect width="1200" height="630" fill="${c.bg}"/>
 <g font-family="Instrument Sans">${body}
-<text x="1130" y="580" font-size="19" font-weight="600" fill="${c.foot}" text-anchor="end">WhoIsJohnny?</text>
+<text x="1130" y="580" font-size="19" font-weight="600" fill="${c.foot}" text-anchor="end">${CORNER}</text>
 </g>
 </svg>`;
 }

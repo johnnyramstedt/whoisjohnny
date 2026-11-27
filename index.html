@@ -414,7 +414,7 @@ footer a{color:var(--muted)}
 
 <script type="module">
 import { nobody, traitsOf, pad, CITIES, cityRow, MAP_SVG, storyOf, XMAS_FROM, XMAS_TO } from '/assets/nobody.js';
-import { TEXT_COUNT, textOf, slugOf, bySlug, schemeOf, schemeKey, NEWS_CONSENT } from '/assets/texts.js';
+import { TEXT_COUNT, textOf, slugOf, bySlug, schemeOf, schemeKey, NEWS_CONSENT, COLLECTION, CORNER } from '/assets/texts.js';
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -783,12 +783,11 @@ function drawText(n, W, H, mode){
   try { x.letterSpacing='0px'; } catch(e){}
   x.fillStyle=k.foot; x.textAlign='right';
   if (social){
-    x.font='bold '+(2.4*u)+'px '+TFONT; x.fillText('WhoIsJohnny?', W-M, H-lift-10*u);
+    x.font='bold '+(2.4*u)+'px '+TFONT; x.fillText(CORNER, W-M, H-lift-7.3*u);
     x.font=(2.1*u)+'px '+TFONT;
-    x.fillText('whoisjohnny.com', W-M, H-lift-7.3*u);
     x.fillText('@whoisjohnny2020', W-M, H-lift-4.8*u);
   } else {
-    x.font='bold '+(2.3*u)+'px '+TFONT; x.fillText('WhoIsJohnny?', W-M, H-5.5*u);
+    x.font='bold '+(2.3*u)+'px '+TFONT; x.fillText(CORNER, W-M, H-5.5*u);
   }
   return c;
 }
@@ -814,8 +813,8 @@ function textPdf(n, wmm, hmm){
   lines.forEach((l,k)=>{ s += '1 0 0 1 '+f(M)+' '+f(PH-(top+size*0.86+k*size*1.02))+' Tm '+pdfStr(l)+' Tj\n'; });
   s += 'ET\n';
   const small = 1.8*u;
-  mctx.font='bold 100px '+TFONT; const fw = mctx.measureText('WhoIsJohnny?').width*small/100;
-  s += rgb(k.foot)+'BT /F1 '+f(small)+' Tf 0 Tc 1 0 0 1 '+f(PW-M-fw)+' '+f(4.6*u)+' Tm (WhoIsJohnny?) Tj ET\n';
+  mctx.font='bold 100px '+TFONT; const fw = mctx.measureText(CORNER).width*small/100;
+  s += rgb(k.foot)+'BT /F1 '+f(small)+' Tf 0 Tc 1 0 0 1 '+f(PW-M-fw)+' '+f(4.6*u)+' Tm '+pdfStr(CORNER)+' Tj ET\n';
   const enc=new TextEncoder(), parts=[], offs=[]; let len=0;
   const add=p=>{ const b = typeof p==='string' ? Uint8Array.from(p, ch=>ch.charCodeAt(0)&255) : p; parts.push(b); len+=b.length; };
   const obj=(i,body)=>{ offs[i]=len; add(i+' 0 obj\n'+body+'\nendobj\n'); };
@@ -834,10 +833,10 @@ function textPdf(n, wmm, hmm){
 function renderTexts(){
   show('vTexts');
   document.title = 'WhoIsJohnny? Deadpan texts.';
-  const items=[]; for(let n=1;n<=DATA.tcount;n++) items.push(n);
+  const items=COLLECTION.slice();
   $('tgrid').innerHTML = items.map(n=>`<a class="card" href="/t/${slugOf(n)}" data-link data-c="${schemeKey(n)}"><div class="pic tpic"><img src="${textThumb(n)}" alt="${esc(textOf(n))}" loading="lazy"></div></a>`).join('');
   // three framed texts on a wall, one of each colour, short ones, new ones each visit
-  const pick = c => { const p = items.filter(n=>schemeKey(n)===c && textOf(n).length<34); return p[Math.floor(Math.random()*p.length)]; };
+  const pick = c => { let p = items.filter(n=>schemeKey(n)===c && textOf(n).length<45); if(!p.length) p = items.filter(n=>schemeKey(n)===c); return p[Math.floor(Math.random()*p.length)]; };
   const fr = (n,cls) => `<a class="fr ${cls}" href="/t/${slugOf(n)}" data-link><img src="${textThumb(n)}" alt="${esc(textOf(n))}"></a>`;
   $('troom').innerHTML = fr(pick('white'),'f1') + fr(pick('black'),'f2') + fr(pick('yellow'),'f3') + '<div class="bench"></div>';
   const setC = c => { document.querySelectorAll('#tfilter button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.c===c)); document.querySelectorAll('#tgrid .card').forEach(a=>a.hidden = !(c==='all' || a.dataset.c===c)); };
