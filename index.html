@@ -169,6 +169,9 @@ h1.name{margin:-10px 0 0;font-size:clamp(56px,7vw,96px);line-height:.95;font-wei
 .legal{max-width:760px;padding:24px 24px 80px}
 .legal h3{font-size:18px;margin:24px 0 4px}
 .legal p{margin:0 0 10px;color:var(--soft)}
+.sharebox{max-width:520px;display:flex;gap:16px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:14px;margin:4px 0 8px;background:#fff}
+.sharebox img{width:96px;height:120px;object-fit:cover;border-radius:6px;flex:none;background:var(--chip)}
+.sharebox .label{font-size:12px;letter-spacing:.08em;color:var(--muted);margin-bottom:4px}
 .about{max-width:760px;padding:24px 24px 80px}
 .about h1{font-size:clamp(40px,7vw,72px);letter-spacing:-.03em;line-height:1;margin:0 0 20px}
 .about h2{font-size:24px;letter-spacing:-.02em;margin:40px 0 8px}
@@ -461,7 +464,7 @@ async function renderItem(n, key, isNew){
         intro = `<p style="margin:0;font-size:16px;max-width:480px">${isNew?'It has left the shelf for good. We also sent this link to your email. ':''}This page is your own link. Keep it.</p>`;
       }
       if (info.gift) html = `<div class="giftnote"><span class="from">A GIFT FROM ${esc((info.from||'Somebody').toUpperCase())}</span>${info.note?'“'+esc(info.note)+'”':'No note. It speaks for itself. It does not speak.'}</div>` + html;
-      html += intro + `<div class="dl">${FORMATS.map(f=>`<div><div><b>${f[1]}</b><span>${f[2]} · ${f[3]} × ${f[4]} · PNG</span></div><button class="btn2" type="button" data-fmt="${f[0]}">Save</button></div>`).join('')}
+      html += intro + `<div class="sharebox"><img id="shareImg" alt="Your share picture"><div><div class="label">SHOW IT OFF</div><p style="margin:0 0 12px;font-size:16px">A ready picture that says ${esc(b.name)} is yours, and where it lives. Post it, send it, set it as your story. The link in it is public, your own link stays private.</p><div class="linkrow" style="margin:0"><button class="btn2" type="button" id="shareCard">${matchMedia('(pointer:coarse)').matches?'Share':'Save'} picture</button><button class="btn2" type="button" id="copyPublic">Copy public link</button></div></div></div><div class="dl">${FORMATS.map(f=>`<div><div><b>${f[1]}</b><span>${f[2]} · ${f[3]} × ${f[4]} · PNG</span></div><button class="btn2" type="button" data-fmt="${f[0]}">Save</button></div>`).join('')}
         <div><div><b>Poster A4</b><span>21 × 29.7 cm / 8.3 × 11.7 in · PDF · to print and hang up</span></div><button class="btn2" type="button" id="posterBtn">Save</button></div></div>
         <details class="howto"><summary>How to print the poster</summary>
           <ul>
@@ -476,6 +479,19 @@ async function renderItem(n, key, isNew){
     }
     st.outerHTML = html;
     document.querySelectorAll('[data-fmt]').forEach(btn=>btn.onclick=()=>savePng(n, btn.dataset.fmt));
+    if ($('shareCard')){
+      const pub = location.origin+'/no/'+b.num, gotIt = !!info.gift;
+      shareCard(n, {city:info.city, gift:gotIt}).then(bl=>{ if($('shareImg')) $('shareImg').src=URL.createObjectURL(bl); }).catch(()=>{});
+      $('shareCard').onclick=async()=>{
+        const bl = await shareCard(n, {city:info.city, gift:gotIt});
+        const file = new File([bl], 'nobody-'+b.num+'-'+b.name.toLowerCase()+'-share.png', {type:'image/png'});
+        if (matchMedia('(pointer:coarse)').matches && navigator.canShare && navigator.canShare({files:[file]})){
+          try { await navigator.share({files:[file], title:b.name, text:pub}); return; } catch(e){ if (e.name==='AbortError') return; }
+        }
+        saveBlob(bl, file.name, 'image/png', b.name);
+      };
+      $('copyPublic').onclick=async()=>{ try{ await navigator.clipboard.writeText(pub); }catch(e){} toast('Copied: '+pub.replace(/^https?:\/\//,'')); };
+    }
     if ($('posterBtn')) $('posterBtn').onclick=async()=>{ const bt=$('posterBtn'); bt.disabled=true; bt.textContent='Making…'; try{ await savePoster(n, {city:info.city, since:fmtDate(info.since)}); } catch(e){ toast('Could not make the poster. Try again.'); } bt.disabled=false; bt.textContent='Save'; };
     return;
   }
@@ -587,6 +603,26 @@ function makePng(n, W, H){
     img.onerror=rej;
     img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(exportSvg(n,W,H));
   });
+}
+// The owner's share picture: 1080 x 1350, says whose it is and where it lives.
+async function shareCard(n, info){
+  const b=nobody(n), W=1080, H=1350;
+  await Promise.all([document.fonts.load('600 40px "Instrument Sans"'), document.fonts.load('400 40px "Instrument Sans"')]).catch(()=>{});
+  const c=document.createElement('canvas'); c.width=W; c.height=H; const x=c.getContext('2d');
+  x.fillStyle=b.paper; x.fillRect(0,0,W,H);
+  const fig=await loadImg(b.src); const fh=860, fw=fh*200/266; x.drawImage(fig,(W-fw)/2,96,fw,fh);
+  const F=(w,px)=>`${w} ${px}px "Instrument Sans", Arial, sans-serif`;
+  const txt=(t,tx,ty,w,px,col,align)=>{ x.font=F(w,px); x.fillStyle=col; x.textAlign=align||'left'; x.fillText(t,tx,ty); };
+  const fitPx=(t,w,px,max)=>{ x.font=F(w,px); const m=x.measureText(t).width; return m>max?Math.floor(px*max/m):px; };
+  txt('WhoIsJohnny?',64,84,600,34,'#151515');
+  txt(b.label,W-64,84,400,32,'#3a3833','right');
+  const l1 = info.gift ? 'Somebody gave me a Nobody.' : 'I adopted a Nobody.';
+  const l2 = b.name+' lives in '+info.city+' now.';
+  txt(l1,64,1066,600,fitPx(l1,600,76,W-128),'#151515');
+  txt(l2,64,1142,400,fitPx(l2,400,46,W-128),'#3a3833');
+  txt('whoisjohnny.com/no/'+b.num,64,1280,600,32,'#151515');
+  txt('Exists once.',W-64,1280,400,32,'#6a675f','right');
+  return await new Promise((res,rej)=>c.toBlob(bl=>bl?res(bl):rej(new Error('No image')),'image/png'));
 }
 async function savePng(n, key){
   const f=FORMATS.find(x=>x[0]===key), b=nobody(n);
