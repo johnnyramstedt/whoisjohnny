@@ -6,12 +6,13 @@
 import { nobody, isXmas, storyOf } from '../../assets/nobody.js';
 
 const START = 50;
+const NOBODIES_HIDDEN = true; // the site shows only the texts for now
 
 export async function onRequestGet({ request, env, params }) {
   const url = new URL(request.url);
   const page = await env.ASSETS.fetch(new URL('/', url.origin));
   const n = parseInt(params.n, 10);
-  if (!(n > 0)) return page;
+  if (NOBODIES_HIDDEN || !(n > 0)) return page;
   try {
     const ix = env.NOBODIES ? (await env.NOBODIES.get('index', 'json')) || { max: START, owned: {} } : { max: START, owned: {} };
     if (!(isXmas(n) || n <= ix.max)) return page;

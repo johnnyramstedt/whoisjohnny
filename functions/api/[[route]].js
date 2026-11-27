@@ -9,6 +9,7 @@
 //   POLAR_API         Optional. Set to https://sandbox-api.polar.sh to test with Polar's sandbox.
 
 import { nameOf, pad, label, isXmas, XMAS_FROM, XMAS_TO } from '../../assets/nobody.js';
+import { TEXT_COUNT, textOf, slugOf } from '../../assets/texts.js';
 
 const START = 50;        // Nobodies on the first shelf
 const REFILL_AT = 20;    // when this few are left...
@@ -35,6 +36,8 @@ export async function onRequest(ctx) {
     if (route === 'done' && request.method === 'GET') return await done(env, url, ctx);
     if (route === 'nobody' && request.method === 'GET') return await one(env, url);
     if (route === 'news' && request.method === 'POST') return await news(request, env);
+    if (route === 'tget' && request.method === 'POST') return await tget(request, env, url, ctx);
+    if (route === 'text' && request.method === 'GET') return await oneText(env, url);
     return json({ error: 'Not found' }, 404);
   } catch (e) {
     return json({ error: String(e && e.message || e) }, 500);
@@ -129,7 +132,7 @@ async function shelf(env, url, ctx) {
 
   const held = Object.keys(ix.holds).map(Number).filter(n => ix.holds[n].u > now && !ix.owned[n]);
   const owned = Object.keys(ix.owned).map(Number).map(n => ({ no: n, owner: ix.owned[n].o, city: ix.owned[n].c, since: ix.owned[n].s }));
-  return { price: ALL_FREE ? 0 : PRICE, allFree: ALL_FREE, xmasFree: xmasFree(), xmasFreeUntil: XMAS_FREE_UNTIL, max: ix.max, newFrom: ix.lastLitter || 0, free: freeList(ix), xmas: freeXmas(ix), held, owned };
+  return { tcount: TEXT_COUNT, price: ALL_FREE ? 0 : PRICE, allFree: ALL_FREE, xmasFree: xmasFree(), xmasFreeUntil: XMAS_FREE_UNTIL, max: ix.max, newFrom: ix.lastLitter || 0, free: freeList(ix), xmas: freeXmas(ix), held, owned };
 }
 
 // ---------------------------------------------------------------- adopt
@@ -297,4 +300,73 @@ async function news(request, env) {
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json({ error: 'That does not look like an email address.' }, 400);
   await env.NOBODIES.put('news:' + email, JSON.stringify({ t: Date.now() }));
   return json({ ok: true });
+}
+
+// ---------------------------------------------------------------- texts
+// The deadpan texts. Every text is free and anybody can get any text.
+// One text per email address: you give your email, you get a link to the downloads.
+// You can also send it to somebody else as a gift (that uses your one text).
+async function newKey() { return [...crypto.getRandomValues(new Uint8Array(10))].map(b => b.toString(16).padStart(2, '0')).join(''); }
+
+async function tget(request, env, url, ctx) {
+  const body = await request.json().catch(() => ({}));
+  const no = parseInt(body.no, 10);
+  const gift = !!body.gift;
+  const email = clean(body.email, 120).toLowerCase();
+  const toEmail = gift ? clean(body.toEmail, 120).toLowerCase() : '';
+  const note = gift ? clean(body.note, 200) : '';
+  const from = gift ? clean(body.from, 30) : '';
+  const ok = e => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e);
+  if (!(no >= 1 && no <= TEXT_COUNT)) return json({ error: 'That text does not exist.' }, 400);
+  if (!ok(email)) return json({ error: 'Please give your email. The link comes there.' }, 400);
+  if (toEmail && !ok(toEmail)) return json({ error: 'Their email does not look right. Leave it empty to send the link yourself.' }, 400);
+  if (await env.NOBODIES.get('tget:' + email)) return json({ error: 'This email has already got its text. One per email address.' }, 409);
+
+  const key = await newKey();
+  const rec = { no, s: Date.now() };
+  if (gift) { rec.g = 1; rec.f = from || 'Somebody'; rec.m = note; rec.te = toEmail; }
+  await env.NOBODIES.put('tg:' + key, JSON.stringify(rec));
+  await env.NOBODIES.put('tget:' + email, JSON.stringify({ no, t: Date.now() }));
+  if (ctx) ctx.waitUntil(deliverText(env, email, no, key, rec, url.origin));
+  return json({ ok: true, no, key });
+}
+
+async function oneText(env, url) {
+  const no = parseInt(url.searchParams.get('no'), 10);
+  const key = url.searchParams.get('key') || '';
+  if (!(no >= 1 && no <= TEXT_COUNT)) return json({ exists: false });
+  if (!key || !/^[a-f0-9]{8,40}$/.test(key)) return json({ exists: true, mine: false });
+  const rec = await env.NOBODIES.get('tg:' + key, 'json');
+  if (!rec || rec.no !== no) return json({ exists: true, mine: false });
+  return json({ exists: true, mine: true, ...(rec.g ? { gift: true, from: rec.f, note: rec.m || '', toSent: !!rec.te } : {}) });
+}
+
+const TFOOT = `<p style="font-size:13px;color:#6a675f;margin:0">Chosen by Johnny. · whoisjohnny.com · @whoisjohnny2020</p>`;
+const tpage = inner => page(inner).replace(FOOT, TFOOT);
+const quote = t => `<p style="font-size:28px;line-height:1.05;font-weight:bold;color:#e4002b;margin:0 0 22px;letter-spacing:-.5px">${esc(t)}</p>`;
+const WHAT = 'On the page you get pictures for Instagram, TikTok, Snapchat, Facebook, LinkedIn and Pinterest, an A4 poster and a 50 × 70 cm (19.7 × 27.6 in) poster, both as PDFs to print at home or at a print shop.';
+
+async function deliverText(env, email, no, key, rec, origin) {
+  if (!env.RESEND_KEY) return;
+  const link = origin + '/t/' + slugOf(no) + '?key=' + key, t = textOf(no);
+  const jobs = [];
+  if (rec.g) {
+    jobs.push(sendMail(env, email, 'Your gift is ready to send.', tpage(
+      `<h1 style="font-size:34px;line-height:1.05;margin:0 0 14px">Your gift is ready.</h1>${quote(t)}
+<p style="font-size:17px;line-height:1.5;margin:0 0 20px">${rec.te ? 'We have emailed it to them.' : 'Send them the link below, in a message, a card or a text.'} ${WHAT}</p>
+${btn(link, rec.te ? 'See the gift' : 'Open the gift link')}${linkLine(link)}`)));
+    if (rec.te) jobs.push(sendMail(env, rec.te, rec.f === 'Somebody' ? 'Somebody sent you a text.' : rec.f + ' sent you a text.', tpage(
+      `<h1 style="font-size:34px;line-height:1.05;margin:0 0 14px">${esc(rec.f)} sent you a text.</h1>${quote(t)}
+${rec.m ? `<p style="font-size:18px;line-height:1.45;margin:0 0 22px;padding:16px 18px;background:#f1e9d8;border:2px solid #151515;border-radius:10px">“${esc(rec.m)}”<br><span style="font-size:13px;color:#6a675f">${esc(rec.f)}</span></p>` : ''}
+${btn(link, 'Get your text')}
+<p style="font-size:15px;line-height:1.5;color:#3a3833;margin:0 0 6px">${WHAT} Tag @whoisjohnny2020 on Instagram or TikTok, and we may share it.</p>
+${linkLine(link)}`)));
+  } else {
+    jobs.push(sendMail(env, email, 'Your text is here.', tpage(
+      `<h1 style="font-size:34px;line-height:1.05;margin:0 0 14px">Your text is here.</h1>${quote(t)}
+${btn(link, 'Get the pictures and posters')}
+<p style="font-size:15px;line-height:1.5;color:#3a3833;margin:0 0 6px">${WHAT} Tag @whoisjohnny2020 on Instagram or TikTok, and we may share it. Keep this email: the button is your own link.</p>
+${linkLine(link)}`)));
+  }
+  await Promise.all(jobs.map(j => j.catch(() => {})));
 }
