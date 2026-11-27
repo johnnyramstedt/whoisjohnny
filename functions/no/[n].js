@@ -19,7 +19,7 @@ export async function onRequestGet({ request, env, params }) {
     const title = b.name + ', ' + b.label + ' · WhoIsJohnny?';
     const desc = o
       ? b.name + ' lives in ' + o.c + ' now. A Nobody: a small figure that exists once.'
-      : (storyOf(n) || 'A small figure that exists once.') + ' On the shelf. €9.';
+      : (storyOf(n) || 'A small figure that exists once.') + ' On the shelf. Free.';
     const img = url.origin + '/og/' + b.num + '.png' + (o ? '?c=' + encodeURIComponent(o.c) : '');
     const set = v => ({ element(e) { e.setAttribute('content', v); } });
     return new HTMLRewriter()

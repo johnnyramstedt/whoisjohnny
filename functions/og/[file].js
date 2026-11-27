@@ -6,7 +6,7 @@
 import { cardPng } from '../_lib/card.js';
 import { isXmas } from '../../assets/nobody.js';
 
-const PRICE = 9;
+const PRICE = 0; // free for now (was 9)
 const START = 50;
 
 export async function onRequestGet({ request, env, params }) {
