@@ -208,14 +208,14 @@ footer a{color:var(--muted)}
       <h1 class="big">Pick a Nobody.</h1>
       <p class="lede">Small figures with nowhere to be. Each one exists once, with its own name and number. Keep one, collect a few, or give one away. Then watch where they end up.</p>
       <p class="muted">Every Nobody comes with pictures for Instagram, TikTok, Snapchat and Facebook, and an A4 poster (PDF) to print at home or at a print shop.</p>
-      <div class="ctas"><a class="btn" href="#shelf">Pick one · <span class="price">€9</span></a><a class="btn2" href="#gift">Give one as a gift</a><a class="btn2" href="#xmas">Christmas edition</a></div>
+      <div class="ctas"><a class="btn" href="#shelf">Pick one · <span class="price">€9</span></a><a class="btn2" href="#gift">Give one as a gift</a><a class="btn2" href="#xmas" id="xCta">Christmas edition</a></div>
     </div>
     <div class="parade" aria-label="Nobodies walking by"><div class="track" id="parade"></div></div>
     <section class="xmas" id="xmas"><div class="wrap">
       <div class="xhead">
-        <div class="kick">CHRISTMAS EDITION</div>
+        <div class="kick" id="xKick">CHRISTMAS EDITION</div>
         <h2>Ten Christmas Nobodies.</h2>
-        <p>Only ten. There will never be more. Keep one, or give one as the least necessary present under the tree. With pictures for the phone and an A4 poster to print. <span class="price">€9</span>.</p>
+        <p>Only ten. There will never be more. Keep one, or give one as the least necessary present under the tree. With pictures for the phone and an A4 poster to print. <span class="price" id="xPrice">€9</span>.</p>
       </div>
       <div class="xgrid" id="xgrid"></div>
     </div></section>
@@ -388,6 +388,7 @@ async function load(){
   $('cntShelf').textContent = DATA.free.length;
   $('cntWorld').textContent = DATA.owned.length;
   document.querySelectorAll('.price').forEach(e=>e.textContent='€'+DATA.price);
+  if (DATA.xmasFree){ $('xPrice').textContent='Free until Christmas Day. One each'; $('xKick').textContent='CHRISTMAS EDITION · FREE UNTIL CHRISTMAS'; $('xCta').textContent='Christmas edition · free'; }
 }
 
 // ---------------------------------------------------------------- views
@@ -414,7 +415,7 @@ function renderShelf(){
   const xs=[]; for(let i=XMAS_FROM;i<=XMAS_TO;i++) xs.push(i);
   $('xgrid').innerHTML = xs.map(n=>{
     const b=nobody(n), o=xOwned[n], free=xFree.has(n);
-    const right = o ? 'Lives in '+esc(o.city) : free ? '€'+DATA.price : 'Being adopted';
+    const right = o ? 'Lives in '+esc(o.city) : free ? (DATA.xmasFree?'Free':'€'+DATA.price) : 'Being adopted';
     return `<a class="xcard${o?' gone':''}" href="/no/${b.num}" data-link><div class="pic" style="background:${b.paper}"><img src="${b.src}" alt="${esc(b.name)}, ${b.label}" loading="lazy">${o?'<span class="tag">ADOPTED</span>':''}</div><div class="cap"><span><b>${esc(b.name)}</b> <span class="muted">${b.label}</span></span><span class="muted">${right}</span></div><div class="story">${esc(storyOf(n))}</div></a>`;
   }).join('');
   const own = DATA.owned, nc = new Set(own.map(o=>o.city)).size;
@@ -498,8 +499,9 @@ async function renderItem(n, key, isNew){
 
   if (info.held){ st.outerHTML = `<p class="line">Somebody is adopting ${esc(b.name)} right now. Pick another, or come back in 15 minutes.</p>`; return; }
 
+  const xFreeNow = !!(DATA.xmasFree && n>=XMAS_FROM && n<=XMAS_TO);
   st.outerHTML = `<form class="box" id="adoptForm">
-    <div style="font-size:17px">${esc(b.name)}, ${b.label} · €${DATA.price}</div>
+    <div style="font-size:17px">${esc(b.name)}, ${b.label} · ${xFreeNow?'Free until Christmas':'€'+DATA.price}</div>
     <div class="seg" role="group" aria-label="Who is it for?"><button type="button" data-for="me" aria-pressed="${giftMode?'false':'true'}">For me</button><button type="button" data-for="gift" aria-pressed="${giftMode?'true':'false'}">As a gift</button></div>
     <div id="giftFields" ${giftMode?'':'hidden'} style="display:flex;flex-direction:column;gap:12px">
       <label class="f" for="toName">Their name</label>
@@ -521,12 +523,15 @@ async function renderItem(n, key, isNew){
       <label class="f" for="owner">Your name in the register <span class="muted" style="font-weight:400">(optional)</span></label>
       <input id="owner" type="text" maxlength="30" placeholder="Anonymous">
     </div>
-    <label class="tick"><input type="checkbox" id="consent" required> Deliver it now. I understand the 14-day right of withdrawal ends when delivery starts.</label>
+    ${xFreeNow?`<label class="f" for="email">Your email</label>
+    <input id="email" type="email" required maxlength="120" placeholder="you@example.com" autocomplete="email">
+    <div class="hint">We send ${giftMode?'the gift link':'your own link'} here. Nothing else, unless you sign up for news.</div>`:''}
+    <label class="tick" ${xFreeNow?'hidden':''}><input type="checkbox" id="consent" ${xFreeNow?'':'required'}> Deliver it now. I understand the 14-day right of withdrawal ends when delivery starts.</label>
     <button class="btn" type="submit" id="adoptBtn"></button>
     <div class="err" id="adoptErr" hidden></div>
-    <div class="muted" style="font-size:13px">Includes pictures for Instagram, TikTok, Snapchat and Facebook, and an A4 poster to print. You pay on the next page, with Polar. ${esc(b.name)} is held for you for 15 minutes.</div>
+    <div class="muted" style="font-size:13px">Includes pictures for Instagram, TikTok, Snapchat and Facebook, and an A4 poster to print. ${xFreeNow?'Free until Christmas Day, no payment. One Christmas Nobody per person.':'You pay on the next page, with Polar. '+esc(b.name)+' is held for you for 15 minutes.'}</div>
   </form>`;
-  const label = ()=> (giftMode?'Give ':'Adopt ')+b.name+' · €'+DATA.price;
+  const label = ()=> (giftMode?'Give ':'Adopt ')+b.name+' · '+(xFreeNow?'Free':'€'+DATA.price);
   const setMode = gm=>{
     giftMode = gm;
     document.querySelectorAll('[data-for]').forEach(x=>x.setAttribute('aria-pressed', String((x.dataset.for==='gift')===gm)));
@@ -544,8 +549,10 @@ async function renderItem(n, key, isNew){
     const body = giftMode
       ? {no:n, city:$('city').value, gift:true, owner:$('toName').value, toEmail:$('toEmail').value, note:$('note').value, from:$('fromName').value}
       : {no:n, city:$('city').value, owner:$('owner').value};
+    if (xFreeNow) body.email = $('email').value;
     const d = await api('adopt', body);
     if (d.url){ location.href = d.url; return; }
+    if (d.ok){ await load(); history.pushState(null,'','/no/'+pad(d.no)+'?key='+encodeURIComponent(d.key)+'&new=1'); return route(); }
     fail(d.error || 'Something went wrong.');
   };
 }
