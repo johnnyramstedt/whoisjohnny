@@ -10,7 +10,7 @@
 <meta property="og:image" content="https://whoisjohnny.com/og/t001.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="A deadpan text in red on white.">
+<meta property="og:image:alt" content="A short deadpan text on white, yellow or black.">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:type" content="website">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -183,11 +183,31 @@ h1.name{margin:-10px 0 0;font-size:clamp(56px,7vw,96px);line-height:.95;font-wei
 .teaser{max-width:760px;margin:-36px 0 0;padding:0 0 56px;font-size:18px;line-height:1.55;color:var(--soft)}
 .teaser a{color:var(--ink);font-weight:600}
 
-.tpic{background:#fff;border:1px solid var(--line)}
+.tpic{border-radius:0!important;box-shadow:0 1px 2px rgba(0,0,0,.08),0 6px 18px rgba(0,0,0,.07)}
 .tpic img{aspect-ratio:210/297!important;object-fit:cover}
 .item .big-pic.tpic img{aspect-ratio:210/297}
+.tleft{flex:1 1 340px;max-width:480px;display:flex;flex-direction:column;gap:18px}
+.tleft .big-pic{max-width:none;flex:none}
+.tfilter{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 28px}
+.tfilter button{font:600 14px var(--font);padding:8px 16px;border:1.5px solid var(--ink);border-radius:999px;background:transparent;color:var(--ink);cursor:pointer;display:flex;align-items:center;gap:8px}
+.tfilter button i{width:12px;height:12px;border-radius:50%;border:1px solid #0003;display:inline-block}
+.tfilter button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.tgrid .card[hidden]{display:none}
+/* framed on a wall */
+.room{position:relative;aspect-ratio:21/9;background:#e4e0d6;overflow:hidden;container-type:inline-size;margin:8px 0 10px}
+.room::after{content:"";position:absolute;left:0;right:0;bottom:0;height:13%;background:#b9a88f;border-top:.4cqw solid #a8967c}
+.room .fr{position:absolute;bottom:31%;background:#fff;padding:2.1cqw;border:.75cqw solid #161616;box-shadow:0 1.2cqw 2.4cqw rgba(0,0,0,.18)}
+.room .fr img{display:block;width:100%;aspect-ratio:210/297;object-fit:cover}
+.room .f1{left:25%;width:15%}.room .f2{left:43.5%;width:12%;bottom:40%}.room .f3{left:59%;width:15%}
+.room .bench{position:absolute;left:21%;width:58%;bottom:13%;height:9%;background:#2a2a2a;border-radius:.6cqw .6cqw 0 0}
+.room1{aspect-ratio:4/3;margin:0}
+.room1 .fr{left:31%;width:38%;bottom:27%;padding:3.6cqw;border-width:1.3cqw}
+.room1 .bench{left:20%;width:60%;height:7%}
+.mock{font-size:13px;color:var(--muted);margin:0}
+@media (max-width:600px){.tgrid{grid-template-columns:1fr 1fr;gap:18px 14px}.tfilter button{padding:7px 12px;font-size:13px}.room{aspect-ratio:4/3}.room .f1{left:6%;width:27%}.room .f2{left:37%;width:24%}.room .f3{left:65%;width:27%}.room .bench{left:4%;width:92%}}
 .tname{font-size:clamp(34px,4.4vw,56px)!important;line-height:1!important;letter-spacing:-.03em!important;margin:0!important}
-.tgrid{grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
+.tgrid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:40px 28px}
+.tgrid .card:hover{transform:translateY(-6px)}
 .card.gone{opacity:.6}
 .tband{border-top:2px solid var(--ink);padding:64px 0 0}
 .thead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:20px 40px;margin-bottom:32px}
@@ -299,7 +319,17 @@ footer a{color:var(--muted)}
       <p class="lede">Short deadpan texts, chosen by Johnny. Pick one for yourself, or send it to somebody as a gift. Free.</p>
       <p class="muted">Every text comes with pictures for Instagram, TikTok, Snapchat, Facebook, LinkedIn and Pinterest, an A4 poster (21 × 29.7 cm / 8.3 × 11.7 in) and a 50 × 70 cm poster (19.7 × 27.6 in), both as PDFs to print. Give your email and the link comes there. One text per email address.</p>
     </div>
-    <div class="wrap"><div class="grid tgrid" id="tgrid"></div></div>
+    <div class="wrap">
+      <div class="room" id="troom" aria-label="Three texts framed on a wall"></div>
+      <p class="mock" style="margin-bottom:48px">Mock-up. Frames are not included.</p>
+      <div class="tfilter" id="tfilter" role="group" aria-label="Show colour">
+        <button type="button" data-c="all" aria-pressed="true">All</button>
+        <button type="button" data-c="white" aria-pressed="false"><i style="background:#fff"></i>White</button>
+        <button type="button" data-c="yellow" aria-pressed="false"><i style="background:#ffd60a"></i>Yellow</button>
+        <button type="button" data-c="black" aria-pressed="false"><i style="background:#111"></i>Black</button>
+      </div>
+      <div class="grid tgrid" id="tgrid"></div>
+    </div>
   </section>
 
   <!-- ONE NOBODY -->
@@ -325,7 +355,7 @@ footer a{color:var(--muted)}
   <!-- ABOUT -->
   <section id="vAbout" hidden><div class="wrap about">
     <h1>About the texts.</h1>
-    <p>Short deadpan lines, set in red on white. Johnny chooses them. They say what everybody thinks and nobody prints.</p>
+    <p>Short deadpan lines on white, yellow or black paper. Johnny chooses them. They say what everybody thinks and nobody prints.</p>
     <p>They are free. Pick one, give your email, and you get a link with pictures for your phone and posters for your wall. One text per email address, so choose well. Or send it to somebody else, with a short note.</p>
     <h2>What people do with them</h2>
     <ul>
@@ -380,7 +410,7 @@ footer a{color:var(--muted)}
 
 <script type="module">
 import { nobody, traitsOf, pad, CITIES, cityRow, MAP_SVG, storyOf, XMAS_FROM, XMAS_TO } from '/assets/nobody.js';
-import { TEXT_COUNT, textOf, TEXT_RED, slugOf, bySlug } from '/assets/texts.js';
+import { TEXT_COUNT, textOf, slugOf, bySlug, schemeOf, schemeKey } from '/assets/texts.js';
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -711,7 +741,7 @@ async function saveBlob(blob, name, type, title){
 }
 
 // ---------------------------------------------------------------- texts
-// A text sheet: white paper, red bold type, a red question mark. Same look on screen, in pictures and on posters.
+// A text sheet. Same look on screen, in pictures and on posters.
 const TFONT = 'Arial, Helvetica, "Liberation Sans", sans-serif';
 const TFORMATS = [['instagram','Instagram','Post or story',1080,1350],['tiktok','TikTok','Video or profile',1080,1920],['snapchat','Snapchat','Story',1080,1920],['facebook','Facebook','Post or profile picture',1080,1080],['linkedin','LinkedIn','Post',1200,1200],['pinterest','Pinterest','Pin',1000,1500]];
 const TPOSTERS = [['a4','Poster A4','21 × 29.7 cm / 8.3 × 11.7 in',210,297],['50x70','Poster 50 × 70 cm','50 × 70 cm / 19.7 × 27.6 in',500,700]];
@@ -733,28 +763,29 @@ function fitText(text, maxW, maxH, start, min){
   }
   return {size, lines};
 }
-// mode: 'thumb' (sheet, no footer) | 'social' (pictures with the site footer)
+// Each text has one paper colour (white, yellow or black). Same font everywhere. Small WhoIsJohnny? bottom right.
+// mode: 'thumb' (the sheet) | 'social' (pictures, with the web address and handle under the name)
 function drawText(n, W, H, mode){
   const c=document.createElement('canvas'); c.width=W; c.height=H; const x=c.getContext('2d');
-  const u=W/100, t=textOf(n), story = H/W > 1.6, social = mode!=='thumb';
-  x.fillStyle='#fff'; x.fillRect(0,0,W,H);
+  const u=W/100, t=textOf(n), k=schemeOf(n), story = H/W > 1.6, social = mode!=='thumb';
+  x.fillStyle=k.bg; x.fillRect(0,0,W,H);
   const lift = story ? 22*u : 0, M=8*u;
   const top = (story ? 24 : 9)*u;
   const reserve = (social ? 20 : 13)*u + lift;
-  const {size, lines} = fitText(t, W-2*M, H-top-reserve, 26*u, 4*u);
-  x.font='bold '+size+'px '+TFONT; x.fillStyle=TEXT_RED; x.textAlign='left'; x.textBaseline='alphabetic';
+  const {size, lines} = fitText(t, W-2*M, (H-top-reserve)*0.62, 17*u, 4*u);
+  x.font='bold '+size+'px '+TFONT; x.fillStyle=k.fg; x.textAlign='left'; x.textBaseline='alphabetic';
   try { x.letterSpacing=(-size*0.02)+'px'; } catch(e){}
-  lines.forEach((l,k)=>x.fillText(l, M, top+size*0.86+k*size*1.02));
+  lines.forEach((l,i)=>x.fillText(l, M, top+size*0.86+i*size*1.02));
   try { x.letterSpacing='0px'; } catch(e){}
-  x.fillStyle='#111';
+  x.fillStyle=k.foot; x.textAlign='right';
   if (social){
-    x.font='bold '+(3.4*u)+'px '+TFONT; x.fillText('WhoIsJohnny?', M, H-lift-11.5*u);
+    x.font='bold '+(3.4*u)+'px '+TFONT; x.fillText('WhoIsJohnny?', W-M, H-lift-11.5*u);
     x.font=(2.9*u)+'px '+TFONT;
-    x.fillText('whoisjohnny.com', M, H-lift-8*u);
-    x.fillText('@whoisjohnny2020', M, H-lift-4.6*u);
+    x.fillText('whoisjohnny.com', W-M, H-lift-8*u);
+    x.fillText('@whoisjohnny2020', W-M, H-lift-4.6*u);
+  } else {
+    x.font='bold '+(3.4*u)+'px '+TFONT; x.fillText('WhoIsJohnny?', W-M, H-6*u);
   }
-  x.fillStyle=TEXT_RED; x.font='bold '+(8*u)+'px '+TFONT; x.textAlign='right';
-  x.fillText('?', W-M, H-lift-4.6*u);
   return c;
 }
 const THUMB = {};
@@ -771,15 +802,16 @@ function pdfStr(s){
 }
 function textPdf(n, wmm, hmm){
   const pt=72/25.4, PW=wmm*pt, PH=hmm*pt, u=PW/100, M=8*u, top=9*u, reserve=13*u, t=textOf(n);
-  const {size, lines} = fitText(t, PW-2*M, PH-top-reserve, 26*u, 4*u);
+  const {size, lines} = fitText(t, PW-2*M, (PH-top-reserve)*0.62, 17*u, 4*u);
   const f = v => v.toFixed(2);
-  let s = '0.894 0 0.169 rg BT /F1 '+f(size)+' Tf '+f(-size*0.02)+' Tc\n';
+  const k = schemeOf(n), rgb = h => [1,3,5].map(i=>(parseInt(h.slice(i,i+2),16)/255).toFixed(3)).join(' ')+' rg ';
+  let s = rgb(k.bg)+'0 0 '+f(PW)+' '+f(PH)+' re f\n';
+  s += rgb(k.fg)+'BT /F1 '+f(size)+' Tf '+f(-size*0.02)+' Tc\n';
   lines.forEach((l,k)=>{ s += '1 0 0 1 '+f(M)+' '+f(PH-(top+size*0.86+k*size*1.02))+' Tm '+pdfStr(l)+' Tj\n'; });
   s += 'ET\n';
-  const small = 2.2*u;
-  s += '0.067 0.067 0.067 rg BT /F2 '+f(small)+' Tf 0 Tc 1 0 0 1 '+f(M)+' '+f(4.6*u)+' Tm '+pdfStr('WhoIsJohnny?  ·  Chosen by Johnny.')+' Tj ET\n';
-  mctx.font='bold 100px '+TFONT; const qw = mctx.measureText('?').width*8*u/100;
-  s += '0.894 0 0.169 rg BT /F1 '+f(8*u)+' Tf 1 0 0 1 '+f(PW-M-qw)+' '+f(4.6*u)+' Tm (?) Tj ET\n';
+  const small = 2.6*u;
+  mctx.font='bold 100px '+TFONT; const fw = mctx.measureText('WhoIsJohnny?').width*small/100;
+  s += rgb(k.foot)+'BT /F1 '+f(small)+' Tf 0 Tc 1 0 0 1 '+f(PW-M-fw)+' '+f(4.6*u)+' Tm (WhoIsJohnny?) Tj ET\n';
   const enc=new TextEncoder(), parts=[], offs=[]; let len=0;
   const add=p=>{ const b = typeof p==='string' ? Uint8Array.from(p, ch=>ch.charCodeAt(0)&255) : p; parts.push(b); len+=b.length; };
   const obj=(i,body)=>{ offs[i]=len; add(i+' 0 obj\n'+body+'\nendobj\n'); };
@@ -799,7 +831,14 @@ function renderTexts(){
   show('vTexts');
   document.title = 'WhoIsJohnny? Deadpan texts.';
   const items=[]; for(let n=1;n<=DATA.tcount;n++) items.push(n);
-  $('tgrid').innerHTML = items.map(n=>`<a class="card" href="/t/${slugOf(n)}" data-link><div class="pic tpic"><img src="${textThumb(n)}" alt="${esc(textOf(n))}" loading="lazy"></div><div class="cap"><span></span><span class="muted">Free</span></div></a>`).join('');
+  $('tgrid').innerHTML = items.map(n=>`<a class="card" href="/t/${slugOf(n)}" data-link data-c="${schemeKey(n)}"><div class="pic tpic"><img src="${textThumb(n)}" alt="${esc(textOf(n))}" loading="lazy"></div></a>`).join('');
+  // three framed texts on a wall, one of each colour, short ones, new ones each visit
+  const pick = c => { const p = items.filter(n=>schemeKey(n)===c && textOf(n).length<34); return p[Math.floor(Math.random()*p.length)]; };
+  const fr = (n,cls) => `<a class="fr ${cls}" href="/t/${slugOf(n)}" data-link><img src="${textThumb(n)}" alt="${esc(textOf(n))}"></a>`;
+  $('troom').innerHTML = fr(pick('white'),'f1') + fr(pick('black'),'f2') + fr(pick('yellow'),'f3') + '<div class="bench"></div>';
+  const setC = c => { document.querySelectorAll('#tfilter button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.c===c)); document.querySelectorAll('#tgrid .card').forEach(a=>a.hidden = !(c==='all' || a.dataset.c===c)); };
+  $('tfilter').onclick = e => { const b=e.target.closest('button[data-c]'); if (b) setC(b.dataset.c); };
+  setC('all');
   if (location.hash) { const t=document.querySelector(location.hash); if (t) t.scrollIntoView(); }
 }
 
@@ -809,7 +848,7 @@ async function renderText(n, key, isNew){
   const t=textOf(n), slug=slugOf(n), file=slug.slice(0,48);
   document.title = t+' · WhoIsJohnny?';
   const big = drawText(n, 960, 1358, 'thumb').toDataURL('image/png');
-  $('item').innerHTML = `<div class="item"><div class="big-pic tpic"><img src="${big}" alt="${esc(t)}"></div><div class="side"><a class="back" href="/" data-link>← All texts</a><div class="kicker">Deadpan · Free</div><h1 class="name tname">${esc(t)}</h1><div id="state" class="muted">One moment…</div></div></div>`;
+  $('item').innerHTML = `<div class="item"><div class="tleft"><div class="big-pic tpic"><img src="${big}" alt="${esc(t)}"></div><div class="room room1" aria-label="The text framed on a wall"><div class="fr"><img src="${big}" alt=""></div><div class="bench"></div></div><p class="mock">Mock-up. Frames are not included.</p></div><div class="side"><a class="back" href="/" data-link>← All texts</a><div class="kicker">Deadpan · Free</div><h1 class="name tname">${esc(t)}</h1><div id="state" class="muted">One moment…</div></div></div>`;
 
   let info;
   if (DATA.offline || !key) info = {exists:true, mine:false};

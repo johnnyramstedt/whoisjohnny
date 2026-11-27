@@ -96,7 +96,42 @@ export var TEXTS = [
  "I am listening. I am also thinking about lunch.",
  "Snacks are a form of hope.",
  "Please do not feed the thoughts.",
- "Everything is fine. It is just loud."
+ "Everything is fine. It is just loud.",
+ "Wash your hands. We know who you are.",
+ "Thinking happens here. Take your time.",
+ "The mirror has seen worse.",
+ "Ask for paper. Do not be ashamed.",
+ "Do the dishes now. Thank you.",
+ "There is food. It is just not yours.",
+ "The keys are not here. You already have them.",
+ "You are home. That is enough.",
+ "Take the umbrella. It is raining. Or it is not.",
+ "A deadline is a suggestion.",
+ "I am working. It just does not show.",
+ "Five more minutes.",
+ "We sleep here. No questions.",
+ "Tomorrow is tomorrow's problem.",
+ "The wifi password exists. Order first.",
+ "The queue is here. It starts here.",
+ "We accept cards and patience.",
+ "The toilet is for customers. A coffee makes you a customer.",
+ "Sit as long as you like. The coffee will go cold on its own.",
+ "Dogs welcome. Dogs decide for themselves.",
+ "We know what is in the buns. Ask us.",
+ "Opening hours: see the door. You are standing at the door.",
+ "Silence is free.",
+ "Tipping is not mandatory. Neither is kindness, but we appreciate both.",
+ "We are closed. We are also people.",
+ "Liked it? Tell others. Did not like it? Tell us.",
+ "The cinnamon bun is not a metaphor.",
+ "Calls are taken outside. Or never.",
+ "We cut hair. We do not fix lives.",
+ "It grows back.",
+ "Cancel 24 hours ahead. Hair grows back, time does not.",
+ "Bring a picture. We have seen the picture.",
+ "Nobody can cut their own hair. Many try.",
+ "We cannot read minds. Show a picture.",
+ "Talking is free. Advice costs extra."
 ];
 
 export var TEXT_COUNT = TEXTS.length;
@@ -104,6 +139,15 @@ export function tpad(n){ return String(n).padStart(3,'0'); }
 export function tlabel(n){ return 'Text '+tpad(n); }
 export function textOf(n){ return TEXTS[n-1] ? TEXTS[n-1].toUpperCase() : ''; }
 export var TEXT_RED = '#e4002b';
+// Every text has one fixed colour: white, yellow or black paper. Same font on all of them.
+//   bg: paper, fg: the text, mark: the question mark, foot: the small site line
+export var SCHEMES = {
+  white:  { bg:'#ffffff', fg:'#e4002b', mark:'#e4002b', foot:'#e4002b' },
+  yellow: { bg:'#ffd60a', fg:'#111111', mark:'#111111', foot:'#111111' },
+  black:  { bg:'#111111', fg:'#ffffff', mark:'#ffd60a', foot:'#ffffff' }
+};
+export function schemeKey(n){ return ['white','yellow','black'][(n-1)%3]; }
+export function schemeOf(n){ return SCHEMES[schemeKey(n)]; }
 // Each text has a web address made from its words, e.g. /t/keep-out-of-reach-of-deadlines
 export function slugOf(n){ return String(TEXTS[n-1]||'').toLowerCase().replace(/['’]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,80); }
 export function bySlug(s){ s=String(s||'').toLowerCase(); for (var i=1;i<=TEXTS.length;i++) if (slugOf(i)===s) return i; return 0; }
