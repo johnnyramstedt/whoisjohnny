@@ -373,7 +373,7 @@ const quote = t => `<p style="font-size:26px;line-height:1.05;font-weight:bold;c
 async function deliverText(env, email, no, rec, origin) {
   if (!env.RESEND_KEY) return;
   const link = origin + '/t/' + tpad(no) + '?key=' + rec.key, lab = tlabel(no), t = textOf(no);
-  const what = 'On the page you get pictures for Instagram, TikTok, Snapchat and Facebook, an A4 poster and a 50 × 70 cm (19.7 × 27.6 in) poster, both as PDFs to print at home or at a print shop.';
+  const what = 'On the page you get pictures for Instagram, TikTok, Snapchat, Facebook, LinkedIn and Pinterest, an A4 poster and a 50 × 70 cm (19.7 × 27.6 in) poster, both as PDFs to print at home or at a print shop.';
   const jobs = [];
   if (rec.g) {
     jobs.push(sendMail(env, email, lab + ' is ready to give.', tpage(

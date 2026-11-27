@@ -247,7 +247,7 @@ footer a{color:var(--muted)}
     <div class="wrap" id="shelf"><h2 class="sec">On the shelf now</h2><p class="sub">Every one is different. When one is gone, it is gone.</p><div class="grid" id="grid"></div></div>
 
     <div class="tband"><div class="wrap">
-      <div class="thead"><div><div class="kick">ALSO ON THE SHELF</div><h2>Texts.</h2><p><span class="tcnt">94</span> deadpan texts, chosen by Johnny. Each one exists once, like a Nobody. Adopt one for yourself or give it away. Pictures for your phone, and posters to print in A4 and 50 × 70 cm (19.7 × 27.6 in). Free.</p></div><a class="btn" href="/texts" data-link>See all texts</a></div>
+      <div class="thead"><div><div class="kick">ALSO ON THE SHELF</div><h2>Texts.</h2><p><span class="tcnt">94</span> deadpan texts, chosen by Johnny. Each one exists once, like a Nobody. Adopt one for yourself or give it away. Pictures for Instagram, TikTok, LinkedIn, Pinterest and more, and posters to print in A4 and 50 × 70 cm (19.7 × 27.6 in). Free.</p></div><a class="btn" href="/texts" data-link>See all texts</a></div>
       <div class="grid tgrid" id="tteaser"></div>
     </div></div>
 
@@ -301,7 +301,7 @@ footer a{color:var(--muted)}
     <div class="wrap hero">
       <h1 class="big">Pick a text.</h1>
       <p class="lede">Short deadpan texts, chosen by Johnny. Each one exists once, with one owner, in one city. When it is gone, it is gone.</p>
-      <p class="muted">Every text comes with pictures for Instagram, TikTok, Snapchat and Facebook, an A4 poster (21 × 29.7 cm / 8.3 × 11.7 in) and a 50 × 70 cm poster (19.7 × 27.6 in), both as PDFs to print. Free.</p>
+      <p class="muted">Every text comes with pictures for Instagram, TikTok, Snapchat, Facebook, LinkedIn and Pinterest, an A4 poster (21 × 29.7 cm / 8.3 × 11.7 in) and a 50 × 70 cm poster (19.7 × 27.6 in), both as PDFs to print. Free.</p>
     </div>
     <div class="wrap"><div class="grid tgrid" id="tgrid"></div></div>
   </section>
@@ -730,7 +730,7 @@ async function saveBlob(blob, name, type, title){
 // ---------------------------------------------------------------- texts
 // A text sheet: white paper, red bold type, a red question mark. Same look on screen, in pictures and on posters.
 const TFONT = 'Arial, Helvetica, "Liberation Sans", sans-serif';
-const TFORMATS = [['instagram','Instagram','Post or story',1080,1350],['tiktok','TikTok','Video or profile',1080,1920],['snapchat','Snapchat','Story',1080,1920],['facebook','Facebook','Post or profile picture',1080,1080]];
+const TFORMATS = [['instagram','Instagram','Post or story',1080,1350],['tiktok','TikTok','Video or profile',1080,1920],['snapchat','Snapchat','Story',1080,1920],['facebook','Facebook','Post or profile picture',1080,1080],['linkedin','LinkedIn','Post',1200,1200],['pinterest','Pinterest','Pin',1000,1500]];
 const TPOSTERS = [['a4','Poster A4','21 × 29.7 cm / 8.3 × 11.7 in',210,297],['50x70','Poster 50 × 70 cm','50 × 70 cm / 19.7 × 27.6 in',500,700]];
 const mctx = document.createElement('canvas').getContext('2d');
 function wrapLines(text, size, maxW){
@@ -935,7 +935,7 @@ async function renderText(n, key, isNew){
     <div class="hint" id="emailHint"></div>
     <button class="btn" type="submit" id="adoptBtn"></button>
     <div class="err" id="adoptErr" hidden></div>
-    <div class="muted" style="font-size:13px">Includes pictures for Instagram, TikTok, Snapchat and Facebook, an A4 poster and a 50 × 70 cm (19.7 × 27.6 in) poster to print. Free, no payment.</div>
+    <div class="muted" style="font-size:13px">Includes pictures for Instagram, TikTok, Snapchat, Facebook, LinkedIn and Pinterest, an A4 poster and a 50 × 70 cm (19.7 × 27.6 in) poster to print. Free, no payment.</div>
   </form>`;
   const label = ()=> (giftMode?'Give ':'Adopt ')+lab+' · Free';
   const setMode = gm=>{
