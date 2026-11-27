@@ -16,6 +16,10 @@ const LITTER = 30;       // ...this many new ones arrive
 const HOLD_MS = 15 * 60 * 1000; // a chosen Nobody is held for 15 minutes while paying
 const PRICE = 9;
 const FROM = 'WhoIsJohnny? <hello@whoisjohnny.com>';
+// The ten Christmas Nobodies are free until Christmas Day is over (Helsinki time).
+// No payment, no Polar: the email is asked on the page. One per email address.
+const XMAS_FREE_UNTIL = Date.parse('2026-12-25T22:00:00Z');
+const xmasFree = () => Date.now() < XMAS_FREE_UNTIL;
 
 export async function onRequest(ctx) {
   const { request, env } = ctx;
@@ -24,7 +28,7 @@ export async function onRequest(ctx) {
   try {
     if (!env.NOBODIES) return json({ error: 'The KV binding NOBODIES is missing in Cloudflare.' }, 500);
     if (route === 'shelf' && request.method === 'GET') return json(await shelf(env, url, ctx));
-    if (route === 'adopt' && request.method === 'POST') return await adopt(request, env, url);
+    if (route === 'adopt' && request.method === 'POST') return await adopt(request, env, url, ctx);
     if (route === 'done' && request.method === 'GET') return await done(env, url, ctx);
     if (route === 'nobody' && request.method === 'GET') return await one(env, url);
     if (route === 'news' && request.method === 'POST') return await news(request, env);
@@ -122,12 +126,11 @@ async function shelf(env, url, ctx) {
 
   const held = Object.keys(ix.holds).map(Number).filter(n => ix.holds[n].u > now && !ix.owned[n]);
   const owned = Object.keys(ix.owned).map(Number).map(n => ({ no: n, owner: ix.owned[n].o, city: ix.owned[n].c, since: ix.owned[n].s }));
-  return { price: PRICE, max: ix.max, newFrom: ix.lastLitter || 0, free: freeList(ix), xmas: freeXmas(ix), held, owned };
+  return { price: PRICE, xmasFree: xmasFree(), xmasFreeUntil: XMAS_FREE_UNTIL, max: ix.max, newFrom: ix.lastLitter || 0, free: freeList(ix), xmas: freeXmas(ix), held, owned };
 }
 
 // ---------------------------------------------------------------- adopt
-async function adopt(request, env, url) {
-  if (!env.POLAR_TOKEN || !env.POLAR_PRODUCT_ID) return json({ error: 'Polar is not set up yet (POLAR_TOKEN / POLAR_PRODUCT_ID).' }, 500);
+async function adopt(request, env, url, ctx) {
   const body = await request.json().catch(() => ({}));
   const no = parseInt(body.no, 10);
   const city = clean(body.city, 40);
@@ -146,15 +149,31 @@ async function adopt(request, env, url) {
   const h = ix.holds[no];
   if (h && h.u > Date.now()) return json({ error: 'Somebody is adopting ' + nameOf(no) + ' right now. Pick another, or try again in 15 minutes.', taken: true }, 409);
 
+  const meta = gift
+    ? { nobody: no, nobody_name: nameOf(no), city, owner: owner || 'Anonymous', gift: '1', from: from || 'Somebody', note, to_email: toEmail }
+    : { nobody: no, nobody_name: nameOf(no), city, owner: owner || 'Anonymous' };
+
+  // Free Christmas Nobody: adopted at once, the link goes to the email given.
+  if (isXmas(no) && xmasFree()) {
+    const email = clean(body.email, 120).toLowerCase();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json({ error: 'Please give your email, so we can send you the link.' }, 400);
+    if (await env.NOBODIES.get('xfree:' + email)) return json({ error: 'This email already got a Christmas Nobody. One each, so there are some left for others.' }, 409);
+    const co = { id: 'free-' + crypto.randomUUID(), metadata: meta, customer_email: email };
+    const r = await finalize(env, co, ix);
+    await putIndex(env, ix);
+    await env.NOBODIES.put('xfree:' + email, JSON.stringify({ no, t: Date.now() }));
+    if (ctx) ctx.waitUntil(deliver(env, co, r, url.origin));
+    return json({ ok: true, no, key: r.key });
+  }
+
+  if (!env.POLAR_TOKEN || !env.POLAR_PRODUCT_ID) return json({ error: 'Polar is not set up yet (POLAR_TOKEN / POLAR_PRODUCT_ID).' }, 500);
   const co = await polar(env, '/v1/checkouts/', {
     method: 'POST',
     body: JSON.stringify({
       products: [env.POLAR_PRODUCT_ID],
       success_url: url.origin + '/done?checkout_id={CHECKOUT_ID}',
       return_url: url.origin + '/no/' + pad(no),
-      metadata: gift
-        ? { nobody: no, nobody_name: nameOf(no), city, owner: owner || 'Anonymous', gift: '1', from: from || 'Somebody', note, to_email: toEmail }
-        : { nobody: no, nobody_name: nameOf(no), city, owner: owner || 'Anonymous' },
+      metadata: meta,
     }),
   });
 
@@ -256,7 +275,7 @@ async function one(env, url) {
     return json({ exists: true, owned: true, owner: o.o, city: o.c, since: o.s, mine, ...extra });
   }
   const h = ix.holds[no];
-  return json({ exists: true, owned: false, held: !!(h && h.u > Date.now()), price: PRICE });
+  return json({ exists: true, owned: false, held: !!(h && h.u > Date.now()), price: isXmas(no) && xmasFree() ? 0 : PRICE });
 }
 
 // ---------------------------------------------------------------- news signup
