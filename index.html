@@ -188,6 +188,8 @@ h1.name{margin:-10px 0 0;font-size:clamp(56px,7vw,96px);line-height:.95;font-wei
 .item .big-pic.tpic img{aspect-ratio:210/297}
 .tleft{flex:1 1 340px;max-width:480px;display:flex;flex-direction:column;gap:18px}
 .tleft .big-pic{max-width:none;flex:none}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.4;color:var(--soft);cursor:pointer}
+.consent input{width:18px;height:18px;margin:1px 0 0;flex:none;accent-color:var(--ink)}
 .tfilter{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 28px}
 .tfilter button{font:600 14px var(--font);padding:8px 16px;border:1.5px solid var(--ink);border-radius:999px;background:transparent;color:var(--ink);cursor:pointer;display:flex;align-items:center;gap:8px}
 .tfilter button i{width:12px;height:12px;border-radius:50%;border:1px solid #0003;display:inline-block}
@@ -391,7 +393,9 @@ footer a{color:var(--muted)}
     <h3>Who is responsible</h3>
     <p>Johnny Ramstedt, a private individual in Finland. Contact: hello@whoisjohnny.com.</p>
     <h3>What we keep</h3>
-    <p>When you get a text, we keep your email address, so that each address gets one text, and we use it to send you the link, through our email provider Resend. If you send a text as a gift, we keep the note and the name you sign it with, and show them only to whoever has the gift link. If you add the receiver's email, we use it once, to send them the gift, and for nothing else. If you sign up for news, we keep your email address until you ask us to remove it.</p>
+    <p>When you get a text, we keep your email address, so that each address gets one text, and we use it to send you the link, through our email provider Resend. If you send a text as a gift, we keep the note and the name you sign it with, and show them only to whoever has the gift link. If you add the receiver's email, we use it once, to send them the gift, and for nothing else. </p>
+    <h3>News emails</h3>
+    <p>Only if you tick the box "Send me an email now and then when new texts come out". You do not need it to get a text. If you tick it, we keep your email address, the time you said yes and the words you said yes to, and now and then send you news about new texts. The email with your text and every news email have a link to unsubscribe: one click and you are off the list. You can also write to hello@whoisjohnny.com. We keep the record of your yes and of your unsubscribing, so we can show that we only wrote to people who asked.</p>
     <h3>Who gets it</h3>
     <p>Resend (sending email) and Cloudflare (hosting). We do not sell personal data and do not use it for advertising. The fonts come from Bunny Fonts, which says it does not log or track visitors. The site sets no tracking cookies.</p>
     <h3>Pictures and poster</h3>
@@ -410,7 +414,7 @@ footer a{color:var(--muted)}
 
 <script type="module">
 import { nobody, traitsOf, pad, CITIES, cityRow, MAP_SVG, storyOf, XMAS_FROM, XMAS_TO } from '/assets/nobody.js';
-import { TEXT_COUNT, textOf, slugOf, bySlug, schemeOf, schemeKey } from '/assets/texts.js';
+import { TEXT_COUNT, textOf, slugOf, bySlug, schemeOf, schemeKey, NEWS_CONSENT } from '/assets/texts.js';
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -901,16 +905,17 @@ async function renderText(n, key, isNew){
     <label class="f" for="email">Your email</label>
     <input id="email" type="email" required maxlength="120" placeholder="you@example.com" autocomplete="email">
     <div class="hint" id="emailHint"></div>
+    <label class="consent"><input type="checkbox" id="newsOk"><span>${esc(NEWS_CONSENT)}</span></label>
     <button class="btn" type="submit" id="adoptBtn"></button>
     <div class="err" id="adoptErr" hidden></div>
-    <div class="muted" style="font-size:13px">Free. One text per email address, so choose well.</div>
+    <div class="muted" style="font-size:13px">Free. One text per email address, so choose well. <a href="/privacy" data-link style="color:inherit">Privacy</a>.</div>
   </form>`;
   const label = ()=> giftMode ? 'Send it as a gift · Free' : 'Get it · Free';
   const setMode = gm=>{
     giftMode = gm;
     document.querySelectorAll('[data-for]').forEach(x=>x.setAttribute('aria-pressed', String((x.dataset.for==='gift')===gm)));
     $('giftFields').hidden = !gm;
-    $('emailHint').textContent = gm ? 'We send you the gift link too. Nothing else, ever.' : 'We send the download link here. Nothing else, ever.';
+    $('emailHint').textContent = gm ? 'We send you the gift link too.' : 'We send the download link here.';
     $('adoptBtn').textContent = label();
   };
   document.querySelectorAll('[data-for]').forEach(x=>x.onclick=()=>setMode(x.dataset.for==='gift'));
@@ -921,8 +926,8 @@ async function renderText(n, key, isNew){
     const fail = m=>{ err.textContent=m; err.hidden=false; btn.disabled=false; btn.textContent=label(); };
     if (DATA.offline) return fail('Not connected here. This is a preview.');
     const body = giftMode
-      ? {no:n, gift:true, toEmail:$('toEmail').value, note:$('note').value, from:$('fromName').value, email:$('email').value}
-      : {no:n, email:$('email').value};
+      ? {no:n, gift:true, toEmail:$('toEmail').value, note:$('note').value, from:$('fromName').value, email:$('email').value, news:$('newsOk').checked}
+      : {no:n, email:$('email').value, news:$('newsOk').checked};
     const d = await api('tget', body);
     if (d.ok){ history.pushState(null,'','/t/'+slug+'?key='+encodeURIComponent(d.key)+'&new=1'); return route(); }
     fail(d.error || 'Something went wrong.');

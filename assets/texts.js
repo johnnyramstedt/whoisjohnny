@@ -139,6 +139,8 @@ export function tpad(n){ return String(n).padStart(3,'0'); }
 export function tlabel(n){ return 'Text '+tpad(n); }
 export function textOf(n){ return TEXTS[n-1] ? TEXTS[n-1].toUpperCase() : ''; }
 export var TEXT_RED = '#e4002b';
+// The exact words a person says yes to when they tick the news box. Stored with every yes.
+export var NEWS_CONSENT = 'Send me an email now and then when new texts come out. I can unsubscribe any time.';
 // Every text has one fixed colour: white, yellow or black paper. Same font on all of them.
 //   bg: paper, fg: the text, mark: the question mark, foot: the small site line
 export var SCHEMES = {
