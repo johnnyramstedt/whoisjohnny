@@ -9,7 +9,6 @@
 //   POLAR_API         Optional. Set to https://sandbox-api.polar.sh to test with Polar's sandbox.
 
 import { nameOf, pad, label, isXmas, XMAS_FROM, XMAS_TO } from '../../assets/nobody.js';
-import { TEXT_COUNT, textOf, slugOf, NEWS_CONSENT } from '../../assets/texts.js';
 
 const START = 50;        // Nobodies on the first shelf
 const REFILL_AT = 20;    // when this few are left...
@@ -17,7 +16,7 @@ const LITTER = 30;       // ...this many new ones arrive
 const HOLD_MS = 15 * 60 * 1000; // a chosen Nobody is held for 15 minutes while paying
 const PRICE = 9;
 const FROM = 'WhoIsJohnny? <hello@whoisjohnny.com>';
-// The ten Christmas Nobodies are free until Christmas Day is over (Helsinki time).
+// The fourteen Christmas Nobodies are free until Christmas Day is over (Helsinki time).
 // No payment, no Polar: the email is asked on the page. One per email address.
 const XMAS_FREE_UNTIL = Date.parse('2026-12-25T22:00:00Z');
 const xmasFree = () => Date.now() < XMAS_FREE_UNTIL;
@@ -36,9 +35,6 @@ export async function onRequest(ctx) {
     if (route === 'done' && request.method === 'GET') return await done(env, url, ctx);
     if (route === 'nobody' && request.method === 'GET') return await one(env, url);
     if (route === 'news' && request.method === 'POST') return await news(request, env);
-    if (route === 'tget' && request.method === 'POST') return await tget(request, env, url, ctx);
-    if (route === 'text' && request.method === 'GET') return await oneText(env, url);
-    if (route === 'unsub' && request.method === 'GET') return await unsub(env, url);
     return json({ error: 'Not found' }, 404);
   } catch (e) {
     return json({ error: String(e && e.message || e) }, 500);
@@ -133,7 +129,7 @@ async function shelf(env, url, ctx) {
 
   const held = Object.keys(ix.holds).map(Number).filter(n => ix.holds[n].u > now && !ix.owned[n]);
   const owned = Object.keys(ix.owned).map(Number).map(n => ({ no: n, owner: ix.owned[n].o, city: ix.owned[n].c, since: ix.owned[n].s }));
-  return { tcount: TEXT_COUNT, price: ALL_FREE ? 0 : PRICE, allFree: ALL_FREE, xmasFree: xmasFree(), xmasFreeUntil: XMAS_FREE_UNTIL, max: ix.max, newFrom: ix.lastLitter || 0, free: freeList(ix), xmas: freeXmas(ix), held, owned };
+  return { price: ALL_FREE ? 0 : PRICE, allFree: ALL_FREE, xmasFree: xmasFree(), xmasFreeUntil: XMAS_FREE_UNTIL, max: ix.max, newFrom: ix.lastLitter || 0, free: freeList(ix), xmas: freeXmas(ix), held, owned };
 }
 
 // ---------------------------------------------------------------- adopt
@@ -207,6 +203,7 @@ async function finalize(env, co, ix) {
   if (existing && existing.checkout !== co.id) throw new Error('This Nobody already belongs to somebody else.');
   const md = co.metadata;
   const rec = existing || { key, checkout: co.id, o: clean(md.owner, 30) || 'Anonymous', c: clean(md.city, 40) || 'Somewhere', s: Date.now() };
+  if (!existing && co.customer_email) rec.e = clean(co.customer_email, 120).toLowerCase();
   if (!existing && String(md.gift) === '1') { rec.g = 1; rec.f = clean(md.from, 30) || 'Somebody'; rec.m = clean(md.note, 200); rec.te = clean(md.to_email, 120); }
   if (!existing) await env.NOBODIES.put('own:' + no, JSON.stringify(rec));
   ix.owned[no] = { o: rec.o, c: rec.c, s: rec.s };
@@ -244,21 +241,21 @@ async function deliver(env, co, r, origin) {
   if (rec.g) {
     if (co.customer_email) jobs.push(sendMail(env, co.customer_email, nameOf(r.no) + ' is ready to give.', page(
       `<h1 style="font-size:34px;line-height:1.05;margin:0 0 14px">${name} is ready to give.</h1>
-<p style="font-size:17px;line-height:1.5;margin:0 0 20px">You gave ${name}, Nobody ${lab}, to ${esc(rec.o)}. It now lives in ${esc(rec.c)}, in the register and on the world map. ${rec.te ? 'We have emailed it to them.' : 'Send them the link below. Whoever has the link has ' + name + '.'} On the page they get pictures for Instagram, TikTok, Snapchat and Facebook, and an A4 poster to print at home or at a print shop.</p>
+<p style="font-size:17px;line-height:1.5;margin:0 0 20px">You gave ${name}, Nobody ${lab}, to ${esc(rec.o)}. It now lives in ${esc(rec.c)}, in the register and on the world map. ${rec.te ? 'We have emailed it to them.' : 'Send them the link below. Whoever has the link has ' + name + '.'} On the page they get pictures for Instagram, TikTok, Snapchat and Facebook, and an A4 poster and a 50 × 70 cm poster (19.7 × 27.6 in) to print at home or at a print shop.</p>
 ${btn(link, rec.te ? 'See the gift' : 'Open the gift link')}${linkLine(link)}`)));
     if (rec.te) jobs.push(sendMail(env, rec.te, esc(rec.f) === 'Somebody' ? 'Somebody gave you a Nobody.' : rec.f + ' gave you a Nobody.', page(
       `<h1 style="font-size:34px;line-height:1.05;margin:0 0 14px">${esc(rec.f)} gave you a Nobody.</h1>
 <p style="font-size:17px;line-height:1.5;margin:0 0 18px">Meet ${name}, Nobody ${lab}. It exists once, and now it is yours. It lives in ${esc(rec.c)}, on the world map.</p>
 ${rec.m ? `<p style="font-size:18px;line-height:1.45;margin:0 0 22px;padding:16px 18px;background:#f1e9d8;border:2px solid #151515;border-radius:10px">“${esc(rec.m)}”<br><span style="font-size:13px;color:#6a675f">${esc(rec.f)}</span></p>` : ''}
 ${btn(link, 'Meet ' + name)}
-<p style="font-size:15px;line-height:1.5;color:#3a3833;margin:0 0 6px">On the page you can save ${name} as pictures for Instagram, TikTok, Snapchat and Facebook, and as an A4 poster (PDF) to print at home or at a print shop. Set it as your profile picture and tag @whoisjohnny2020 on Instagram or TikTok, and we may share it. Keep this email: the button is your own link.</p>
+<p style="font-size:15px;line-height:1.5;color:#3a3833;margin:0 0 6px">On the page you can save ${name} as pictures for Instagram, TikTok, Snapchat and Facebook, and as posters (PDF), A4 and 50 × 70 cm (19.7 × 27.6 in), to print at home or at a print shop. Set it as your profile picture and tag @whoisjohnny2020 on Instagram or TikTok, and we may share it. Keep this email: the button is your own link.</p>
 ${linkLine(link)}${CARE}`)));
   } else if (co.customer_email) {
     jobs.push(sendMail(env, co.customer_email, nameOf(r.no) + ' is yours.', page(
       `<h1 style="font-size:34px;line-height:1.05;margin:0 0 14px">${name} is yours.</h1>
 <p style="font-size:17px;line-height:1.5;margin:0 0 20px">You adopted ${name}, Nobody ${lab}. It now lives in ${esc(rec.c)}, in the register and on the world map. Nobody else will ever have this one.</p>
 ${btn(link, 'Get the pictures')}
-<p style="font-size:15px;line-height:1.5;color:#3a3833;margin:0 0 6px">On the page you get pictures for Instagram, TikTok, Snapchat and Facebook, and an A4 poster (PDF) to print at home or at a print shop and hang up (matte paper, 200–250 g, actual size). Set it as your profile picture and tag @whoisjohnny2020 on Instagram or TikTok, and we may share it. Keep this email: the button is your own link.</p>
+<p style="font-size:15px;line-height:1.5;color:#3a3833;margin:0 0 6px">On the page you get pictures for Instagram, TikTok, Snapchat and Facebook, an A4 poster and a 50 × 70 cm poster (PDF, 19.7 × 27.6 in) to print at home or at a print shop and hang up (matte paper, 200–250 g, actual size). Set it as your profile picture and tag @whoisjohnny2020 on Instagram or TikTok, and we may share it. Keep this email: the button is your own link.</p>
 ${linkLine(link)}${CARE}`)));
   }
   await Promise.all(jobs.map(j => j.catch(() => {})));
@@ -301,95 +298,4 @@ async function news(request, env) {
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json({ error: 'That does not look like an email address.' }, 400);
   await env.NOBODIES.put('news:' + email, JSON.stringify({ t: Date.now() }));
   return json({ ok: true });
-}
-
-// ---------------------------------------------------------------- texts
-// The deadpan texts. Every text is free and anybody can get any text.
-// One text per email address: you give your email, you get a link to the downloads.
-// You can also send it to somebody else as a gift (that uses your one text).
-async function newKey() { return [...crypto.getRandomValues(new Uint8Array(10))].map(b => b.toString(16).padStart(2, '0')).join(''); }
-
-async function tget(request, env, url, ctx) {
-  const body = await request.json().catch(() => ({}));
-  const no = parseInt(body.no, 10);
-  const gift = !!body.gift;
-  const email = clean(body.email, 120).toLowerCase();
-  const toEmail = gift ? clean(body.toEmail, 120).toLowerCase() : '';
-  const note = gift ? clean(body.note, 200) : '';
-  const from = gift ? clean(body.from, 30) : '';
-  const news = body.news === true;
-  const ok = e => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e);
-  if (!(no >= 1 && no <= TEXT_COUNT)) return json({ error: 'That text does not exist.' }, 400);
-  if (!ok(email)) return json({ error: 'Please give your email. The link comes there.' }, 400);
-  if (toEmail && !ok(toEmail)) return json({ error: 'Their email does not look right. Leave it empty to send the link yourself.' }, 400);
-  if (await env.NOBODIES.get('tget:' + email)) return json({ error: 'This email has already got its text. One per email address.' }, 409);
-
-  const key = await newKey();
-  const rec = { no, s: Date.now() };
-  if (gift) { rec.g = 1; rec.f = from || 'Somebody'; rec.m = note; rec.te = toEmail; }
-  await env.NOBODIES.put('tg:' + key, JSON.stringify(rec));
-  const now = Date.now();
-  await env.NOBODIES.put('tget:' + email, JSON.stringify({ no, t: now, news }), { metadata: { no, t: now, g: gift ? 1 : 0 } });
-  let unsubLink = '';
-  if (news) {
-    // Proof of the yes: when, from which text, and the exact words. Kept also after unsubscribing.
-    const tok = await newKey();
-    const sub = { t: now, no, src: 'text', words: NEWS_CONSENT, tok };
-    await env.NOBODIES.put('sub:' + email, JSON.stringify(sub), { metadata: { t: now, no } });
-    unsubLink = url.origin + '/api/unsub?e=' + encodeURIComponent(email) + '&t=' + tok;
-  }
-  if (ctx) ctx.waitUntil(deliverText(env, email, no, key, rec, url.origin, unsubLink));
-  return json({ ok: true, no, key });
-}
-
-async function oneText(env, url) {
-  const no = parseInt(url.searchParams.get('no'), 10);
-  const key = url.searchParams.get('key') || '';
-  if (!(no >= 1 && no <= TEXT_COUNT)) return json({ exists: false });
-  if (!key || !/^[a-f0-9]{8,40}$/.test(key)) return json({ exists: true, mine: false });
-  const rec = await env.NOBODIES.get('tg:' + key, 'json');
-  if (!rec || rec.no !== no) return json({ exists: true, mine: false });
-  return json({ exists: true, mine: true, ...(rec.g ? { gift: true, from: rec.f, note: rec.m || '', toSent: !!rec.te } : {}) });
-}
-
-const TFOOT = `<p style="font-size:13px;color:#6a675f;margin:0">Chosen by Johnny. · whoisjohnny.com · @whoisjohnny2020</p>`;
-const tpage = inner => page(inner).replace(FOOT, TFOOT);
-const quote = t => `<p style="font-size:28px;line-height:1.05;font-weight:bold;color:#e4002b;margin:0 0 22px;letter-spacing:-.5px">${esc(t)}</p>`;
-const WHAT = 'On the page you get pictures for Instagram, TikTok, Snapchat, Facebook, LinkedIn and Pinterest, an A4 poster and a 50 × 70 cm (19.7 × 27.6 in) poster, both as PDFs to print at home or at a print shop.';
-
-async function unsub(env, url) {
-  const email = clean(url.searchParams.get('e'), 120).toLowerCase(), tok = url.searchParams.get('t') || '';
-  const rec = email && await env.NOBODIES.get('sub:' + email, 'json');
-  const done = rec && rec.tok === tok;
-  if (done && !rec.off) { rec.off = Date.now(); await env.NOBODIES.put('sub:' + email, JSON.stringify(rec), { metadata: { t: rec.t, no: rec.no, off: rec.off } }); }
-  const msg = done ? '<h1>You are off the list.</h1><p>No more news emails from WhoIsJohnny?. Your text and its link still work.</p>'
-                   : '<h1>That link did not work.</h1><p>Write to hello@whoisjohnny.com and we take you off the list by hand.</p>';
-  return new Response(`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>WhoIsJohnny?</title><body style="font-family:Arial,Helvetica,sans-serif;max-width:560px;margin:80px auto;padding:0 24px;color:#151515;line-height:1.5">${msg}<p><a href="/" style="color:#151515">whoisjohnny.com</a></p></body>`,
-    { headers: { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store' } });
-}
-
-async function deliverText(env, email, no, key, rec, origin, unsubLink) {
-  if (!env.RESEND_KEY) return;
-  const link = origin + '/t/' + slugOf(no) + '?key=' + key, t = textOf(no);
-  const jobs = [];
-  const own = unsubLink ? html => html.replace(TFOOT, TFOOT + `<p style="font-size:12px;color:#6a675f;margin:8px 0 0">You said yes to news about new texts. <a href="${unsubLink}" style="color:#6a675f">Unsubscribe</a>.</p>`) : html => html;
-  if (rec.g) {
-    jobs.push(sendMail(env, email, 'Your gift is ready to send.', own(tpage(
-      `<h1 style="font-size:34px;line-height:1.05;margin:0 0 14px">Your gift is ready.</h1>${quote(t)}
-<p style="font-size:17px;line-height:1.5;margin:0 0 20px">${rec.te ? 'We have emailed it to them.' : 'Send them the link below, in a message, a card or a text.'} ${WHAT}</p>
-${btn(link, rec.te ? 'See the gift' : 'Open the gift link')}${linkLine(link)}`))));
-    if (rec.te) jobs.push(sendMail(env, rec.te, rec.f === 'Somebody' ? 'Somebody sent you a text.' : rec.f + ' sent you a text.', tpage(
-      `<h1 style="font-size:34px;line-height:1.05;margin:0 0 14px">${esc(rec.f)} sent you a text.</h1>${quote(t)}
-${rec.m ? `<p style="font-size:18px;line-height:1.45;margin:0 0 22px;padding:16px 18px;background:#f1e9d8;border:2px solid #151515;border-radius:10px">“${esc(rec.m)}”<br><span style="font-size:13px;color:#6a675f">${esc(rec.f)}</span></p>` : ''}
-${btn(link, 'Get your text')}
-<p style="font-size:15px;line-height:1.5;color:#3a3833;margin:0 0 6px">${WHAT} Tag @whoisjohnny2020 on Instagram or TikTok, and we may share it.</p>
-${linkLine(link)}`)));
-  } else {
-    jobs.push(sendMail(env, email, 'Your text is here.', own(tpage(
-      `<h1 style="font-size:34px;line-height:1.05;margin:0 0 14px">Your text is here.</h1>${quote(t)}
-${btn(link, 'Get the pictures and posters')}
-<p style="font-size:15px;line-height:1.5;color:#3a3833;margin:0 0 6px">${WHAT} Tag @whoisjohnny2020 on Instagram or TikTok, and we may share it. Keep this email: the button is your own link.</p>
-${linkLine(link)}`))));
-  }
-  await Promise.all(jobs.map(j => j.catch(() => {})));
 }

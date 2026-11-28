@@ -8,13 +8,17 @@ var HAIRC=['#1a1a1a','#6b4226','#e8832a','#18a3a3','#f08fb0','#f3d34a','#c93c2b'
 var PAPERS=['#fbfaf6','#f6efe0','#e8f1f0','#f4e6ea','#ece9f6','#fdf3c8','#e3eadf'];
 var UID=0;
 // Christmas Nobodies: numbers 9001-9010, shown as "X-mas 001" and so on.
-export var XMAS_FROM=9001, XMAS_TO=9010;
+export var XMAS_FROM=9001, XMAS_TO=9014;
+// 9011-9012 are dressed as Santa, 9013-9014 are snowmen.
+export function isSanta(n){ return n===9011||n===9012; }
+export function isSnowman(n){ return n===9013||n===9014; }
 export function isXmas(n){ return n>=XMAS_FROM && n<=XMAS_TO; }
 var XBODIES=['#c93c2b','#2f7a3f','#b8262b','#1f5c33','#ffffff','#c93c2b','#2f7a3f'];
 var XPAPERS=['#e8f1f0','#eef3f6','#f4e6ea','#e3eadf','#fbfaf6'];
-var XHATS=['santa','antlers','elf','santa','star','santa','elf','antlers','santa','star'];
+var XHATS=['santa','antlers','elf','santa','star','santa','elf','antlers','santa','star','santa','santa','top','top'];
 function rng(seed){var a=(seed*2654435761)>>>0;return function(){a=(a+0x6D2B79F5)>>>0;var t=a;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return((t^(t>>>14))>>>0)/4294967296}}
 function figure(seed){
+  if(isSnowman(seed)) return snowman(seed);
   var r=rng(seed*7919+13);
   var f=function(a,b){return a+r()*(b-a)};
   var pick=function(a){return a[Math.floor(r()*a.length)]};
@@ -25,6 +29,7 @@ function figure(seed){
   var hairC=pick(HAIRC),paper=pick(PAPERS);
   var X=isXmas(seed), xr=rng(seed*31+7);
   if(X){ body=XBODIES[Math.floor(xr()*XBODIES.length)]; if(body===head)body='#2f7a3f'; paper=XPAPERS[Math.floor(xr()*XPAPERS.length)]; }
+  var SA=isSanta(seed); if(SA){ body='#c93c2b'; head=['#f2c6a0','#e98c7b'][seed%2]; paper=['#e8f1f0','#eef3f6'][seed%2]; }
   var R=f(36,50),cx=100,cy=f(88,100),shape=int(5);
   var vs=[1,1,1.15,.85,1.05][shape];
   var top=cy-R*vs,btm=cy+R*vs;
@@ -60,7 +65,7 @@ function figure(seed){
   else if(arm===2)s+=limb(cx-ax,ay,cx-ax-20,ay-24)+limb(cx+ax,ay,cx+ax+20,ay-24);
   /* body + pattern */
   s+=bodyEl;
-  var pat=int(5);
+  var pat=int(5); if(SA) pat=0;
   if(pat>0){
     s+='<clipPath id="'+id+'">'+clipEl+'</clipPath><g clip-path="url(#'+id+')" opacity=".42" stroke="'+(r()>.5?'#ffffff':ink)+'" fill="none">';
     if(pat===1){for(var y=bt+8;y<bb;y+=16)s+='<path d="M0 '+y.toFixed(1)+' H200" stroke-width="5"/>'}
@@ -76,8 +81,11 @@ function figure(seed){
   else if(ex===3)s+='<polygon points="'+cx+','+(bt+20)+' '+(cx-20)+','+(bt+10)+' '+(cx-20)+','+(bt+30)+' '+cx+','+(bt+20)+' '+(cx+20)+','+(bt+10)+' '+(cx+20)+','+(bt+30)+'" fill="#f3d34a" stroke="'+ink+'" stroke-width="2.4" stroke-linejoin="round"/>';
   else if(ex===4)s+='<rect x="'+(cx+bw*.1)+'" y="'+(bt+34)+'" width="18" height="16" fill="#fff" stroke="'+ink+'" stroke-width="2.4"/>';
 
+  /* santa suit: white trim at the hem, a black belt with a gold buckle */
+  if(SA){ s+='<g clip-path="url(#'+id+'c)"><clipPath id="'+id+'c">'+clipEl+'</clipPath><rect x="0" y="'+(bb-18)+'" width="200" height="22" fill="#ffffff" stroke="'+ink+'" stroke-width="3"/><rect x="0" y="'+((bt+bb)/2-6).toFixed(1)+'" width="200" height="13" fill="#1a1a1a"/><path d="M'+cx+' '+(bt+2)+' V'+(bb-18)+'" stroke="#ffffff" stroke-width="9"/></g>';
+    s+='<rect x="'+(cx-10)+'" y="'+((bt+bb)/2-9).toFixed(1)+'" width="20" height="19" rx="2" fill="none" stroke="#f3d34a" stroke-width="4"/>'; }
   /* christmas scarf */
-  if(X && xr()<.6){ var sc=['#c93c2b','#f3d34a','#ffffff','#2f7a3f'][Math.floor(xr()*4)]; if(sc===body)sc='#f3d34a';
+  if(X && !SA && xr()<.6){ var sc=['#c93c2b','#f3d34a','#ffffff','#2f7a3f'][Math.floor(xr()*4)]; if(sc===body)sc='#f3d34a';
     s+='<rect x="'+(cx-bw*.42).toFixed(1)+'" y="'+(bt-2).toFixed(1)+'" width="'+(bw*.84).toFixed(1)+'" height="13" rx="5" fill="'+sc+'" stroke="'+ink+'" stroke-width="2.6"/><path d="M'+(cx+bw*.18).toFixed(1)+' '+(bt+8).toFixed(1)+' l6 34 l12 -2 l-5 -32 Z" fill="'+sc+'" stroke="'+ink+'" stroke-width="2.6" stroke-linejoin="round"/>'; }
   /* ears */
   if(int(3)===0){var er0=f(7,11);s+='<circle cx="'+(cx-R*1.02)+'" cy="'+(cy+4)+'" r="'+er0.toFixed(1)+'" fill="'+head+'" stroke="'+ink+'" stroke-width="3"/><circle cx="'+(cx+R*1.02)+'" cy="'+(cy+4)+'" r="'+er0.toFixed(1)+'" fill="'+head+'" stroke="'+ink+'" stroke-width="3"/>'}
@@ -168,6 +176,13 @@ function figure(seed){
   else if(mt===5)s+='<path d="M'+mx1+' '+(my+8)+' Q '+cx+' '+(my-mw*.7)+' '+mx2+' '+(my+8)+'" stroke="'+ink+'" stroke-width="3.2" fill="none" stroke-linecap="round"/>';
   else if(mt===6){s+='<rect x="'+(cx-7)+'" y="'+(my+4)+'" width="15" height="'+f(11,17).toFixed(1)+'" rx="7" fill="#e86a8a" stroke="'+ink+'" stroke-width="2.4"/><path d="M'+mx1+' '+my+' Q '+cx+' '+(my+mw*.9)+' '+mx2+' '+my+'" stroke="'+ink+'" stroke-width="3.2" fill="none" stroke-linecap="round"/>'}
   else{s+='<path d="M'+mx1+' '+my+' Q '+cx+' '+(my+mw*.9)+' '+mx2+' '+my+'" stroke="'+ink+'" stroke-width="3.2" fill="none" stroke-linecap="round"/><rect x="'+(cx-3.5)+'" y="'+(my+1)+'" width="7" height="8" fill="#fff" stroke="'+ink+'" stroke-width="2"/>'}
+  /* santa beard and moustache */
+  if(SA){ var bw2=R*.95, by0=cy+R*vs*.05, bp='M'+(cx-bw2)+' '+by0;
+    for(var bi=0;bi<=6;bi++){ var bx=cx-bw2+bi*(2*bw2/6), byy=by0+R*.55+Math.sin(bi/6*Math.PI)*R*.75; bp+=' Q '+(bx-bw2/6).toFixed(1)+' '+(byy+10).toFixed(1)+' '+bx.toFixed(1)+' '+byy.toFixed(1); }
+    bp+=' L'+(cx+bw2)+' '+by0+' Q '+cx+' '+(by0+14)+' '+(cx-bw2)+' '+by0+' Z';
+    s+='<path d="'+bp+'" fill="#ffffff" stroke="'+ink+'" stroke-width="3" stroke-linejoin="round"/>';
+    var my2=cy+R*vs*.28; s+='<path d="M'+cx+' '+my2+' q -10 -10 -24 -2 q 8 10 24 4 q 16 6 24 -4 q -14 -8 -24 2 Z" fill="#ffffff" stroke="'+ink+'" stroke-width="2.6" stroke-linejoin="round"/>';
+    s+='<circle cx="'+cx+'" cy="'+(cy+R*vs*.12)+'" r="6" fill="#e86a6a" stroke="'+ink+'" stroke-width="2.4"/>'; }
   /* cheeks */
   if(r()<.3){s+='<circle cx="'+(cx-R*.62)+'" cy="'+(my-5)+'" r="7" fill="#f06a8a" opacity=".5"/><circle cx="'+(cx+R*.62)+'" cy="'+(my-5)+'" r="7" fill="#f06a8a" opacity=".5"/>'}
 
@@ -199,6 +214,39 @@ function figure(seed){
 }
 
 
+// A snowman: three snowballs, coal eyes, a carrot nose, a top hat, a scarf, stick arms.
+function snowman(seed){
+  var xr=rng(seed*31+7), ink='#1a1a1a', W='#ffffff';
+  var scarf=seed===9013?'#c93c2b':'#2f4fd0', paper=seed===9013?'#e8f1f0':'#eef3f6';
+  var s='<svg viewBox="0 0 200 266" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Digital figure">';
+  s+='<g transform="translate(9 22) scale(.91)">';
+  for(var sn=0;sn<26;sn++) s+='<circle cx="'+(xr()*200).toFixed(1)+'" cy="'+(xr()*262).toFixed(1)+'" r="'+(1.6+xr()*2.6).toFixed(1)+'" fill="#ffffff" stroke="#b9c7d0" stroke-width="1"/>';
+  var st='stroke="'+ink+'" stroke-width="3"';
+  /* stick arms */
+  var aS='stroke="#7a4a26" stroke-width="5" stroke-linecap="round" fill="none"';
+  if(seed===9013) s+='<path d="M62 150 L22 128 M36 136 L30 118 M138 150 L178 128 M164 136 L170 118" '+aS+'/>';
+  else s+='<path d="M62 152 L24 170 M38 163 L26 152 M138 150 L176 112 M160 128 L176 128" '+aS+'/>';
+  /* snowballs */
+  s+='<ellipse cx="100" cy="214" rx="56" ry="44" fill="'+W+'" '+st+'/>';
+  s+='<ellipse cx="100" cy="150" rx="42" ry="36" fill="'+W+'" '+st+'/>';
+  s+='<circle cx="100" cy="88" r="34" fill="'+W+'" '+st+'/>';
+  /* coal buttons */
+  [138,156,174,198,222].forEach(function(y){ s+='<circle cx="100" cy="'+y+'" r="4.6" fill="'+ink+'"/>'; });
+  /* scarf */
+  s+='<rect x="64" y="112" width="72" height="14" rx="6" fill="'+scarf+'" '+st+' stroke-linejoin="round"/><path d="M118 122 l4 36 l13 -2 l-5 -34 Z" fill="'+scarf+'" '+st+' stroke-linejoin="round"/>';
+  /* face */
+  if(seed===9013){ s+='<circle cx="88" cy="80" r="4.6" fill="'+ink+'"/><circle cx="112" cy="80" r="4.6" fill="'+ink+'"/>'; }
+  else { s+='<circle cx="88" cy="80" r="8" fill="#fff" stroke="'+ink+'" stroke-width="2.4"/><circle cx="90" cy="81" r="3.6" fill="'+ink+'"/><circle cx="112" cy="80" r="8" fill="#fff" stroke="'+ink+'" stroke-width="2.4"/><circle cx="114" cy="81" r="3.6" fill="'+ink+'"/>'; }
+  s+='<polygon points="100,88 132,95 100,98" fill="#e8832a" stroke="'+ink+'" stroke-width="2.4" stroke-linejoin="round"/>';
+  if(seed===9013) [84,92,100,108,116].forEach(function(x,i){ s+='<circle cx="'+x+'" cy="'+(106+Math.abs(i-2)*-1.6+3).toFixed(1)+'" r="2.4" fill="'+ink+'"/>'; });
+  else s+='<path d="M88 108 L112 107" stroke="'+ink+'" stroke-width="3.2" stroke-linecap="round"/>';
+  /* hat */
+  if(seed===9013) s+='<rect x="76" y="20" width="48" height="40" fill="#1a1a1a" '+st+'/><rect x="76" y="50" width="48" height="8" fill="#c93c2b"/><rect x="62" y="56" width="76" height="9" rx="3" fill="#1a1a1a" '+st+'/>';
+  else s+='<path d="M68 68 Q 70 30 100 28 Q 130 30 132 68 Z" fill="'+scarf+'" '+st+' stroke-linejoin="round"/><rect x="64" y="60" width="72" height="12" fill="'+scarf+'" '+st+'/><circle cx="100" cy="26" r="8" fill="#fff" stroke="'+ink+'" stroke-width="2.6"/>';
+  s+='</g></svg>';
+  return {svg:s,paper:paper,traits:{hat:seed===9013?'top':'beanie',eyes:seed===9013?3:0,hair:0,body:2,glasses:false,snowman:true}};
+}
+
 // ---- Names ---------------------------------------------------------------
 // Invented names, built from syllables. Each number gets its own name.
 var ON=['b','d','f','g','k','l','m','n','p','r','s','t','v','z','j','h','w'];
@@ -225,11 +273,13 @@ export function label(n){ return isXmas(n) ? 'X-mas '+pad(n-XMAS_FROM+1) : 'No. 
 var RAR={"h:Mohawk":10,"e:Sleepy eyes":6,"e:Odd eyes":6,"h:Bowl cut":10,"h:Top hat":14,"h:Bristles":10,"e:Cyclops":6,"h:Bald":10,"e:Two eyes":6,"h:Long hair":11,"e:Dot eyes":6,"g:Glasses":6,"h:Spikes":10,"h:Beanie":15,"h:Curls":10,"e:Three eyes":6,"h:Crown":14,"h:Curl":10};
 var HAIRN=['Bald','Spikes','Long hair','Curls','Bowl cut','Curl','Mohawk','Bristles'];
 var HATN={crown:'Crown',top:'Top hat',beanie:'Beanie',santa:'Santa hat',elf:'Elf hat',antlers:'Antlers',star:'Star'};
-var XODDS={santa:'4 of 10',elf:'2 of 10',antlers:'2 of 10',star:'2 of 10'};
+var XODDS={santa:'4 of 14',elf:'2 of 14',antlers:'2 of 14',star:'2 of 14'};
 var EYEN=['Two eyes','Cyclops','Three eyes','Dot eyes','Sleepy eyes','Odd eyes'];
 export function traitsOf(n){
   var t=figure(n).traits, h=t.hat?HATN[t.hat]:HAIRN[t.hair];
-  if(isXmas(n)){ var xo=[{label:'Christmas edition',text:'1 of 10'},{label:h,text:XODDS[t.hat]},{label:EYEN[t.eyes],odds:RAR['e:'+EYEN[t.eyes]]}]; if(t.glasses) xo.push({label:'Glasses',odds:RAR['g:Glasses']}); return xo; }
+  if(isSnowman(n)) return [{label:'Christmas edition',text:'1 of 14'},{label:'Snowman',text:'2 of 14'},{label:h,text:'1 of 14'}];
+  if(isSanta(n)) return [{label:'Christmas edition',text:'1 of 14'},{label:'Santa suit',text:'2 of 14'},{label:EYEN[t.eyes],odds:RAR['e:'+EYEN[t.eyes]]}];
+  if(isXmas(n)){ var xo=[{label:'Christmas edition',text:'1 of 14'},{label:h,text:XODDS[t.hat]},{label:EYEN[t.eyes],odds:RAR['e:'+EYEN[t.eyes]]}]; if(t.glasses) xo.push({label:'Glasses',odds:RAR['g:Glasses']}); return xo; }
   var out=[{label:h,odds:RAR['h:'+h]},{label:EYEN[t.eyes],odds:RAR['e:'+EYEN[t.eyes]]}];
   if(t.glasses) out.push({label:'Glasses',odds:RAR['g:Glasses']});
   return out;
@@ -312,6 +362,10 @@ var STORIES={
 9007:'Keeps the naughty list. Has not checked it twice. Once seemed enough.',
 9008:'Reindeer on weekends. Accountant during the week. Nobody has asked which is the real one.',
 9009:'Ate the cookies that were left out. They were not for Rumpo. Rumpo knew that.',
-9010:'Thinks it is the brightest thing in the room. In a dark room, this is correct.'
+9010:'Thinks it is the brightest thing in the room. In a dark room, this is correct.',
+9011:'Got the suit for one party in 2019. Has not found a reason to take it off.',
+9012:'Is not Santa. Has stopped saying so. It only made the children sadder.',
+9013:'Built on a Tuesday. Expects to leave in April. Has made no other plans.',
+9014:'Wears a hat in case it gets cold. It has never once been warm.'
 };
 export function storyOf(n){ return STORIES[n] || null; }
