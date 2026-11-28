@@ -11,7 +11,7 @@ const START = 50;
 
 export async function onRequestGet({ request, env, params }) {
   const url = new URL(request.url);
-  const fallback = () => Response.redirect(url.origin + '/og-nobodies.png', 302);
+  const fallback = () => Response.redirect(url.origin + '/og-nobodies-free.png', 302);
   const m = /^(\d{1,5})\.png$/.exec(params.file || '');
   if (!m) return fallback();
   const n = parseInt(m[1], 10);
